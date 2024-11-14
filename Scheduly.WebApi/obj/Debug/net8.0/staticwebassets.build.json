@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FWoEGSmw2PiLmqK6tHLIWRBq4Qp3FndJ4NChToEsb08=",
+  "Source": "Scheduly.WebApi",
+  "BasePath": "_content/Scheduly.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
