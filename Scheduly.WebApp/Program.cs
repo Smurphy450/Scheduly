@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddHttpClient<System.Net.Http.HttpClient>(options=>options.BaseAddress = new Uri("https://localhost:7171/"));
+builder.Services.AddMudServices();
 
 // Add MudBlazor services
 builder.Services.AddMudServices();

@@ -28,8 +28,8 @@
     </div>
     <div class="form-group">
         <label for="password">Password:</label>
-        <InputText id="password" @bind-Value="model.Password" placeholder="Enter password" Type="password" />
-        <ValidationMessage For="@(() => model.Password)" />
+        <InputText id="password" @bind-Value="model.PasswordHash" placeholder="Enter password" Type="password" />
+        <ValidationMessage For="@(() => model.PasswordHash)" />
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </EditForm>
