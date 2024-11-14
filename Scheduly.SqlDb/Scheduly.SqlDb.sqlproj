@@ -56,5 +56,25 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Compares" />
+    <Folder Include="Schema" />
+    <Folder Include="Schema\Functions" />
+    <Folder Include="Schema\Triggers" />
+    <Folder Include="Schema\Tables" />
+    <Folder Include="Schema\Views" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Compares\Local.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Schema\Tables\Absence.sql" />
+    <Build Include="Schema\Tables\AbsenceType.sql" />
+    <Build Include="Schema\Tables\Bookings.sql" />
+    <Build Include="Schema\Tables\Premises.sql" />
+    <Build Include="Schema\Tables\Profiles.sql" />
+    <Build Include="Schema\Tables\Resources.sql" />
+    <Build Include="Schema\Tables\TimeRegistration.sql" />
+    <Build Include="Schema\Tables\User.sql" />
+    <Build Include="Schema\Tables\ZipCodes.sql" />
   </ItemGroup>
 </Project>
