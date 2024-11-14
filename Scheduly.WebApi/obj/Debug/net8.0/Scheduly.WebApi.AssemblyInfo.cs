@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Scheduly.WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5182494c08b9df25e764e67401963a04d39f6e86")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a39c02f710ab9997ae1fb02648d71b5c9f20193d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Scheduly.WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Scheduly.WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

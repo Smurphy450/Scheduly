@@ -1,6 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using Scheduly.WebApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//add db context
+builder.Services.AddDbContext<SchedulyContext>(options => options.UseSqlServer("name:ConnectionStrings;DefaultConnection"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
