@@ -12,6 +12,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="MudBlazor" Version="7.15.0" />
   </ItemGroup>
 
@@ -23,7 +27,6 @@
     <Folder Include="Pages\Booking\" />
     <Folder Include="Pages\Absence\" />
     <Folder Include="Pages\AdminOverview\" />
-    <Folder Include="Pages\Login\" />
     <Folder Include="Pages\TimeRegistration\" />
     <Folder Include="Pages\Overview\" />
   </ItemGroup>

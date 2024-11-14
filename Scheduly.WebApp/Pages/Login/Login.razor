@@ -1,0 +1,35 @@
+﻿@page "/login";
+
+@using MudBlazor;
+@inherits LoginBase;
+
+<h3>Login</h3>
+
+@* <input />
+
+<MudButton Disabled="@_processing" OnClick="ProcessSomething" Variant="Variant.Filled" Color="Color.Primary">
+    @if (_processing)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+        <MudText Class="ms-2">Processing</MudText>
+    }
+    else
+    {
+        <MudText>Click me</MudText>
+    }
+</MudButton> *@
+
+<EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <InputText id="username" @bind-Value="model.Username" placeholder="Enter username" />
+        <ValidationMessage For="@(() => model.Username)" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <InputText id="password" @bind-Value="model.Password" placeholder="Enter password" Type="password" />
+        <ValidationMessage For="@(() => model.Password)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
