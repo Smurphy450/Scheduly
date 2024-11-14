@@ -26,7 +26,6 @@
     <Folder Include="Pages\Login\" />
     <Folder Include="Pages\TimeRegistration\" />
     <Folder Include="Pages\Overview\" />
-    <Folder Include="Pages\Profile\" />
   </ItemGroup>
 
 </Project>

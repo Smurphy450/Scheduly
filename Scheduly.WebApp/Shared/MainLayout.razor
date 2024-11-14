@@ -2,18 +2,29 @@
 
 <PageTitle>Scheduly</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudLayout>
+	<MudAppBar Elevation="0">
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+	</MudAppBar>
+	<MudDrawer @bind-Open="_drawerOpen" Breakpoint="@_breakpoint" Elevation="1">
+		<MudDrawerHeader>
+			<MudText Typo="Typo.h6">Scheduly</MudText>
+		</MudDrawerHeader>
+		<NavMenu />
+	</MudDrawer>
+	<MudMainContent>
+		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-2 pt-2">
+			@Body
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+@code {
+	private Breakpoint _breakpoint = Breakpoint.Xl;
+	private bool _drawerOpen = true;
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+	void DrawerToggle()
+	{
+		_drawerOpen = !_drawerOpen;
+	}
+}
