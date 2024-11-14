@@ -273,3 +273,7 @@ __pycache__/
 # tools/
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
+Scheduly.WebApi/bin
+Scheduly.SqlDb/bin
+Scheduly.WebApi/obj
+Scheduly.WebApp/bin
