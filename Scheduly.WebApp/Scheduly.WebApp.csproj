@@ -24,11 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Booking\" />
-    <Folder Include="Pages\Absence\" />
     <Folder Include="Pages\AdminOverview\" />
-    <Folder Include="Pages\TimeRegistration\" />
-    <Folder Include="Pages\Overview\" />
   </ItemGroup>
 
 </Project>
