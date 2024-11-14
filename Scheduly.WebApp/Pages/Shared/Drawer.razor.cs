@@ -7,7 +7,7 @@ namespace Scheduly.WebApp.Pages.Shared
     {
 		public bool _open = false;
 
-		public void ToggleDrawer()
+		public async void ToggleDrawer()
 		{
 			_open = !_open;
 		}
