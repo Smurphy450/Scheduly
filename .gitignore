@@ -2,3 +2,5 @@
 Scheduly.WebApp/.vs/Scheduly.WebApp/v17
 Scheduly.WebApp/.vs
 Scheduly.SqlDb/obj
+*.jfm
+*.dbmdl
