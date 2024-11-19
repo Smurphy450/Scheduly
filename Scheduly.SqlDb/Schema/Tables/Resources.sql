@@ -4,6 +4,6 @@
 	[Name] nvarchar(50) not null,
 	[Amount] int,
 	[Description] nvarchar(max),
-	[MustBeApproved] datetimeoffset(2),
+	[MustBeApproved] bit,
 	constraint [PK_dbo_Resources$ResourceID] primary key clustered (ResourceID) with (fillfactor = 100),
 )

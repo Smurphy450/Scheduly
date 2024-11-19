@@ -13,7 +13,7 @@ public partial class Premise
 
     public string? Description { get; set; }
 
-    public DateTimeOffset? MustBeApproved { get; set; }
+    public bool? MustBeApproved { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

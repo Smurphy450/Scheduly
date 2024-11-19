@@ -4,6 +4,6 @@
 	[Name] nvarchar(50) not null,
 	[Size] nvarchar(10),
 	[Description] nvarchar(max),
-	[MustBeApproved] datetimeoffset(2),
+	[MustBeApproved] bit,
 	constraint [PK_dbo_Premises$PremisID] primary key clustered (PremisID) with (fillfactor = 100),
 )
