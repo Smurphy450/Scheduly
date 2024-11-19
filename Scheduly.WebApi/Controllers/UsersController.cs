@@ -96,7 +96,6 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return NotFound();
-            // Your existing implementation here
         }
 
         // DELETE: api/Users/5
