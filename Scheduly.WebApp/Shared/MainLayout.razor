@@ -2,7 +2,7 @@
 
 <PageTitle>Scheduly</PageTitle>
 
-<MudThemeProvider />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -10,6 +10,10 @@
 <MudLayout>
 	<MudAppBar Elevation="0">
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+		<MudSpacer />
+		<MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnDarkModeChanged"
+							 Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Title="Switch to Light Mode"
+							 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Warning" ToggledTitle="Switch to Dark Mode" />
 	</MudAppBar>
 	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
 		<NavMenu />
@@ -23,10 +27,16 @@
 
 @code {
 	private Breakpoint _breakpoint = Breakpoint.Xl;
+	private bool _isDarkMode = true;
 	private bool _drawerOpen = false;
 
 	void DrawerToggle()
 	{
 		_drawerOpen = !_drawerOpen;
+	}
+
+	public void OnDarkModeChanged(bool isDarkMode)
+	{
+		_isDarkMode = isDarkMode;
 	}
 }
