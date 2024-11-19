@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
@@ -81,6 +82,21 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+        }
+
+
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<int>> AuthenticateUser([FromForm] UserAuthRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username && u.PasswordHash == request.PasswordHash);
+
+            if (user != null)
+            {
+                return Ok(user.UserId);
+            }
+
+            return NotFound();
+            // Your existing implementation here
         }
 
         // DELETE: api/Users/5
