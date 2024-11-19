@@ -1,20 +1,18 @@
 ﻿@page "/Booking";
 @inherits BookingBase;
 
-<h4>Booking</h4>
+<h4 class="py-4">Booking</h4>
 
 <MudGrid>
-    @foreach (var resource in ResourcesList)
+    @foreach (var resourceCategory in ResourceCategoryList)
     {
         <MudItem>
-            <MudCard Style="height:150px; width:300px;">
+            <MudCard Style="height:100px; width:300px;">
                 <MudCardContent>
-                    <MudText><b>@resource.Name</b></MudText>
-                    <MudText Typo="Typo.body2">@resource.Description</MudText>
-                    <MudText Typo="Typo.body2"><b>Amount @resource.Amount</b></MudText>
+                    <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton Variant="Variant.Text" Color="Color.Primary">Show More</MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{resourceCategory.CategoryId}")">Details</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>

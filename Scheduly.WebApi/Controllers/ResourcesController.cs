@@ -41,6 +41,22 @@ namespace Scheduly.WebApi.Controllers
             return resource;
         }
 
+        // GET: api/Resources/Category/{categoryId}
+        [HttpGet("Category/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<Resource>>> GetResourcesByCategory(int categoryId)
+        {
+            var category = await _context.Resources.FindAsync(categoryId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return await _context.Resources
+                .Where(r => r.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
         // PUT: api/Resources/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

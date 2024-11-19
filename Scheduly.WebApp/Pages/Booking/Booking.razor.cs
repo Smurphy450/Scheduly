@@ -7,7 +7,7 @@ namespace Scheduly.WebApp.Pages.Booking
 {
 	public class BookingBase : ComponentBase
     {
-        public List<Resource> ResourcesList = [];
+        public List<ResourceCategory> ResourceCategoryList = [];
 
         protected override async Task OnInitializedAsync()
 		{
@@ -17,19 +17,19 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     try
                     {
-                        var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/Resources");
+                        var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/ResourceCategories");
                         if (getAllResponse.IsSuccessStatusCode)
                         {
                             var content = await getAllResponse.Content.ReadAsStringAsync();
 
-                            var resources = JsonConvert.DeserializeObject<List<Resource>>(content);
-                            ResourcesList = resources ?? new List<Resource>();
+                            var resourceCategories = JsonConvert.DeserializeObject<List<ResourceCategory>>(content);
+							ResourceCategoryList = resourceCategories ?? new List<ResourceCategory>();
 
-                            Console.WriteLine("Retrieved all resources.");
+                            Console.WriteLine("Retrieved all resource categories.");
                         }
                         else
                         {
-                            Console.WriteLine($"Failed to get all resources. Status: {getAllResponse.StatusCode}");
+                            Console.WriteLine($"Failed to get all resource categories. Status: {getAllResponse.StatusCode}");
                         }
                     }
                     catch (HttpRequestException e)
@@ -40,7 +40,7 @@ namespace Scheduly.WebApp.Pages.Booking
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error retrieving resources: {ex.Message}");
+                Console.WriteLine($"Error retrieving resource categories: {ex.Message}");
             }
         }
 	}
