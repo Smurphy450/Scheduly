@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Services;
+using Scheduly.WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
