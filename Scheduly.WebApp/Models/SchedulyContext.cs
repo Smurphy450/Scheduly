@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Scheduly.WebApi.Models;
+namespace Scheduly.WebApp.Models;
 
 public partial class SchedulyContext : DbContext
 {

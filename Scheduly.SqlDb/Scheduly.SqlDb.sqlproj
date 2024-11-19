@@ -76,5 +76,6 @@
     <Build Include="Schema\Tables\TimeRegistration.sql" />
     <Build Include="Schema\Tables\User.sql" />
     <Build Include="Schema\Tables\ZipCodes.sql" />
+    <Build Include="Schema\Tables\ResourceCategory.sql" />
   </ItemGroup>
 </Project>

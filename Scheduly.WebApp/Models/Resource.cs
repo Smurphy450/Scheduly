@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Scheduly.WebApi.Models;
+namespace Scheduly.WebApp.Models;
 
 public partial class Resource
 {

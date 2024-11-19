@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Scheduly.WebApi.Models;
+namespace Scheduly.WebApp.Models;
 
-public partial class Resource
+public partial class Premise
 {
-    public int ResourceId { get; set; }
-
-    public int CategoryId { get; set; }
+    public int PremisId { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public int? Amount { get; set; }
+    public string? Size { get; set; }
 
     public string? Description { get; set; }
 
     public bool? MustBeApproved { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-
-    public virtual ResourceCategory Category { get; set; } = null!;
 }

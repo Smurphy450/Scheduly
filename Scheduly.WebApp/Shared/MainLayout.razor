@@ -11,10 +11,7 @@
 	<MudAppBar Elevation="0">
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
 	</MudAppBar>
-	<MudDrawer @bind-Open="_drawerOpen" Breakpoint="@_breakpoint" Elevation="1">
-		<MudDrawerHeader>
-			<MudText Typo="Typo.h6">Scheduly</MudText>
-		</MudDrawerHeader>
+	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
 		<NavMenu />
 	</MudDrawer>
 	<MudMainContent>
@@ -26,7 +23,7 @@
 
 @code {
 	private Breakpoint _breakpoint = Breakpoint.Xl;
-	private bool _drawerOpen = true;
+	private bool _drawerOpen = false;
 
 	void DrawerToggle()
 	{

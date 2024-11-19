@@ -4,17 +4,19 @@
 <h4>Booking</h4>
 
 <MudGrid>
-    @* @foreach (var resource in Resources)
-    { *@
+    @foreach (var resource in ResourcesList)
+    {
         <MudItem>
-            <MudCard>
+            <MudCard Style="height:150px; width:300px;">
                 <MudCardContent>
-                    <MudText>resource.Name</MudText>
+                    <MudText><b>@resource.Name</b></MudText>
+                    <MudText Typo="Typo.body2">@resource.Description</MudText>
+                    <MudText Typo="Typo.body2"><b>Amount @resource.Amount</b></MudText>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton Variant="Variant.Text" Color="Color.Primary">Show More</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
-    @* } *@
+    }
 </MudGrid>
