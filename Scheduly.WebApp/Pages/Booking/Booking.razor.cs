@@ -1,5 +1,5 @@
-﻿using Humanizer.Localisation;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
 
@@ -43,5 +43,5 @@ namespace Scheduly.WebApp.Pages.Booking
                 Console.WriteLine($"Error retrieving resource categories: {ex.Message}");
             }
         }
-	}
+    }
 }

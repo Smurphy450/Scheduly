@@ -1,0 +1,13 @@
+﻿@page "/Booking/CreateResourceCategory";
+@inherits CreateCategoryBase;
+
+<h4>Create Resource Category</h4>
+
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudTextField @bind-Value="CategoryName" Immediate="true" Label="Category name" />
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="CreateNewCategory">Create</MudButton>
+    </MudCardActions>
+</MudPaper>

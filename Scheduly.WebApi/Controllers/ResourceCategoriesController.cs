@@ -75,12 +75,12 @@ namespace Scheduly.WebApi.Controllers
         // POST: api/ResourceCategories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ResourceCategory>> PostResourceCategory(ResourceCategory resourceCategory)
+        public async Task<ActionResult<ResourceCategory>> PostResourceCategory([FromBody] ResourceCategory resourceCategory)
         {
             _context.ResourceCategories.Add(resourceCategory);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetResourceCategory", new { id = resourceCategory.CategoryId }, resourceCategory);
+            return CreatedAtAction("GetResourceCategory", new { name = resourceCategory.Name }, resourceCategory);
         }
 
         // DELETE: api/ResourceCategories/5
