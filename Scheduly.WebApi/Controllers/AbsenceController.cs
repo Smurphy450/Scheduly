@@ -41,6 +41,22 @@ namespace Scheduly.WebApi.Controllers
             return absence;
         }
 
+        // GET: api/Absence/User/{userId}
+        [HttpGet("User/{userId}")]
+        public async Task<ActionResult<IEnumerable<Absence>>> GetAbsenceByUserId(int userId)
+        {
+            var absences = await _context.Absences
+                .Where(a => a.UserId == userId)
+                .ToListAsync();
+
+            if (absences.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return absences;
+        }
+
         // PUT: api/Absence/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

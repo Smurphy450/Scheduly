@@ -2,3 +2,11 @@
 @inherits AbsenceBase;
 
 <h3>Absence</h3>
+
+<MudPaper Class="pa-4">
+    <MudText>Total Absence</MudText>
+    <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@AbsenceArray" Width="300px" Height="300px" />
+</MudPaper>
+<MudPaper Class="pa-4 mt-2 d-flex justify-center">
+    <MudButton Variant="Variant.Text" Color="Color.Primary">Report abscence</MudButton>
+</MudPaper>
