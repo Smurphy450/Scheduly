@@ -22,16 +22,13 @@ namespace Scheduly.WebApp.Pages.Booking
                         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
                         var url = "https://localhost:7171/api/ResourceCategories/CreateResourceCategory";
 
-                        // Create form data
                         var formData = new Dictionary<string, string>
                         {
                             { "name", CategoryName }
                         };
 
-                        // Convert form data to string
                         var content = new FormUrlEncodedContent(formData);
 
-                        // Send POST request
                         var response = await httpClient.PostAsync(url, content);
 
                         if (response.IsSuccessStatusCode)

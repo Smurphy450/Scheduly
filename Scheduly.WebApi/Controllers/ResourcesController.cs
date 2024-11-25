@@ -99,6 +99,31 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetResource", new { id = resource.ResourceId }, resource);
         }
 
+        [HttpPost("CreateResource")]
+        public async Task<ActionResult<Resource>> CreateResource([FromForm] CreateResourceDTO resourceDTO)
+        {
+            if (!string.IsNullOrEmpty(resourceDTO.Name))
+            {
+                var resource = new Resource
+                {
+                    CategoryId = resourceDTO.CategoryId,
+                    Name = resourceDTO.Name,
+                    Description = resourceDTO.Description,
+                    Amount = resourceDTO.Amount,
+                    MustBeApproved = resourceDTO.MustBeApproved,
+                };
+
+                _context.Resources.Add(resource);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetResource", new { id = resource.CategoryId }, resource);
+            }
+            else
+            {
+                return BadRequest("Name is required");
+            }
+        }
+
         // DELETE: api/Resources/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResource(int id)
