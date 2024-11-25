@@ -20,7 +20,7 @@ namespace Scheduly.WebApp.Pages.Booking
                     try
                     {
                         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
-                        var url = "https://localhost:7171/api/ResourceCategories/ResourceCategories";
+                        var url = "https://localhost:7171/api/ResourceCategories/CreateResourceCategory";
 
                         // Create form data
                         var formData = new Dictionary<string, string>

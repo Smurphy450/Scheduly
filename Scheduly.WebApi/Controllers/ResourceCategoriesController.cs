@@ -83,6 +83,27 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetResourceCategory", new { id = resourceCategory.CategoryId }, resourceCategory);
         }
 
+        [HttpPost("CreateResourceCategory")]
+        public async Task<ActionResult<ResourceCategory>> CreateResourceCategory([FromForm] CreateResourceCategoryDTO resourceCategoryDTO)
+        {
+            if (!string.IsNullOrEmpty(resourceCategoryDTO.Name))
+            {
+                var resourceCategory = new ResourceCategory
+                {
+                    Name = resourceCategoryDTO.Name
+                };
+
+                _context.ResourceCategories.Add(resourceCategory);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetResourceCategory", new { id = resourceCategory.CategoryId }, resourceCategory);
+            }
+            else
+            {
+                return BadRequest("Name is required");
+            }
+        }
+
         // DELETE: api/ResourceCategories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResourceCategory(int id)
