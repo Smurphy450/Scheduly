@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Extensions;
+using Scheduly.WebApp.Authentication;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -12,6 +14,8 @@ namespace Scheduly.WebApp.Pages.Login
 {
     public class LoginBase : ComponentBase
     {
+        [Inject]
+        private AuthenticationStateProvider authStateProvider { get; set; };
         [Inject]
         private ISnackbar Snackbar { get; set; }
 
@@ -60,6 +64,8 @@ namespace Scheduly.WebApp.Pages.Login
                     }
                     else
                     {
+                        var customerAuthStateProvider = (CustomAuthenticationStateProvider)customerAuthStateProvider;
+
                         // Handle successful authentication
                         Snackbar.Add("Login successful!", Severity.Success);
                         Console.WriteLine($"Login successful for username: {username}");
@@ -73,6 +79,11 @@ namespace Scheduly.WebApp.Pages.Login
                 Snackbar.Add($"An error occurred during authentication: {ex.Message}", Severity.Error);
                 Console.WriteLine($"Error during authentication attempt: {ex.Message}");
             }
+        }
+
+        private async Task Authenticate()
+        {
+
         }
     }
 }

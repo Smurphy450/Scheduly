@@ -2,11 +2,22 @@
 
 <Title />
 
-<div style="color: #ffffff">
-	<MudText Typo="Typo.h2">Welcome</MudText>
-	<MudGrid>
-		<MudItem md="6" xs="12">
-			<MudText>Welcome to Scheduly</MudText>
-		</MudItem>
-	</MudGrid>
-</div>
+<AuthorizeView>
+	<Authorized>
+        <div style="color: #ffffff">
+            <MudText Typo="Typo.h2">Welcome</MudText>
+            <MudGrid>
+                <MudItem md="6" xs="12">
+                    <MudText>Welcome to Scheduly</MudText>
+                    <MudText>@context.User.Identity.Name!</MudText>
+                </MudItem>
+            </MudGrid>
+        </div>
+	</Authorized>
+	<NotAuthorized>
+		<MudAlert Severity="Severity.Error" Elevation="0" IsOpen="true">
+			<MudAlertTitle>Not authorized</MudAlertTitle>
+			<MudAlertContent>You are not authorized to view this page.</MudAlertContent>
+		</MudAlert>
+	</NotAuthorized>
+</AuthorizeView>
