@@ -1,5 +1,6 @@
 ﻿@page "/Booking/CreateResourceCategory";
 @inherits CreateCategoryBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h4>Create Resource Category</h4>
 

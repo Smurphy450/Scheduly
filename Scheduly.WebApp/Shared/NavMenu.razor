@@ -5,4 +5,9 @@
 	<MudNavLink Href="Booking" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.BookOnline">Booking</MudNavLink>
 	<MudNavLink Href="Overview" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Overview</MudNavLink>
 	<MudNavLink Href="TimeRegistration" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AvTimer">TimeRegistration</MudNavLink>
+	<AuthorizeView Roles="Administrator">
+        <Authorized>
+            <MudNavLink Href="Admin" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AdminPanelSettings">Admin</MudNavLink>
+        </Authorized>
+	</AuthorizeView>
 </MudNavMenu>
