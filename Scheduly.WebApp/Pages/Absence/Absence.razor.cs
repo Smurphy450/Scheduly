@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
-using Scheduly.WebApi.Models;
 
 namespace Scheduly.WebApp.Pages.Absence
 {
@@ -30,7 +29,7 @@ namespace Scheduly.WebApp.Pages.Absence
                         {
                             var content = await getAllResponse.Content.ReadAsStringAsync();
 
-                            var absence = JsonConvert.DeserializeObject<List<Absence>>(content);
+                            var absence = JsonConvert.DeserializeObject<List<Scheduly.WebApi.Models.Absence>>(content);
                             AbsenceArray = Array.ConvertAll(absence.ToArray(), x => x.ToString());
 
                             Console.WriteLine("Retrieved list of absence for user.");
