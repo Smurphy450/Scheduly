@@ -22,10 +22,42 @@ namespace Scheduly.WebApp.Pages.Absence
 
         protected override async Task OnInitializedAsync()
         {
+            int userId = await GetUserInfo();
+            await GetAbsenceInfo(userId);
+        }
+
+        private async Task GetAbsenceInfo(int userId)
+        {
             try
             {
-                int userId = await GetUserInfo();
-                await GetAbsenceInfo(userId);
+                // TODO: Lav et api kald til at hente alle fraværestyper for en bruger, hente hvor mange gange de forkommer og indsæt det i data arrayet.
+                // TODO: Den skal også kunne hente alt fravær for en bruger, tælle hvor mange gange de forskellige fraværestyper forkommer samt tælle op hvor mange timer fraværet er i alt.
+
+                // TODO: Get amount of times the absence types have been used
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Absence/User/{userId}");
+                        if (getAllResponse.IsSuccessStatusCode)
+                        {
+                            var content = await getAllResponse.Content.ReadAsStringAsync();
+
+                            var absence = JsonConvert.DeserializeObject<List<Scheduly.WebApi.Models.Absence>>(content);
+                            AbsenceArray = Array.ConvertAll(absence.ToArray(), x => x.ToString());
+
+                            Console.WriteLine("Retrieved list of absence for user.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to get all absence for user. Status: {getAllResponse.StatusCode}");
+                        }
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -33,53 +65,29 @@ namespace Scheduly.WebApp.Pages.Absence
             }
         }
 
-        private async Task GetAbsenceInfo(int userId)
-        {
-            // TODO: Lav et api kald til at hente alle fraværestyper for en bruger, hente hvor mange gange de forkommer og indsæt det i data arrayet.
-            // TODO: Den skal også kunne hente alt fravær for en bruger, tælle hvor mange gange de forskellige fraværestyper forkommer samt tælle op hvor mange timer fraværet er i alt.
-
-            // TODO: Get amount of times the absence types have been used
-            using (var httpClient = new HttpClient())
-            {
-                try
-                {
-                    var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Absence/User/{userId}");
-                    if (getAllResponse.IsSuccessStatusCode)
-                    {
-                        var content = await getAllResponse.Content.ReadAsStringAsync();
-
-                        var absence = JsonConvert.DeserializeObject<List<Scheduly.WebApi.Models.Absence>>(content);
-                        AbsenceArray = Array.ConvertAll(absence.ToArray(), x => x.ToString());
-
-                        Console.WriteLine("Retrieved list of absence for user.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed to get all absence for user. Status: {getAllResponse.StatusCode}");
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine($"An error occurred while making the request: {e.Message}");
-                }
-            }
-        }
-
         private async Task<int> GetUserInfo()
         {
-            var userId = 0;
-            string userName = string.Empty;
-
-            var authState = await authStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user.Identity.IsAuthenticated)
+            try
             {
-                userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                userName = user.Identity.Name;
-            }
+                var userId = 0;
+                string userName = string.Empty;
 
-            return userId;
+                var authState = await authStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
+                    userName = user.Identity.Name;
+                }
+
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error authenticating user: {ex.Message}");
+                return 0;
+            }
         }
     }
 }
