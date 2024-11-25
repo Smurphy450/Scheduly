@@ -51,6 +51,9 @@ namespace Scheduly.WebApp.Pages.Booking
                             Console.WriteLine("Created new resource.");
 
                             ResourceName = string.Empty;
+                            ResourceAmount = 0;
+                            ResourceDescription = string.Empty;
+                            MustBeApproved = false;
                         }
                         else
                         {
@@ -58,8 +61,6 @@ namespace Scheduly.WebApp.Pages.Booking
                             Snackbar.Add("Failed to create new resource!", Severity.Error);
 
                             Console.WriteLine($"Failed to create new resource. Status: {response.StatusCode}");
-
-                            ResourceName = string.Empty;
                         }
                     }
                     catch (HttpRequestException e)
@@ -68,8 +69,6 @@ namespace Scheduly.WebApp.Pages.Booking
                         Snackbar.Add("Error creating new resource!", Severity.Error);
 
                         Console.WriteLine($"An error occurred while making the request: {e.Message}");
-
-                        ResourceName = string.Empty;
                     }
                 }
             }
@@ -79,8 +78,6 @@ namespace Scheduly.WebApp.Pages.Booking
                 Snackbar.Add("Error creating new resource!", Severity.Error);
 
                 Console.WriteLine($"Error creating new resource: {ex.Message}");
-
-                ResourceName = string.Empty;
             }
 
         }

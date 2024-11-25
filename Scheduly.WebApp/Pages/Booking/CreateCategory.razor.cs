@@ -45,8 +45,6 @@ namespace Scheduly.WebApp.Pages.Booking
                             Snackbar.Add("Failed to create new resource category!", Severity.Error);
 
                             Console.WriteLine($"Failed to create new resource category. Status: {response.StatusCode}");
-
-                            CategoryName = string.Empty;
                         }
                     }
                     catch (HttpRequestException e)
@@ -55,8 +53,6 @@ namespace Scheduly.WebApp.Pages.Booking
                         Snackbar.Add("Error creating new resource category!", Severity.Error);
 
                         Console.WriteLine($"An error occurred while making the request: {e.Message}");
-
-                        CategoryName = string.Empty;
                     }
                 }
             }
@@ -66,10 +62,7 @@ namespace Scheduly.WebApp.Pages.Booking
                 Snackbar.Add("Error creating new resource category!", Severity.Error);
 
                 Console.WriteLine($"Error creating new resource category: {ex.Message}");
-
-                CategoryName = string.Empty;
             }
-
         }
     }
 }
