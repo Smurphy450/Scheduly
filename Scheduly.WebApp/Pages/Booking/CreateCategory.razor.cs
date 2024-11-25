@@ -19,8 +19,8 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     try
                     {
-                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
-                        var url = "https://localhost:7171/api/ResourceCategories";
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                        var url = "https://localhost:7171/api/ResourceCategories/ResourceCategories";
 
                         // Create form data
                         var formData = new Dictionary<string, string>
