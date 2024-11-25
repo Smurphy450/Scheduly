@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Newtonsoft.Json;
-using Scheduly.WebApi.Models;
-using System.Text;
+using System.Net.Http.Headers;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
@@ -21,10 +19,22 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     try
                     {
-                        var content = new StringContent(JsonConvert.SerializeObject(CategoryName), Encoding.UTF8, "application/json");
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                        var url = "https://localhost:7171/api/ResourceCategories";
 
-                        var postResponse = await httpClient.PostAsync("https://localhost:7171/api/ResourceCategories", content);
-                        if (postResponse.IsSuccessStatusCode)
+                        // Create form data
+                        var formData = new Dictionary<string, string>
+                        {
+                            { "name", CategoryName }
+                        };
+
+                        // Convert form data to string
+                        var content = new FormUrlEncodedContent(formData);
+
+                        // Send POST request
+                        var response = await httpClient.PostAsync(url, content);
+
+                        if (response.IsSuccessStatusCode)
                         {
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                             Snackbar.Add("Created new category.", Severity.Success);
@@ -38,7 +48,7 @@ namespace Scheduly.WebApp.Pages.Booking
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                             Snackbar.Add("Failed to create new resource category!", Severity.Error);
 
-                            Console.WriteLine($"Failed to create new resource category. Status: {postResponse.StatusCode}");
+                            Console.WriteLine($"Failed to create new resource category. Status: {response.StatusCode}");
 
                             CategoryName = string.Empty;
                         }
