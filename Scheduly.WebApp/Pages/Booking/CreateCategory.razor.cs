@@ -6,8 +6,7 @@ namespace Scheduly.WebApp.Pages.Booking
 {
     public class CreateCategoryBase : ComponentBase
     {
-        [Inject]
-        private ISnackbar Snackbar { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
         public string CategoryName { get; set; }
 

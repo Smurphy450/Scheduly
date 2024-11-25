@@ -11,7 +11,12 @@ namespace Scheduly.WebApp.Pages.Booking
 
         protected override async Task OnInitializedAsync()
 		{
-			try
+            await GetAllResourceTypes();
+        }
+
+        private async Task GetAllResourceTypes()
+        {
+            try
             {
                 using (var httpClient = new HttpClient())
                 {
@@ -23,7 +28,7 @@ namespace Scheduly.WebApp.Pages.Booking
                             var content = await getAllResponse.Content.ReadAsStringAsync();
 
                             var resourceCategories = JsonConvert.DeserializeObject<List<ResourceCategory>>(content);
-							ResourceCategoryList = resourceCategories ?? new List<ResourceCategory>();
+                            ResourceCategoryList = resourceCategories ?? new List<ResourceCategory>();
 
                             Console.WriteLine("Retrieved all resource categories.");
                         }

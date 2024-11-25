@@ -6,25 +6,17 @@ using MudBlazor.Extensions;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Authentication;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
-using static System.Net.WebRequestMethods;
 
 namespace Scheduly.WebApp.Pages.Login
 {
     public class LoginBase : ComponentBase
     {
-        [Inject]
-        private AuthenticationStateProvider authStateProvider { get; set; }
-        [Inject]
-        private ISnackbar Snackbar { get; set; }
-        [Inject]
-        private NavigationManager NavigationManager { get; set; }
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
+        [Inject] private NavigationManager NavigationManager { get; set; }
 
-        protected WebApi.Models.User model = new WebApi.Models.User();
+        protected User model = new User();
 
         private string HashPassword(string password)
         {
