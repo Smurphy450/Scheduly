@@ -27,7 +27,7 @@ namespace Scheduly.WebApp.Authentication
                 var claimsPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, userSession.Username),
-                    //new Claim(ClaimTypes.NameIdentifier, userSession.UserID.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, userSession.UserID.ToString()),
                     new Claim(ClaimTypes.Role, userSession.Role)
                 }, "CustomAuth"));
 
