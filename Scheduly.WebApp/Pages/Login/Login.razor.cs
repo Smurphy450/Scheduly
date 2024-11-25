@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Extensions;
+using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Authentication;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -15,9 +18,11 @@ namespace Scheduly.WebApp.Pages.Login
     public class LoginBase : ComponentBase
     {
         [Inject]
-        private AuthenticationStateProvider authStateProvider { get; set; };
+        private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject]
         private ISnackbar Snackbar { get; set; }
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
 
         protected WebApi.Models.User model = new WebApi.Models.User();
 
@@ -64,13 +69,22 @@ namespace Scheduly.WebApp.Pages.Login
                     }
                     else
                     {
-                        var customerAuthStateProvider = (CustomAuthenticationStateProvider)customerAuthStateProvider;
+                        var userAuthResponse = await response.Content.ReadFromJsonAsync<UserSession>();
+                        if (userAuthResponse != null)
+                        {                           
+                            var customerAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+                            await customerAuthStateProvider.UpdateAuthenticationState(new UserSession
+                            {
+                                Username = userAuthResponse.Username,
+                                UserID = userAuthResponse.UserID,
+                                Role = userAuthResponse.Role
+                            });
+                            // Handle successful authentication
+                            Snackbar.Add("Login successful!", Severity.Success);
 
-                        // Handle successful authentication
-                        Snackbar.Add("Login successful!", Severity.Success);
-                        Console.WriteLine($"Login successful for username: {username}");
 
-                        model = new WebApi.Models.User();
+                            NavigationManager.NavigateTo("/test");
+                        }
                     }
                 }
             }
@@ -79,11 +93,6 @@ namespace Scheduly.WebApp.Pages.Login
                 Snackbar.Add($"An error occurred during authentication: {ex.Message}", Severity.Error);
                 Console.WriteLine($"Error during authentication attempt: {ex.Message}");
             }
-        }
-
-        private async Task Authenticate()
-        {
-
         }
     }
 }

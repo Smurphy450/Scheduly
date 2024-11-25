@@ -39,7 +39,7 @@ namespace Scheduly.WebApp.Authentication
             }
         }
 
-        public async Task AuthenticationState(WebApi.Models.UserSession userSession)
+        public async Task UpdateAuthenticationState(WebApi.Models.UserSession userSession)
         {
             ClaimsPrincipal claimsPrincipal;
 

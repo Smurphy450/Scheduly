@@ -1,10 +1,14 @@
 ﻿<MudNavMenu Color="Color.Info">
 	<MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-	<MudNavLink Href="Profile" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
-	<MudNavLink Href="Absence" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sick">Absence</MudNavLink>
-	<MudNavLink Href="Booking" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.BookOnline">Booking</MudNavLink>
-	<MudNavLink Href="Overview" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Overview</MudNavLink>
-	<MudNavLink Href="TimeRegistration" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AvTimer">TimeRegistration</MudNavLink>
+	<AuthorizeView Roles="Administrator,User">
+		<Authorized>
+			<MudNavLink Href="Profile" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
+			<MudNavLink Href="Absence" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sick">Absence</MudNavLink>
+			<MudNavLink Href="Booking" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.BookOnline">Booking</MudNavLink>
+			<MudNavLink Href="Overview" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Overview</MudNavLink>
+			<MudNavLink Href="TimeRegistration" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AvTimer">TimeRegistration</MudNavLink>
+		</Authorized>
+	</AuthorizeView>
 	<AuthorizeView Roles="Administrator">
         <Authorized>
             <MudNavLink Href="Admin" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AdminPanelSettings">Admin</MudNavLink>
