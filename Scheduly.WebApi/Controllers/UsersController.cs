@@ -84,15 +84,23 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
 
-
         [HttpPost("authenticate")]
-        public async Task<ActionResult<int>> AuthenticateUser([FromForm] UserAuthRequest request)
+        public async Task<ActionResult<UserSession>> AuthenticateUser([FromForm] UserAuthRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username && u.PasswordHash == request.PasswordHash);
 
             if (user != null)
             {
-                return Ok(user.UserId);
+                var profiles = await _context.Profiles.FirstOrDefaultAsync(u => u.UserId == user.UserId);
+                //var profile = await _context.Profiles.FindAsync(user.UserId);
+                string role = profiles?.Admin ?? false ? "Administrator" : "User";
+
+                return Ok(new UserSession
+                {
+                    Username = user.Username,
+                    UserID = user.UserId,
+                    Role = role
+                });
             }
 
             return NotFound();
