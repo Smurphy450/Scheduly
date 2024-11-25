@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Routing.Constraints;
+using MudBlazor;
 using Newtonsoft.Json;
+using Scheduly.WebApp.Authentication;
+using System.Security.Claims;
 
 namespace Scheduly.WebApp.Pages.Absence
 {
 	public class AbsenceBase : ComponentBase
 	{
+        [Inject]
+        private ISnackbar Snackbar { get; set; }
+        [Inject]
+        private AuthenticationStateProvider authStateProvider { get; set; }
         public int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
 
         // TODO: Get absence type
@@ -16,9 +25,33 @@ namespace Scheduly.WebApp.Pages.Absence
         {
             try
             {
-                // TODO: Get UserId from logged in user
-                var userId = 2; // temp
-                
+                var userId = 0; // temp
+                string userName = string.Empty;
+
+                var authState = await authStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
+                    userName = user.Identity.Name;
+
+                    //TODO: Skal slettes herunder, bare for at vise hvordan det skal laves
+                    if (userId == 0)
+                    {
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                        Snackbar.Add("Failed to get user id from claims.", Severity.Success);
+                    }
+                    else
+                    {
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                        Snackbar.Add($"Successfully retrieved user id from claims. UserID: {userId}, Username: {userName}", Severity.Success);
+                    }
+                }
+
+                // TODO: Lav et api kald til at hente alle fraværestyper for en bruger, hente hvor mange gange de forkommer og indsæt det i data arrayet.
+                // TODO: Den skal også kunne hente alt fravær for en bruger, tælle hvor mange gange de forskellige fraværestyper forkommer samt tælle op hvor mange timer fraværet er i alt.
+
                 // TODO: Get amount of times the absence types have been used
                 using (var httpClient = new HttpClient())
                 {
