@@ -15,12 +15,18 @@ namespace Scheduly.WebApp.Pages.Absence
         public int UserId { get; set; }
         public DateTimeOffset Start { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 8 AM
         public DateTimeOffset End { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 4 PM
+        public DateTime? DatetimeStart { get; set; }
+        public DateTime? DatetimeEnd { get; set; }
         public string Description { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await GetUserId();
-            await SaveAbsenceToDb();
+        }
+
+        private async Task ReportAbsenceAsync()
+        {
+            // Add your async task logic here
         }
 
         private async Task SaveAbsenceToDb()
@@ -28,6 +34,8 @@ namespace Scheduly.WebApp.Pages.Absence
             try
             {
                 // TODO: Edit API to save absence to database
+
+                //Skal sende, DatetimeStart, DatetimeEnd, Description, AbsenceTypeId, UserId
                 using (var httpClient = new HttpClient())
                 {
                     try
