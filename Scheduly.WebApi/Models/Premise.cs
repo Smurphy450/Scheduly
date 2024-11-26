@@ -18,4 +18,6 @@ public partial class Premise
     public bool? MustBeApproved { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+    public virtual PremiseCategory PremiseCategory { get; set; } = null!;
 }

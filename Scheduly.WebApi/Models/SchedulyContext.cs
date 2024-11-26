@@ -23,6 +23,8 @@ public partial class SchedulyContext : DbContext
 
     public virtual DbSet<Premise> Premises { get; set; }
 
+    public virtual DbSet<PremiseCategory> PremiseCategories { get; set; }
+
     public virtual DbSet<Profile> Profiles { get; set; }
 
     public virtual DbSet<Resource> Resources { get; set; }
@@ -85,17 +87,17 @@ public partial class SchedulyContext : DbContext
             entity.Property(e => e.End)
                 .HasPrecision(2)
                 .HasDefaultValueSql("(sysdatetimeoffset())");
-            entity.Property(e => e.PremisId).HasColumnName("PremisID");
+            entity.Property(e => e.PremiseId).HasColumnName("PremiseID");
             entity.Property(e => e.ResourceId).HasColumnName("ResourceID");
             entity.Property(e => e.Start)
                 .HasPrecision(2)
                 .HasDefaultValueSql("(sysdatetimeoffset())");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
-            entity.HasOne(d => d.Premis).WithMany(p => p.Bookings)
-                .HasForeignKey(d => d.PremisId)
+            entity.HasOne(d => d.Premise).WithMany(p => p.Bookings)
+                .HasForeignKey(d => d.PremiseId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_dbo_Premises$Bookings_PremisID");
+                .HasConstraintName("FK_dbo_Premises$Bookings_PremiseID");
 
             entity.HasOne(d => d.Resource).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.ResourceId)
@@ -109,11 +111,26 @@ public partial class SchedulyContext : DbContext
 
         modelBuilder.Entity<Premise>(entity =>
         {
-            entity.HasKey(e => e.PremisId).HasName("PK_dbo_Premises$PremisID");
+            entity.HasKey(e => e.PremiseId).HasName("PK_dbo_Premises$PremisID");
 
-            entity.Property(e => e.PremisId).HasColumnName("PremisID");
+            entity.Property(e => e.PremiseId).HasColumnName("PremiseID");
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.PremiseCategoryId).HasColumnName("PremiseCategoryID");
             entity.Property(e => e.Size).HasMaxLength(10);
+
+            entity.HasOne(d => d.PremiseCategory).WithMany(p => p.Premises)
+                .HasForeignKey(d => d.PremiseCategoryId)
+                .HasConstraintName("FK_dbo_PremiseCategory$Premises_PremiseCategoryID");
+        });
+
+        modelBuilder.Entity<PremiseCategory>(entity =>
+        {
+            entity.HasKey(e => e.PremiseCategoryId).HasName("PK_dbo_PremiseCategory$PremiseCategoryID");
+
+            entity.ToTable("PremiseCategory");
+
+            entity.Property(e => e.PremiseCategoryId).HasColumnName("PremiseCategoryID");
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Profile>(entity =>

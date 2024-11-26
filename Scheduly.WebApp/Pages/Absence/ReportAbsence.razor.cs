@@ -24,7 +24,7 @@ namespace Scheduly.WebApp.Pages.Absence
             await GetUserId();
         }
 
-        private async Task ReportAbsenceAsync()
+        protected async Task ReportAbsenceAsync()
         {
             // Add your async task logic here
         }

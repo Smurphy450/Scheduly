@@ -9,7 +9,7 @@ public partial class Booking
 
     public int UserId { get; set; }
 
-    public int? PremisId { get; set; }
+    public int? PremiseId { get; set; }
 
     public int? ResourceId { get; set; }
 
@@ -19,7 +19,7 @@ public partial class Booking
 
     public bool? Approved { get; set; }
 
-    public virtual Premise? Premis { get; set; }
+    public virtual Premise? Premise { get; set; }
 
     public virtual Resource? Resource { get; set; }
 

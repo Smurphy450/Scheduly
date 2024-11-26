@@ -6,6 +6,6 @@
 	[Size] nvarchar(10),
 	[Description] nvarchar(max),
 	[MustBeApproved] bit,
-	constraint [PK_dbo_Premises$PremisID] primary key clustered (PremiseID) with (fillfactor = 100),
+	constraint [PK_dbo_Premises$PremiseID] primary key clustered (PremiseID) with (fillfactor = 100),
 	constraint [FK_dbo_PremiseCategory$Premises_PremiseCategoryID] foreign key (PremiseCategoryID) references dbo.[PremiseCategory](PremiseCategoryID) on delete cascade,
 )

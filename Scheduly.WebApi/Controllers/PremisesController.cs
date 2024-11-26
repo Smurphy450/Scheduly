@@ -46,7 +46,7 @@ namespace Scheduly.WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPremise(int id, Premise premise)
         {
-            if (id != premise.PremisId)
+            if (id != premise.PremiseId)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace Scheduly.WebApi.Controllers
             _context.Premises.Add(premise);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPremise", new { id = premise.PremisId }, premise);
+            return CreatedAtAction("GetPremise", new { id = premise.PremiseId }, premise);
         }
 
         // DELETE: api/Premises/5
@@ -101,7 +101,7 @@ namespace Scheduly.WebApi.Controllers
 
         private bool PremiseExists(int id)
         {
-            return _context.Premises.Any(e => e.PremisId == id);
+            return _context.Premises.Any(e => e.PremiseId == id);
         }
     }
 }
