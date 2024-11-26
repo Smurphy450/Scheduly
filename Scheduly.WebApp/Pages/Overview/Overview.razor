@@ -1,4 +1,37 @@
 ﻿@page "/Overview";
 @inherits OverviewBase;
+@using Scheduly.WebApi.Models.DTO;
 
-<h3>Overview</h3>
+<h4>Overview</h4>
+
+<MudGrid>
+	<MudItem xs="12">
+		<MudButton FullWidth="true" Variant="Variant.Filled">Start</MudButton>
+	</MudItem>
+	<MudItem xs="6" Class="d-flex align-start">
+		<MudDataGrid T="OverviewPremisesDTO">
+			<Columns>
+				<PropertyColumn Property="x => x.Name" />
+				<PropertyColumn Property="x => x.Size" />
+				<PropertyColumn Property="x => x.Start" />
+				<PropertyColumn Property="x => x.End" />
+				<PropertyColumn Property="x => x.Approved" />
+			</Columns>
+		</MudDataGrid>
+	</MudItem>
+	<MudItem xs="6">
+		<MudDataGrid T="OverviewResourcesDTO">
+			<Columns>
+				<PropertyColumn Property="x => x.CategoryName" />
+				<PropertyColumn Property="x => x.ResourceName" />
+				<PropertyColumn Property="x => x.Description" />
+				<PropertyColumn Property="x => x.Start" />
+				<PropertyColumn Property="x => x.End" />
+				<PropertyColumn Property="x => x.Approved" />
+			</Columns>
+		</MudDataGrid>
+	</MudItem>
+	<MudItem xs="12" Class="d-flex align-bottom">
+		<MudButton FullWidth="true" Variant="Variant.Filled">Report Absence</MudButton>
+	</MudItem>
+</MudGrid>

@@ -1,4 +1,4 @@
-﻿namespace Scheduly.WebApi.Models
+﻿namespace Scheduly.WebApi.Models.DTO
 {
     public class CreateResourceDTO
     {
