@@ -5,7 +5,9 @@ namespace Scheduly.WebApi.Models;
 
 public partial class Premise
 {
-    public int PremisId { get; set; }
+    public int PremiseId { get; set; }
+
+    public int PremiseCategoryId { get; set; }
 
     public string Name { get; set; } = null!;
 
