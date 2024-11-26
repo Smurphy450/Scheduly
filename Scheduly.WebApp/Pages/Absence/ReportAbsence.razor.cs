@@ -13,8 +13,8 @@ namespace Scheduly.WebApp.Pages.Absence
 
         public int AbsenceTypeId { get; set; }
         public int UserId { get; set; }
-        public DateTimeOffset Start { get; set; }
-        public DateTimeOffset End { get; set; }
+        public DateTimeOffset Start { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 8 AM
+        public DateTimeOffset End { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 4 PM
         public string Description { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -27,6 +27,7 @@ namespace Scheduly.WebApp.Pages.Absence
         {
             try
             {
+                // TODO: Edit API to save absence to database
                 using (var httpClient = new HttpClient())
                 {
                     try
@@ -57,17 +58,11 @@ namespace Scheduly.WebApp.Pages.Absence
                         }
                         else
                         {
-                            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                            Snackbar.Add("Failed to report absence!", Severity.Error);
-
                             Console.WriteLine($"Failed to report absence. Status: {response.StatusCode}");
                         }
                     }
                     catch (HttpRequestException e)
                     {
-                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                        Snackbar.Add("Error reporting absence!", Severity.Error);
-
                         Console.WriteLine($"An error occurred while making the request: {e.Message}");
                     }
                 }

@@ -65,9 +65,6 @@ namespace Scheduly.WebApp.Pages.Booking
                     }
                     catch (HttpRequestException e)
                     {
-                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                        Snackbar.Add("Error creating new resource!", Severity.Error);
-
                         Console.WriteLine($"An error occurred while making the request: {e.Message}");
                     }
                 }
