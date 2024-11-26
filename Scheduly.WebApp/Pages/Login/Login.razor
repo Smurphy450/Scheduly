@@ -1,21 +1,18 @@
 ﻿@page "/";
-
 @using MudBlazor;
 @inherits LoginBase;
 
-<h3>Login</h3>
 
-<EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <InputText id="username" @bind-Value="model.Username" placeholder="Enter username" />
-        <ValidationMessage For="@(() => model.Username)" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <InputText id="password" @bind-Value="model.PasswordHash" placeholder="Enter password" Type="password" />
-        <ValidationMessage For="@(() => model.PasswordHash)" />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</EditForm>
+<MudGrid Justify="Justify.Center" Style="height:100vh; width:100%; display:flex; justify-content:center; align-items:center;">
+    <MudPaper Class="pa-4" Position="Position.Center">
+        <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <h3>Login</h3>
+            <MudTextField Label="Username" @bind-Value="model.Username" Variant="Variant.Outlined" Required="true" ValidationMessage="ValidationMessageForUsername" />
+            <MudTextField Label="Password" @bind-Value="model.PasswordHash" Variant="Variant.Outlined" Type="InputType.Password" Required="true" ValidationMessage="ValidationMessageForPassword" />
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="(() => HandleValidSubmit())">Login</MudButton>
+            </MudCardActions>
+        </EditForm>
+    </MudPaper>
+</MudGrid>

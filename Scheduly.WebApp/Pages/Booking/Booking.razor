@@ -15,38 +15,52 @@
     <MudItem>
         <h4 class="py-4">Resources</h4>
 
-        @foreach (var resourceCategory in ResourceCategoryList)
-        {
-            <MudItem>
-                <MudCard Style="height:100px; width:300px;">
-                    <MudCardContent>
-                        <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{resourceCategory.CategoryId}")">Details</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        }
+        <MudStack Row="true">
+            @foreach (var resourceCategory in ResourceCategoryList)
+            {
+                <MudItem>
+                    <MudCard Style="height:150px; width:300px;">
+                        <MudCardContent>
+                            <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{resourceCategory.CategoryId}")">Details</MudButton>
+                            <AuthorizeView Roles="Administrator">
+                                <Authorized>
+                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResourceCategory(resourceCategory.CategoryId))" />
+                                </Authorized>
+                            </AuthorizeView>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudStack>
     </MudItem>
     
-    <MudDivider Vertical="false" DividerType="DividerType.FullWidth" />
+    <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.FullWidth" />
 
     <MudItem>
         <h4 class="py-4">Premises</h4>
 
-        @foreach (var premiseCategory in PremiseCategoryList)
-        {
-            <MudItem>
-                <MudCard Style="height:100px; width:300px;">
-                    <MudCardContent>
-                        <MudText Typo="Typo.body1"><b>@premiseCategory.Name</b</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        }
+        <MudStack Row="true">
+            @foreach (var premiseCategory in PremiseCategoryList)
+            {
+                <MudItem>
+                    <MudCard Style="height:150px; width:300px;">
+                        <MudCardContent>
+                            <MudText Typo="Typo.body1"><b>@premiseCategory.Name</b</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
+                            <AuthorizeView Roles="Administrator">
+                                <Authorized>
+                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremiseCategory(premiseCategory.PremiseCategoryId))" />
+                                </Authorized>
+                            </AuthorizeView>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudStack>
     </MudItem>
 </MudGrid>

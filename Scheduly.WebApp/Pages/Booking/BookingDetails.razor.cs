@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using System.Net.Http;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
@@ -75,6 +76,59 @@ namespace Scheduly.WebApp.Pages.Booking
                 else
                 {
                     Console.WriteLine($"Failed to get all resources. Status: {getAllResponse.StatusCode}");
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
+        }
+
+        // TODO:
+        protected async Task BookResource()
+        {
+            //try
+            //{
+            //    var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Resources/Category/{CategoryId}");
+            //    if (getAllResponse.IsSuccessStatusCode)
+            //    {
+            //        var content = await getAllResponse.Content.ReadAsStringAsync();
+
+            //        var resource = JsonConvert.DeserializeObject<List<Resource>>(content);
+            //        ResourceList = resource ?? new List<Resource>();
+
+            //        Console.WriteLine("Retrieved all resources.");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine($"Failed to get all resources. Status: {getAllResponse.StatusCode}");
+            //    }
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            //}
+        }
+
+        protected async Task DeleteResource(int resourceId)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Resources/{resourceId}");
+                    if (getAllResponse.IsSuccessStatusCode)
+                    {
+                        // Load items again
+                        ResourceList.Clear();
+                        await GetNameAndResources();
+
+                        Console.WriteLine("Deleted resource.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to Deleted resource. Status: {getAllResponse.StatusCode}");
+                    }
                 }
             }
             catch (HttpRequestException e)

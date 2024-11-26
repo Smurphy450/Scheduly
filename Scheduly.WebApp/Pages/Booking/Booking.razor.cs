@@ -84,5 +84,59 @@ namespace Scheduly.WebApp.Pages.Booking
                 Console.WriteLine($"Error retrieving premise categories: {ex.Message}");
             }
         }
+
+        protected async Task DeleteResourceCategory(int resourceCategoryId)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/ResourceCategories/{resourceCategoryId}");
+                    if (getAllResponse.IsSuccessStatusCode)
+                    {
+                        // Load items again
+                        ResourceCategoryList.Clear();
+                        await GetAllResourceTypes();
+
+                        Console.WriteLine("Deleted category.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to deleted category. Status: {getAllResponse.StatusCode}");
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
+        }
+
+        protected async Task DeletePremiseCategory(int premiseCategoryId)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/PremiseCategories/{premiseCategoryId}");
+                    if (getAllResponse.IsSuccessStatusCode)
+                    {
+                        // Load items again
+                        PremiseCategoryList.Clear();
+                        await GetAllPremiseTypes();
+
+                        Console.WriteLine("Deleted category.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to deleted category. Status: {getAllResponse.StatusCode}");
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
+        }
     }
 }

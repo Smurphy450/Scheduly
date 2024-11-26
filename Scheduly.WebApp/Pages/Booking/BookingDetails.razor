@@ -17,12 +17,20 @@
     @foreach (var resource in ResourceList)
     {
         <MudItem>
-            <MudCard Style="height:100px; width:300px;">
+            <MudCard Style="height:160px; width:300px;">
                 <MudCardContent>
                     <MudText Typo="Typo.body1" Class="pb-2"><b>@resource.Name</b></MudText>
                     <MudText Typo="Typo.body2">@resource.Description</MudText>
                     <MudText Typo="Typo.body2"><b>Amount: @resource.Amount</b></MudText>
                 </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="BookResource" />
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResource(resource.ResourceId))" />
+                        </Authorized>
+                    </AuthorizeView>
+                </MudCardActions>
             </MudCard>
         </MudItem>
     }

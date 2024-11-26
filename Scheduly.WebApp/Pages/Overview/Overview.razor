@@ -5,7 +5,7 @@
 <h3>Overview</h3>
 
 <MudGrid>
-    <MudItem xs="12">
+	<MudItem xs="12">
         @if (DayStarted)
         {
             <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Error" OnClick="EndDay">End</MudButton>
@@ -16,8 +16,8 @@
         }
     </MudItem>
 
-	<MudItem xs="6" Class="d-flex align-start">
-		<MudDataGrid T="OverviewPremisesDTO" Virtualize="true">
+	<MudItem xs="6">
+		<MudDataGrid T="OverviewPremisesDTO" Items="@AllPremises" Virtualize="true" Height="auto">
 			<Columns>
 				<PropertyColumn Property="x => x.Name" />
 				<PropertyColumn Property="x => x.Size" />
@@ -35,8 +35,9 @@
 
 		<MudButton Class="pt-4" FullWidth="true" Variant="Variant.Filled" Href="@("/Booking")">Add</MudButton>
 	</MudItem>
+
 	<MudItem xs="6">
-		<MudDataGrid T="OverviewResourcesDTO" Virtualize="true">
+		<MudDataGrid T="OverviewResourcesDTO" Virtualize="true" Height="auto">
 			<Columns>
 				<PropertyColumn Property="x => x.CategoryName" />
 				<PropertyColumn Property="x => x.ResourceName" />
@@ -55,7 +56,8 @@
 
 		<MudButton Class="pt-4" FullWidth="true" Variant="Variant.Filled" Href="@("/Booking")">Add</MudButton>
 	</MudItem>
-	<MudItem xs="12" Class="d-flex align-bottom">
+
+	<MudItem xs="12">
 		<MudButton FullWidth="true" Variant="Variant.Filled" Href="@("/Absence/ReportAbsence")">Report Absence</MudButton>
 	</MudItem>
 </MudGrid>

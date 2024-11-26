@@ -76,7 +76,6 @@ namespace Scheduly.WebApp.Pages.Booking
 
                 Console.WriteLine($"Error creating new resource: {ex.Message}");
             }
-
         }
     }
 }
