@@ -164,12 +164,7 @@ namespace Scheduly.WebApi.Controllers
             var totalWeeks = (DateTimeOffset.UtcNow - threeMonthsAgo).TotalDays / 7;
             var averageWeeklyWorkTime = totalHours / totalWeeks;
 
-            if (averageWeeklyWorkTime > 48)
-            {
-                return Ok(averageWeeklyWorkTime);
-            }
-
-            return Ok(0);
+            return Ok(averageWeeklyWorkTime);
         }
 
 

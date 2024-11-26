@@ -12,10 +12,12 @@ namespace Scheduly.WebApp.Pages.Overview
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         protected bool DayStarted { get; set; } = false;
+        protected double AverageWeeklyWorkTime { get; set; } = 0.0;
 
         protected override async Task OnInitializedAsync()
         {
             await CheckDayStarted();
+            await GetAverageWeeklyWorkTime();
         }
 
         protected async Task StartDay()
@@ -30,6 +32,36 @@ namespace Scheduly.WebApp.Pages.Overview
             // Your logic here
         }
 
+        private async Task GetAverageWeeklyWorkTime()
+        {
+            var userId = await GetUserInfo();
+            if (userId != 0)
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var response = await httpClient.GetAsync($"https://localhost:7171/api/TimeRegistrations/AverageWeeklyWorkTime/{userId}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            AverageWeeklyWorkTime = await response.Content.ReadFromJsonAsync<double>();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to get average weekly work time. Status: {response.StatusCode}");
+                        }
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error getting average weekly work time: {ex.Message}");
+                }
+            }
+        }
         private async Task RegisterTime(bool isStart)
         {
             var userId = await GetUserInfo();
