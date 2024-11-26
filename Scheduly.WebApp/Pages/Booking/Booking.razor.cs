@@ -8,10 +8,12 @@ namespace Scheduly.WebApp.Pages.Booking
 	public class BookingBase : ComponentBase
     {
         public List<ResourceCategory> ResourceCategoryList = [];
+        public List<PremiseCategory> PremiseCategoryList = [];
 
         protected override async Task OnInitializedAsync()
 		{
             await GetAllResourceTypes();
+            await GetAllPremiseTypes();
         }
 
         private async Task GetAllResourceTypes()
@@ -46,6 +48,40 @@ namespace Scheduly.WebApp.Pages.Booking
             catch (Exception ex)
             {
                 Console.WriteLine($"Error retrieving resource categories: {ex.Message}");
+            }
+        }
+        private async Task GetAllPremiseTypes()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/PremiseCategories");
+                        if (getAllResponse.IsSuccessStatusCode)
+                        {
+                            var content = await getAllResponse.Content.ReadAsStringAsync();
+
+                            var premiseCategories = JsonConvert.DeserializeObject<List<PremiseCategory>>(content);
+                            PremiseCategoryList = premiseCategories ?? new List<PremiseCategory>();
+
+                            Console.WriteLine("Retrieved all premise categories.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to get all premise categories. Status: {getAllResponse.StatusCode}");
+                        }
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving premise categories: {ex.Message}");
             }
         }
     }

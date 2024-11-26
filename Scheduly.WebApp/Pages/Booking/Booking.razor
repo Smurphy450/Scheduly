@@ -1,7 +1,7 @@
 ﻿@page "/Booking";
 @inherits BookingBase;
 
-<h4 class="py-4">Booking</h4>
+<h3 class="py-4">Booking</h3>
 
 <AuthorizeView Roles="Administrator">
     <Authorized>
@@ -11,18 +11,42 @@
     </Authorized>
 </AuthorizeView>
 
-<MudGrid>
-    @foreach (var resourceCategory in ResourceCategoryList)
-    {
-        <MudItem>
-            <MudCard Style="height:100px; width:300px;">
-                <MudCardContent>
-                    <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{resourceCategory.CategoryId}")">Details</MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-    }
+<MudGrid >
+    <MudItem>
+        <h4 class="py-4">Resources</h4>
+
+        @foreach (var resourceCategory in ResourceCategoryList)
+        {
+            <MudItem>
+                <MudCard Style="height:100px; width:300px;">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{resourceCategory.CategoryId}")">Details</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudItem>
+    
+    <MudDivider Vertical="false" DividerType="DividerType.FullWidth" />
+
+    <MudItem>
+        <h4 class="py-4">Premises</h4>
+
+        @foreach (var premiseCategory in PremiseCategoryList)
+        {
+            <MudItem>
+                <MudCard Style="height:100px; width:300px;">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1"><b>@premiseCategory.Name</b</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/details/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudItem>
 </MudGrid>
