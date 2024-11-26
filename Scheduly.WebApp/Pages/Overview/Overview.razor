@@ -5,9 +5,17 @@
 <h4>Overview</h4>
 
 <MudGrid>
-	<MudItem xs="12">
-		<MudButton FullWidth="true" Variant="Variant.Filled">Start</MudButton>
-	</MudItem>
+    <MudItem xs="12">
+        @if (DayStarted)
+        {
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Error" OnClick="EndDay">End</MudButton>
+        }
+        else
+        {
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Success" OnClick="StartDay">Start</MudButton>
+        }
+    </MudItem>
+
 	<MudItem xs="6" Class="d-flex align-start">
 		<MudDataGrid T="OverviewPremisesDTO" Virtualize="true">
 			<Columns>
