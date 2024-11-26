@@ -41,14 +41,49 @@ namespace Scheduly.WebApi.Controllers
             return absenceType;
         }
 
+        //[HttpGet("UserAbsences/{userId}")]
+        //public async Task<ActionResult<IEnumerable<object>>> GetUserAbsenceTypes(int userId)
+        //{
+        //    var userAbsenceTypes = await _context.AbsenceTypes
+        //        .Select(at => new
+        //        {
+        //            AbsenceType = at,
+        //            AbsenceCount = at.Absences.Count(a => a.UserId == userId)
+        //        })
+        //        .ToListAsync();
+
+        //    return Ok(userAbsenceTypes);
+        //}
+
+        //[HttpGet("UserAbsences/{userId}")]
+        //public async Task<ActionResult<IEnumerable<object>>> GetUserAbsenceTypes(int userId)
+        //{
+        //    var userAbsenceTypes = await _context.AbsenceTypes
+        //        .Select(at => new
+        //        {
+        //            AbsenceType = at,
+        //            AbsenceCount = at.Absences.Count(a => a.UserId == userId),
+        //            TotalMinutes = at.Absences
+        //                .Where(a => a.UserId == userId && a.End.HasValue)
+        //                .Sum(a => EF.Functions.DateDiffMinute(a.Start, a.End.Value))
+        //        })
+        //        .ToListAsync();
+
+        //    return Ok(userAbsenceTypes);
+        //}
+
         [HttpGet("UserAbsences/{userId}")]
-        public async Task<ActionResult<IEnumerable<object>>> GetUserAbsenceTypes(int userId)
+        public async Task<ActionResult<IEnumerable<UserAbsenceTypeDto>>> GetUserAbsenceTypes(int userId)
         {
             var userAbsenceTypes = await _context.AbsenceTypes
-                .Select(at => new
+                .Select(at => new UserAbsenceTypeDto
                 {
-                    AbsenceType = at,
-                    AbsenceCount = at.Absences.Count(a => a.UserId == userId)
+                    AbsenceTypeId = at.AbsenceTypeId,
+                    AbsenceTypeName = at.Name,
+                    AbsenceCount = at.Absences.Count(a => a.UserId == userId),
+                    TotalMinutes = at.Absences
+                        .Where(a => a.UserId == userId && a.End.HasValue)
+                        .Sum(a => EF.Functions.DateDiffMinute(a.Start, a.End.Value))
                 })
                 .ToListAsync();
 
