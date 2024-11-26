@@ -75,7 +75,7 @@ namespace Scheduly.WebApp.Pages.Login
                             Snackbar.Add("Login successful!", Severity.Success);
 
 
-                            NavigationManager.NavigateTo("/test");
+                            NavigationManager.NavigateTo("/Overview");
                         }
                     }
                 }
