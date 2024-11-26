@@ -41,6 +41,16 @@ namespace Scheduly.WebApi.Controllers
             return absenceType;
         }
 
+        [HttpGet("Names")]
+        public async Task<ActionResult<IEnumerable<string>>> GetAbsenceTypeNames()
+        {
+            var absenceTypeNames = await _context.AbsenceTypes
+                .Select(at => at.Name)
+                .ToListAsync();
+
+            return Ok(absenceTypeNames);
+        }
+
         //[HttpGet("UserAbsences/{userId}")]
         //public async Task<ActionResult<IEnumerable<object>>> GetUserAbsenceTypes(int userId)
         //{
