@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApp.Models;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -92,6 +93,57 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAbsence", new { id = absence.AbsenceId }, absence);
+        }
+
+        // POST: api/Absence/Report
+        //[HttpPost("Report")]
+        //public async Task<ActionResult<Absence>> ReportAbsence(ReportAbsenceDTO reportAbsenceDTO)
+        //{
+        //    var absenceType = await _context.AbsenceTypes.FindAsync(reportAbsenceDTO.AbsenceTypeId);
+        //    if (absenceType == null)
+        //    {
+        //        return BadRequest("Invalid AbsenceTypeId");
+        //    }
+
+        //    var absence = new Absence
+        //    {
+        //        AbsenceTypeId = reportAbsenceDTO.AbsenceTypeId,
+        //        UserId = reportAbsenceDTO.UserId,
+        //        Start = reportAbsenceDTO.DatetimeStart,
+        //        End = reportAbsenceDTO.DatetimeEnd,
+        //        Description = reportAbsenceDTO.Description,
+        //        Approved = !(absenceType.MustBeApproved ?? false)
+        //    };
+
+        //    _context.Absences.Add(absence);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetAbsence", new { id = absence.AbsenceId }, absence);
+        //}
+
+        [HttpPost("Report")]
+        public async Task<IActionResult> ReportAbsence(ReportAbsenceDTO reportAbsenceDTO)
+        {
+            var absenceType = await _context.AbsenceTypes.FindAsync(reportAbsenceDTO.AbsenceTypeId);
+            if (absenceType == null)
+            {
+                return BadRequest("Invalid AbsenceTypeId");
+            }
+
+            var absence = new Absence
+            {
+                AbsenceTypeId = reportAbsenceDTO.AbsenceTypeId,
+                UserId = reportAbsenceDTO.UserId,
+                Start = reportAbsenceDTO.DatetimeStart,
+                End = reportAbsenceDTO.DatetimeEnd,
+                Description = reportAbsenceDTO.Description,
+                Approved = !(absenceType.MustBeApproved ?? false)
+            };
+
+            _context.Absences.Add(absence);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Success = true });
         }
 
         // DELETE: api/Absence/5

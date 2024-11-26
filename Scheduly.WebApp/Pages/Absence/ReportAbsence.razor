@@ -9,44 +9,25 @@
 
 <MudStack Row Class="justify-space-between mud-width-full">
     <MudStack Style="width: 300px">
-        <MudSelect @bind-Value="AbsenceTypeId"
+        <MudSelect T="int" @bind-Value="_selectedAbsenceTypeId"
                    Label="AbsenceType"
                    Clearable="true">
-            @foreach (var state in _states)
+            @if (AbsenceTypes != null)
             {
-                <MudSelectItem Value="state">@state</MudSelectItem>
+                @foreach (var absenceType in AbsenceTypes)
+                {
+                    <MudSelectItem Value="@(absenceType.AbsenceTypeId)">@absenceType.Name</MudSelectItem>
+                }
             }
         </MudSelect>
     </MudStack>
 </MudStack>
 
 <MudDatePicker Label="Start of absence" ShowWeekNumbers="true" @bind-Date="DatetimeStart" Variant="Variant.Outlined" />
+<MudTimePicker Label="Start time of absence" @bind-Time="StartTime" />
 <MudDatePicker Label="End of absence" ShowWeekNumbers="true" @bind-Date="DatetimeEnd" Variant="Variant.Outlined" />
-
-@* <MudTextField @bind-Value="AbsenceTypeId" Immediate="true" Label="AbsenceType" Variant="Variant.Outlined"></MudTextField>
-<MudTextField @bind-Value="Start" Immediate="true" Label="Start" Variant="Variant.Outlined"></MudTextField>
-<MudTextField @bind-Value="End" Immediate="true" Label="End" Variant="Variant.Outlined"></MudTextField> *@
+<MudTimePicker Label="End time of absence" @bind-Time="EndTime" />
 
 <MudTextField @bind-Value="Description" Immediate="true" Label="Description" Variant="Variant.Outlined"></MudTextField>
 
 <MudButton Variant="Variant.Filled" @onclick="ReportAbsenceAsync">Report abscence</MudButton>
-
-@code {
-    string _value;
-
-    private string[] _states =
-    {
-        "Alabama", "Alaska", "Arizona", "Arkansas", "California",
-        "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
-        "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
-        "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts",
-        "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
-        "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico",
-        "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma",
-        "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-        "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
-        "Washington", "West Virginia", "Wisconsin", "Wyoming"
-    };
-
-    
-}
