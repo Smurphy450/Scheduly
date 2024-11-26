@@ -119,17 +119,17 @@ namespace Scheduly.WebApp.Pages.Overview
                         }
                         else
                         {
-                            //Console.WriteLine($"Failed to check if day started. Status: {response.StatusCode}");
+                            Console.WriteLine($"Failed to get booked premises. Status: {response.StatusCode}");
                         }
                     }
                 }
                 catch (HttpRequestException e)
                 {
-                    //Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                    Console.WriteLine($"An error occurred while making the request: {e.Message}");
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine($"Error checking if day started: {ex.Message}");
+                    Console.WriteLine($"Error getting booked premises: {ex.Message}");
                 }
             }
         }
