@@ -27,4 +27,13 @@
     <Folder Include="Pages\AdminOverview\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\Images\Scheduly_Logo.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Images\Scheduly_Logo_Header.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -3,9 +3,13 @@
 
 <h4 class="py-4">Booking</h4>
 
-<MudItem xs="12" Class="d-flex align-content-end justify-end mud-width-full pb-4">
-    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@("/Booking/CreateResourceCategory")" />
-</MudItem>
+<AuthorizeView Roles="Administrator">
+    <Authorized>
+        <MudItem xs="12" Class="d-flex align-content-end justify-end mud-width-full pb-4">
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@("/Booking/CreateResourceCategory")" />
+        </MudItem>
+    </Authorized>
+</AuthorizeView>
 
 <MudGrid>
     @foreach (var resourceCategory in ResourceCategoryList)

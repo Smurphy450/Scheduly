@@ -9,7 +9,7 @@
 		<MudButton FullWidth="true" Variant="Variant.Filled">Start</MudButton>
 	</MudItem>
 	<MudItem xs="6" Class="d-flex align-start">
-		<MudDataGrid T="OverviewPremisesDTO">
+		<MudDataGrid T="OverviewPremisesDTO" Virtualize="true">
 			<Columns>
 				<PropertyColumn Property="x => x.Name" />
 				<PropertyColumn Property="x => x.Size" />
@@ -17,10 +17,18 @@
 				<PropertyColumn Property="x => x.End" />
 				<PropertyColumn Property="x => x.Approved" />
 			</Columns>
+			<LoadingContent>
+				<MudText Typo="Typo.h6">Loading...</MudText>
+			</LoadingContent>
+			<NoRecordsContent>
+				No data available
+			</NoRecordsContent>
 		</MudDataGrid>
+
+		<MudButton Class="pt-4" FullWidth="true" Variant="Variant.Filled" Href="@("/Booking")">Add</MudButton>
 	</MudItem>
 	<MudItem xs="6">
-		<MudDataGrid T="OverviewResourcesDTO">
+		<MudDataGrid T="OverviewResourcesDTO" Virtualize="true">
 			<Columns>
 				<PropertyColumn Property="x => x.CategoryName" />
 				<PropertyColumn Property="x => x.ResourceName" />
@@ -29,9 +37,17 @@
 				<PropertyColumn Property="x => x.End" />
 				<PropertyColumn Property="x => x.Approved" />
 			</Columns>
+			<LoadingContent>
+				<MudText Typo="Typo.h6">Loading...</MudText>
+			</LoadingContent>
+			<NoRecordsContent>
+				No data available
+			</NoRecordsContent>
 		</MudDataGrid>
+
+		<MudButton Class="pt-4" FullWidth="true" Variant="Variant.Filled" Href="@("/Booking")">Add</MudButton>
 	</MudItem>
 	<MudItem xs="12" Class="d-flex align-bottom">
-		<MudButton FullWidth="true" Variant="Variant.Filled">Report Absence</MudButton>
+		<MudButton FullWidth="true" Variant="Variant.Filled" Href="@("/Absence/ReportAbsence")">Report Absence</MudButton>
 	</MudItem>
 </MudGrid>
