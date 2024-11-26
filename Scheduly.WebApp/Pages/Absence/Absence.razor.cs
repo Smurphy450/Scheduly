@@ -8,8 +8,8 @@ using System.Security.Claims;
 
 namespace Scheduly.WebApp.Pages.Absence
 {
-	public class AbsenceBase : ComponentBase
-	{
+    public class AbsenceBase : ComponentBase
+    {
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
@@ -23,34 +23,43 @@ namespace Scheduly.WebApp.Pages.Absence
         protected override async Task OnInitializedAsync()
         {
             int userId = await GetUserInfo();
-            await GetAbsenceInfo(userId);
+            if (userId > 0)
+            {
+                await GetAbsenceInfo(userId);
+            }
         }
 
         private async Task GetAbsenceInfo(int userId)
         {
             try
             {
-                // TODO: Lav et api kald til at hente alle fraværestyper for en bruger, hente hvor mange gange de forkommer og indsæt det i data arrayet.
-                // TODO: Den skal også kunne hente alt fravær for en bruger, tælle hvor mange gange de forskellige fraværestyper forkommer samt tælle op hvor mange timer fraværet er i alt.
-
-                // TODO: Get amount of times the absence types have been used
                 using (var httpClient = new HttpClient())
                 {
                     try
                     {
-                        var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Absence/User/{userId}");
+                        var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/AbsenceTypes/UserAbsences/{userId}");
                         if (getAllResponse.IsSuccessStatusCode)
                         {
                             var content = await getAllResponse.Content.ReadAsStringAsync();
+                            var absences = JsonConvert.DeserializeObject<List<WebApi.Models.UserAbsenceTypeDto>>(content);
 
-                            var absence = JsonConvert.DeserializeObject<List<Scheduly.WebApi.Models.Absence>>(content);
-                            AbsenceArray = Array.ConvertAll(absence.ToArray(), x => x.ToString());
+                            if (absences.Count == 0)
+                            {
+                                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                                Snackbar.Add("No absences found for user.", Severity.Success);
+                            }
+                            else
+                            {
+                                // TODO: Du skal nok ikke bruge det arrray herunder, men "var absences" er en liste med de værdier som du vil bruge(UserAbsenceTypeDto), den består af; AbsenceTypeId, AbsenceTypeName, AbsenceCount, TotalMinutes
 
-                            Console.WriteLine("Retrieved list of absence for user.");
+                                AbsenceArray = absences.Select(a => a.ToString()).ToArray();
+                            }
+
+                            Console.WriteLine("Retrieved list of absences for user.");
                         }
                         else
                         {
-                            Console.WriteLine($"Failed to get all absence for user. Status: {getAllResponse.StatusCode}");
+                            Console.WriteLine($"Failed to get all absences for user. Status: {getAllResponse.StatusCode}");
                         }
                     }
                     catch (HttpRequestException e)
