@@ -1,19 +1,16 @@
 ﻿@page "/Booking";
 @inherits BookingBase;
 
-<h3 class="py-4">Booking</h3>
-
-<AuthorizeView Roles="Administrator">
-    <Authorized>
-        <MudItem xs="12" Class="d-flex align-content-end justify-end mud-width-full pb-4">
-            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@("/Booking/CreateResourceCategory")" />
-        </MudItem>
-    </Authorized>
-</AuthorizeView>
-
 <MudGrid >
-    <MudItem>
+    <MudItem xs="12">
         <h4 class="py-4">Resources</h4>
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <MudItem xs="12" Class="d-flex align-content-end justify-end mud-width-full pb-4">
+                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@("/Booking/CreateResourceCategory")" />
+                </MudItem>
+            </Authorized>
+        </AuthorizeView>
 
         <MudStack Row="true">
             @foreach (var resourceCategory in ResourceCategoryList)
@@ -39,7 +36,7 @@
     
     <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.FullWidth" />
 
-    <MudItem>
+    <MudItem xs="12">
         <h4 class="py-4">Premises</h4>
 
         <MudStack Row="true">
