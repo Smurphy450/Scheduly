@@ -16,8 +16,8 @@ namespace Scheduly.WebApp.Pages.Absence
 
         public int AbsenceTypeId { get; set; }
         public int UserId { get; set; }
-        public DateTimeOffset Start { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 8 AM
-        public DateTimeOffset End { get; set; } = DateTimeOffset.Now; // TODO: Get current date, where time is set to 4 PM
+        public DateTimeOffset Start { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset End { get; set; } = DateTimeOffset.Now;
         public DateTime? DatetimeStart { get; set; } = DateTime.Today;
         public DateTime? DatetimeEnd { get; set; } = DateTime.Today;
         public string Description { get; set; }
