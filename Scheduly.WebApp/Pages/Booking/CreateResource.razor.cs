@@ -60,6 +60,11 @@ namespace Scheduly.WebApp.Pages.Booking
                     if (response.IsSuccessStatusCode)
                     {
                         Snackbar.Add("Resource created successfully.", Severity.Success);
+
+                        ResourceName = string.Empty;
+                        ResourceAmount = 0;
+                        ResourceDescription = string.Empty;
+                        MustBeApproved = false;
                     }
                     else
                     {

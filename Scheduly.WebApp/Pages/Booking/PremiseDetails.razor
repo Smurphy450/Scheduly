@@ -1,5 +1,5 @@
-﻿@page "/Booking/PremiseDetails/{CategoryId:int}";
-@inherits BookingDetailsBase;
+﻿@page "/Booking/PremiseDetails/{PremiseCategoryId:int}";
+@inherits PremiseDetailsBase;
 
 <h3 class="py-4">@PremiseCategoryName</h3>
 
@@ -8,7 +8,7 @@
     <MudSpacer />
     <AuthorizeView Roles="Administrator">
         <Authorized>
-            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@($"/Booking/PremiseDetails/{CategoryId}/CreatePremise")" />
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@($"/Booking/PremiseDetails/{PremiseCategoryId}/CreatePremise")" />
         </Authorized>
     </AuthorizeView>
 </MudItem>
