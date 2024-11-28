@@ -102,7 +102,7 @@ namespace Scheduly.WebApi.Controllers
 
         // POST: api/Resources/CreateResource
         [HttpPost("CreateResource")]
-        public async Task<ActionResult<Resource>> CreateResource([FromForm] CreateResourceDTO resourceDTO)
+        public async Task<ActionResult<Resource>> CreateResource([FromBody] CreateResourceDTO resourceDTO)
         {
             if (!string.IsNullOrEmpty(resourceDTO.Name))
             {
