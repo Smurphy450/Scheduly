@@ -73,6 +73,7 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
+        // POST: api/ResourceCategories/CreateResourceCategory
         [HttpPost("CreateResourceCategory")]
         public async Task<ActionResult<ResourceCategory>> CreateResourceCategory([FromForm] CreateResourceCategoryDTO resourceCategoryDTO)
         {

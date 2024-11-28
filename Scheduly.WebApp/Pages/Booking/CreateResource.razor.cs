@@ -10,8 +10,7 @@ namespace Scheduly.WebApp.Pages.Booking
     {
         [Parameter] public int CategoryId { get; set; }
 
-        [Inject]
-        private ISnackbar Snackbar { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
         public string ResourceName { get; set; }
         public int ResourceAmount { get; set; }

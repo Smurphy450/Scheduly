@@ -100,6 +100,7 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetResource", new { id = resource.ResourceId }, resource);
         }
 
+        // POST: api/Resources/CreateResource
         [HttpPost("CreateResource")]
         public async Task<ActionResult<Resource>> CreateResource([FromForm] CreateResourceDTO resourceDTO)
         {

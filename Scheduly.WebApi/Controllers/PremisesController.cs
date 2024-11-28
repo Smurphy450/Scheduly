@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -81,6 +82,32 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPremise", new { id = premise.PremiseId }, premise);
+        }
+
+        // POST: api/Premises/CreatePremise
+        [HttpPost("CreatePremise")]
+        public async Task<ActionResult<Premise>> CreateResource([FromForm] CreatePremiseDTO premiseDTO)
+        {
+            if (!string.IsNullOrEmpty(premiseDTO.Name))
+            {
+                var premise = new Premise
+                {
+                    PremiseCategoryId = premiseDTO.PremiseCategoryId,
+                    Name = premiseDTO.Name,
+                    Size = premiseDTO.Size,
+                    Description = premiseDTO.Description,
+                    MustBeApproved = premiseDTO.MustBeApproved,
+                };
+
+                _context.Premises.Add(premise);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetPremise", new { id = premise.PremiseCategoryId }, premise);
+            }
+            else
+            {
+                return BadRequest("Name is required");
+            }
         }
 
         // DELETE: api/Premises/5

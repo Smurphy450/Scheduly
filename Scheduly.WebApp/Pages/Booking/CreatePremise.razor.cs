@@ -8,14 +8,13 @@ namespace Scheduly.WebApp.Pages.Booking
 {
     public class CreatePremiseBase : ComponentBase
     {
-        [Parameter] public int CategoryId { get; set; }
+        [Parameter] public int PremiseCategoryId { get; set; }
 
-        [Inject]
-        private ISnackbar Snackbar { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
-        public string ResourceName { get; set; }
-        public int ResourceAmount { get; set; }
-        public string ResourceDescription { get; set; }
+        public string PremiseName { get; set; }
+        public string PremiseSize { get; set; }
+        public string PremiseDescription { get; set; }
         public bool MustBeApproved { get; set; }
 
         public async Task CreateNewResource()
@@ -28,14 +27,14 @@ namespace Scheduly.WebApp.Pages.Booking
                     try
                     {
                         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var url = "https://localhost:7171/api/Resources/CreateResource";
+                        var url = "https://localhost:7171/api/Premises/CreatePremise";
 
                         var requestBody = new
                         {
-                            categoryid = CategoryId,
-                            name = ResourceName,
-                            amount = ResourceAmount,
-                            description = ResourceDescription,
+                            premisecategoryid = PremiseCategoryId,
+                            name = PremiseName,
+                            size = PremiseSize,
+                            description = PremiseDescription,
                             mustbeapproved = MustBeApproved
                         };
 
@@ -46,21 +45,21 @@ namespace Scheduly.WebApp.Pages.Booking
                         if (response.IsSuccessStatusCode)
                         {
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                            Snackbar.Add("Created new resource.", Severity.Success);
+                            Snackbar.Add("Created new premise.", Severity.Success);
 
-                            Console.WriteLine("Created new resource.");
+                            Console.WriteLine("Created new premise.");
 
-                            ResourceName = string.Empty;
-                            ResourceAmount = 0;
-                            ResourceDescription = string.Empty;
+                            PremiseName = string.Empty;
+                            PremiseSize = string.Empty;
+                            PremiseDescription = string.Empty;
                             MustBeApproved = false;
                         }
                         else
                         {
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                            Snackbar.Add("Failed to create new resource!", Severity.Error);
+                            Snackbar.Add("Failed to create new premise!", Severity.Error);
 
-                            Console.WriteLine($"Failed to create new resource. Status: {response.StatusCode}");
+                            Console.WriteLine($"Failed to create new premise. Status: {response.StatusCode}");
                         }
                     }
                     catch (HttpRequestException e)
@@ -72,9 +71,9 @@ namespace Scheduly.WebApp.Pages.Booking
             catch (Exception ex)
             {
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                Snackbar.Add("Error creating new resource!", Severity.Error);
+                Snackbar.Add("Error creating new premise!", Severity.Error);
 
-                Console.WriteLine($"Error creating new resource: {ex.Message}");
+                Console.WriteLine($"Error creating new premise: {ex.Message}");
             }
         }
     }

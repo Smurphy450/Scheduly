@@ -73,6 +73,7 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
+        // POST: api/PremiseCategories/CreatePremiseCategory
         [HttpPost("CreatePremiseCategory")]
         public async Task<ActionResult<PremiseCategory>> CreatePremiseCategory([FromForm] CreatePremiseCategoryDTO premiseCategoryDTO)
         {
