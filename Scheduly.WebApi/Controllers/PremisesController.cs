@@ -84,9 +84,8 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetPremise", new { id = premise.PremiseId }, premise);
         }
 
-        // POST: api/Premises/CreatePremise
         [HttpPost("CreatePremise")]
-        public async Task<ActionResult<Premise>> CreateResource([FromForm] CreatePremiseDTO premiseDTO)
+        public async Task<ActionResult<Premise>> CreateResource([FromBody] CreatePremiseDTO premiseDTO)
         {
             if (!string.IsNullOrEmpty(premiseDTO.Name))
             {
@@ -109,6 +108,7 @@ namespace Scheduly.WebApi.Controllers
                 return BadRequest("Name is required");
             }
         }
+
 
         // DELETE: api/Premises/5
         [HttpDelete("{id}")]

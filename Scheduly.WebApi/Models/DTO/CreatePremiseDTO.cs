@@ -1,10 +1,10 @@
 ﻿namespace Scheduly.WebApi.Models.DTO
 {
-    public class CreateResourceDTO
+    public class CreatePremiseDTO
     {
-        public int CategoryId { get; set; }
+        public int PremiseCategoryId { get; set; }
         public string Name { get; set; }
-        public int Amount { get; set; }
+        public string Size { get; set; }
         public string Description { get; set; }
         public bool MustBeApproved { get; set; }
     }
