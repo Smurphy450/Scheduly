@@ -1,7 +1,7 @@
 ﻿@page "/Booking/PremiseDetails/{CategoryId:int}";
 @inherits BookingDetailsBase;
 
-<h3 class="py-4">@ResourceCategoryName</h3>
+<h3 class="py-4">@PremiseCategoryName</h3>
 
 <MudItem xs="12" Class="d-flex mud-width-full py-2">
     <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBackIosNew" Href="@("/Booking")">Back</MudButton>
@@ -14,20 +14,20 @@
 </MudItem>
 
 <MudGrid>
-    @foreach (var resource in ResourceList)
+    @foreach (var premise in PremiseList)
     {
         <MudItem>
             <MudCard Style="height:160px; width:300px;">
                 <MudCardContent>
-                    <MudText Typo="Typo.body1" Class="pb-2"><b>@resource.Name</b></MudText>
-                    <MudText Typo="Typo.body2">@resource.Description</MudText>
-                    <MudText Typo="Typo.body2"><b>Amount: @resource.Amount</b></MudText>
+                    <MudText Typo="Typo.body1" Class="pb-2"><b>@premise.Name</b></MudText>
+                    <MudText Typo="Typo.body2"><b>Size: @premise.Size</b></MudText>
+                    <MudText Typo="Typo.body2">@premise.Description</MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="BookResource" />
+                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="BookPremise" />
                     <AuthorizeView Roles="Administrator">
                         <Authorized>
-                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResource(resource.ResourceId))" />
+                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremise(premise.PremiseId))" />
                         </Authorized>
                     </AuthorizeView>
                 </MudCardActions>

@@ -42,6 +42,22 @@ namespace Scheduly.WebApi.Controllers
             return premise;
         }
 
+        // GET: api/Premises/Category/{premisecategoryId}
+        [HttpGet("Category/{premisecategoryId}")]
+        public async Task<ActionResult<IEnumerable<Premise>>> GetResourcesByCategory(int premisecategoryId)
+        {
+            var category = await _context.Resources.FindAsync(premisecategoryId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return await _context.Premises
+                .Where(r => r.PremiseCategoryId == premisecategoryId)
+                .ToListAsync();
+        }
+
         // PUT: api/Premises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

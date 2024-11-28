@@ -5,12 +5,12 @@ using System.Net.Http;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
-    public class BookingDetailsBase : ComponentBase
+    public class PremiseDetailsBase : ComponentBase
     {
-        [Parameter] public int CategoryId { get; set; }
+        [Parameter] public int PremiseCategoryId { get; set; }
 
-        public List<Resource> ResourceList = [];
-        public string ResourceCategoryName = "";
+        public List<Premise> PremiseList = [];
+        public string PremiseCategoryName = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,34 +23,34 @@ namespace Scheduly.WebApp.Pages.Booking
             {
                 using (var httpClient = new HttpClient())
                 {
-                    await GetResourceCategoryName(httpClient);
+                    await GetPremiseCategoryName(httpClient);
 
-                    await GetAllResources(httpClient);
+                    await GetAllPremises(httpClient);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error retrieving resources: {ex.Message}");
+                Console.WriteLine($"Error retrieving premises: {ex.Message}");
             }
         }
 
-        private async Task GetResourceCategoryName(HttpClient httpClient)
+        private async Task GetPremiseCategoryName(HttpClient httpClient)
         {
             try
             {
-                var getNameResponse = await httpClient.GetAsync($"https://localhost:7171/api/ResourceCategories/{CategoryId}");
+                var getNameResponse = await httpClient.GetAsync($"https://localhost:7171/api/PremiseCategories/{PremiseCategoryId}");
                 if (getNameResponse.IsSuccessStatusCode)
                 {
                     var content = await getNameResponse.Content.ReadAsStringAsync();
 
-                    var resourceCategory = JsonConvert.DeserializeObject<ResourceCategory>(content);
-                    ResourceCategoryName = resourceCategory?.Name ?? "";
+                    var premiseCategory = JsonConvert.DeserializeObject<PremiseCategory>(content);
+                    PremiseCategoryName = premiseCategory?.Name ?? "";
 
-                    Console.WriteLine("Retrieved resource category name.");
+                    Console.WriteLine("Retrieved premise category name.");
                 }
                 else
                 {
-                    Console.WriteLine($"Failed to get resource category name. Status: {getNameResponse.StatusCode}");
+                    Console.WriteLine($"Failed to get premise category name. Status: {getNameResponse.StatusCode}");
                 }
             }
             catch (HttpRequestException e)
@@ -59,23 +59,23 @@ namespace Scheduly.WebApp.Pages.Booking
             }
         }
 
-        private async Task GetAllResources(HttpClient httpClient)
+        private async Task GetAllPremises(HttpClient httpClient)
         {
             try
             {
-                var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Resources/Category/{CategoryId}");
+                var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Premises/Category/{PremiseCategoryId}");
                 if (getAllResponse.IsSuccessStatusCode)
                 {
                     var content = await getAllResponse.Content.ReadAsStringAsync();
 
-                    var resource = JsonConvert.DeserializeObject<List<Resource>>(content);
-                    ResourceList = resource ?? new List<Resource>();
+                    var premise = JsonConvert.DeserializeObject<List<Premise>>(content);
+                    PremiseList = premise ?? new List<Premise>();
 
-                    Console.WriteLine("Retrieved all resources.");
+                    Console.WriteLine("Retrieved all premises.");
                 }
                 else
                 {
-                    Console.WriteLine($"Failed to get all resources. Status: {getAllResponse.StatusCode}");
+                    Console.WriteLine($"Failed to get all premises. Status: {getAllResponse.StatusCode}");
                 }
             }
             catch (HttpRequestException e)
@@ -85,7 +85,7 @@ namespace Scheduly.WebApp.Pages.Booking
         }
 
         // TODO:
-        protected async Task BookResource()
+        protected async Task BookPremise()
         {
             //try
             //{
@@ -110,24 +110,24 @@ namespace Scheduly.WebApp.Pages.Booking
             //}
         }
 
-        protected async Task DeleteResource(int resourceId)
+        protected async Task DeletePremise(int premiseId)
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Resources/{resourceId}");
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Premises/{premiseId}");
                     if (getAllResponse.IsSuccessStatusCode)
                     {
                         // Load items again
-                        ResourceList.Clear();
+                        PremiseList.Clear();
                         await GetNameAndResources();
 
-                        Console.WriteLine("Deleted resource.");
+                        Console.WriteLine("Deleted premise.");
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to Deleted resource. Status: {getAllResponse.StatusCode}");
+                        Console.WriteLine($"Failed to Deleted premise. Status: {getAllResponse.StatusCode}");
                     }
                 }
             }
