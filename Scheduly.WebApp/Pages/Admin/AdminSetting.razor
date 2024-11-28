@@ -1,0 +1,12 @@
+﻿@page "/AdminSetting";
+@inherits AdminSettingBase;
+
+<h3>AdminSetting</h3>
+
+@foreach (var setting in AdminSettingList)
+{
+    <MudSwitch @bind-Checked="setting.Enabled" Label="@setting.Name" Value="setting.SettingsId" />
+}
+
+<MudButton OnClick="SubmitSettings">Submit</MudButton>
+

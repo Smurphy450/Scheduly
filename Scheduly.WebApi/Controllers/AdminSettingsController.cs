@@ -72,6 +72,41 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
+        // PUT: api/AdminSettings/UpdateList
+        [HttpPut("UpdateList")]
+        public async Task<IActionResult> PutAdminSettingsList(List<AdminSettingDto> adminSettingsDto)
+        {
+            var adminSettings = adminSettingsDto.Select(dto => new AdminSetting
+            {
+                SettingsId = dto.SettingsId,
+                Name = dto.Name,
+                Enabled = dto.Enabled
+            }).ToList();
+
+            foreach (var adminSetting in adminSettings)
+            {
+                _context.Entry(adminSetting).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                foreach (var adminSetting in adminSettings)
+                {
+                    if (!AdminSettingExists(adminSetting.SettingsId))
+                    {
+                        return NotFound();
+                    }
+                }
+                throw;
+            }
+
+            return NoContent();
+        }
+
         // POST: api/AdminSettings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
