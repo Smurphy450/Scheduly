@@ -78,5 +78,6 @@
     <Build Include="Schema\Tables\ZipCodes.sql" />
     <Build Include="Schema\Tables\ResourceCategory.sql" />
     <Build Include="Schema\Tables\PremiseCategory.sql" />
+    <Build Include="Schema\Tables\AdminSettings.sql" />
   </ItemGroup>
 </Project>

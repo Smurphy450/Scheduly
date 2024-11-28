@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
-    public class CreateCategoryBase : ComponentBase
+    public class CreateResourceCategoryBase : ComponentBase
     {
         [Inject] private ISnackbar Snackbar { get; set; }
 

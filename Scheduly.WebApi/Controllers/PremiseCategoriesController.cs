@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -72,15 +73,25 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/PremiseCategories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<PremiseCategory>> PostPremiseCategory(PremiseCategory premiseCategory)
+        [HttpPost("CreatePremiseCategory")]
+        public async Task<ActionResult<PremiseCategory>> CreatePremiseCategory([FromForm] CreatePremiseCategoryDTO premiseCategoryDTO)
         {
-            _context.PremiseCategories.Add(premiseCategory);
-            await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(premiseCategoryDTO.Name))
+            {
+                var premiseCategory = new PremiseCategory
+                {
+                    Name = premiseCategoryDTO.Name
+                };
 
-            return CreatedAtAction("GetPremiseCategory", new { id = premiseCategory.PremiseCategoryId }, premiseCategory);
+                _context.PremiseCategories.Add(premiseCategory);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetPremiseCategory", new { id = premiseCategory.PremiseCategoryId }, premiseCategory);
+            }
+            else
+            {
+                return BadRequest("Name is required");
+            }
         }
 
         // DELETE: api/PremiseCategories/5

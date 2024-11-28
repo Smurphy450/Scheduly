@@ -19,6 +19,8 @@ public partial class SchedulyContext : DbContext
 
     public virtual DbSet<AbsenceType> AbsenceTypes { get; set; }
 
+    public virtual DbSet<AdminSetting> AdminSettings { get; set; }
+
     public virtual DbSet<Booking> Bookings { get; set; }
 
     public virtual DbSet<Premise> Premises { get; set; }
@@ -37,9 +39,7 @@ public partial class SchedulyContext : DbContext
 
     public virtual DbSet<ZipCode> ZipCodes { get; set; }
 
-
-	// TODO: If API doesn't work, remove \\SQLEXPRESS
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=Scheduly;TrustServerCertificate=True;Trusted_Connection=True;");
 
@@ -81,6 +81,14 @@ public partial class SchedulyContext : DbContext
             entity.Property(e => e.WageFactor).HasColumnType("decimal(9, 4)");
         });
 
+        modelBuilder.Entity<AdminSetting>(entity =>
+        {
+            entity.HasKey(e => e.SettingsId).HasName("PK_dbo_AdminSettings$SettingsID");
+
+            entity.Property(e => e.SettingsId).HasColumnName("SettingsID");
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.HasKey(e => e.BookingsId).HasName("PK_dbo_Bookings$BookingsID");
@@ -113,7 +121,7 @@ public partial class SchedulyContext : DbContext
 
         modelBuilder.Entity<Premise>(entity =>
         {
-            entity.HasKey(e => e.PremiseId).HasName("PK_dbo_Premises$PremisID");
+            entity.HasKey(e => e.PremiseId).HasName("PK_dbo_Premises$PremiseID");
 
             entity.Property(e => e.PremiseId).HasColumnName("PremiseID");
             entity.Property(e => e.Name).HasMaxLength(50);

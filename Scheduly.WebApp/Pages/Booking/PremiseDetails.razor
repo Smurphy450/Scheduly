@@ -1,0 +1,37 @@
+﻿@page "/Booking/PremiseDetails/{CategoryId:int}";
+@inherits BookingDetailsBase;
+
+<h3 class="py-4">@ResourceCategoryName</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full py-2">
+    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBackIosNew" Href="@("/Booking")">Back</MudButton>
+    <MudSpacer />
+    <AuthorizeView Roles="Administrator">
+        <Authorized>
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircleOutline" Label="Create Category" Href="@($"/Booking/PremiseDetails/{CategoryId}/CreatePremise")" />
+        </Authorized>
+    </AuthorizeView>
+</MudItem>
+
+<MudGrid>
+    @foreach (var resource in ResourceList)
+    {
+        <MudItem>
+            <MudCard Style="height:160px; width:300px;">
+                <MudCardContent>
+                    <MudText Typo="Typo.body1" Class="pb-2"><b>@resource.Name</b></MudText>
+                    <MudText Typo="Typo.body2">@resource.Description</MudText>
+                    <MudText Typo="Typo.body2"><b>Amount: @resource.Amount</b></MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="BookResource" />
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResource(resource.ResourceId))" />
+                        </Authorized>
+                    </AuthorizeView>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>

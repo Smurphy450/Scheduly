@@ -1,0 +1,18 @@
+﻿@page "/Booking/CreatePremiseCategory";
+@inherits CreatePremiseCategoryBase;
+@attribute [Authorize(Roles = "Administrator")]
+
+<h3>Create Premise Category</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full py-2">
+    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBackIosNew" Href="@("/Booking")">Back</MudButton>
+</MudItem>
+
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudTextField @bind-Value="CategoryName" Immediate="true" Label="Category name" />
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="CreateNewCategory">Create</MudButton>
+    </MudCardActions>
+</MudPaper>
