@@ -112,15 +112,18 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetTimeRegistration", new { id = timeRegistration.TimeId }, timeRegistration);
         }
 
-
         [HttpPost("RegisterTime")]
         public async Task<IActionResult> RegisterTime([FromBody] TimeRegistrationDTO timeRegistrationDto)
         {
             var userId = timeRegistrationDto.UserId;
             var today = timeRegistrationDto.Start.Value.Date;
 
-            var existingTimeRegistration = await _context.TimeRegistrations
-                .FirstOrDefaultAsync(tr => tr.UserId == userId && tr.Start.Date == today);
+            var existingTimeRegistrations = await _context.TimeRegistrations
+                .Where(tr => tr.UserId == userId && tr.Start.Date == today && (tr.End == null || tr.Start == tr.End))
+                .OrderByDescending(tr => tr.Start)
+                .ToListAsync();
+
+            var existingTimeRegistration = existingTimeRegistrations.FirstOrDefault();
 
             if (existingTimeRegistration != null)
             {
@@ -133,11 +136,9 @@ namespace Scheduly.WebApi.Controllers
                 {
                     UserId = userId,
                     Start = timeRegistrationDto.Start.Value,
-                    End = timeRegistrationDto.Start.Value
+                    End = timeRegistrationDto.Start.Value //vil gerne indsætte null, men det kan jeg ikke.
                 };
                 _context.TimeRegistrations.Add(newTimeRegistration);
-
-
             }
 
             await _context.SaveChangesAsync();

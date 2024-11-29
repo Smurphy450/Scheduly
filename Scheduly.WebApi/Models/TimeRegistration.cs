@@ -11,7 +11,7 @@ public partial class TimeRegistration
 
     public DateTimeOffset Start { get; set; }
 
-    public DateTimeOffset? End { get; set; }
+    public DateTimeOffset? End { get; set; } = null;
 
     public virtual User User { get; set; } = null!;
 }
