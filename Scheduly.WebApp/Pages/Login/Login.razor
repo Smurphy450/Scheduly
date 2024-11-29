@@ -1,7 +1,6 @@
-﻿@page "/";
-@using MudBlazor;
-@inherits LoginBase;
-
+﻿@page "/"
+@using MudBlazor
+@inherits LoginBase
 
 <MudGrid Justify="Justify.Center" Style="height:100vh; width:100%; display:flex; justify-content:center; align-items:center;">
     <MudPaper Class="pa-4" Position="Position.Center">
@@ -9,7 +8,7 @@
             <DataAnnotationsValidator />
             <h3>Login</h3>
             <MudTextField Label="Username" @bind-Value="model.Username" Variant="Variant.Outlined" Required="true" ValidationMessage="ValidationMessageForUsername" />
-            <MudTextField Label="Password" InputType="InputType.Password" @bind-Value="model.PasswordHash" Variant="Variant.Outlined" Type="InputType.Password" Required="true" ValidationMessage="ValidationMessageForPassword" />
+            <MudTextField Label="Password" InputType="InputType.Password" @bind-Value="model.PasswordHash" Variant="Variant.Outlined" Type="InputType.Password" Required="true" ValidationMessage="ValidationMessageForPassword" @onkeydown="@(async (e) => await HandleKeyDown(e))" />
             <MudCardActions>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="(() => HandleValidSubmit())">Login</MudButton>
             </MudCardActions>

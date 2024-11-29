@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
 using Scheduly.WebApi.Models;
@@ -17,7 +19,15 @@ namespace Scheduly.WebApp.Pages.Login
         [Inject] private NavigationManager NavigationManager { get; set; }
 
         protected User model = new User();
-
+        [Inject] private IJSRuntime JSRuntime { get; set; }
+        protected async Task HandleKeyDown(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+                await JSRuntime.InvokeVoidAsync("document.activeElement.blur");
+                await HandleValidSubmit();
+            }
+        }
         private string HashPassword(string password)
         {
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
