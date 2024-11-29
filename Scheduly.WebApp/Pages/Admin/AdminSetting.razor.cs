@@ -72,6 +72,8 @@ namespace Scheduly.WebApp.Pages.Admin
 
         protected void OnSwitchChanged(int settingsId, bool enabled)
         {
+            //TODO: Fix så den opdaterer AdminSettingList
+
             Console.WriteLine($"Switch changed: SettingsId={settingsId}, Enabled={enabled}");
             var setting = AdminSettingList.FirstOrDefault(s => s.SettingsId == settingsId);
             if (setting != null)

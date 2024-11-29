@@ -19,6 +19,35 @@ namespace Scheduly.WebApi.Controllers
         {
             _context = context;
         }
+        //change to [HttpGet("User/{userId}")]
+        // GET: api/ProfileDTO/User/{userId}
+        [HttpGet("UserDto/{userId}")] 
+        public async Task<ActionResult<ProfileDTO>> GetProfileDTOByUserId(int userId)
+        {
+            var profile = await _context.Profiles
+                .Where(a => a.UserId == userId)
+                .Select(p => new ProfileDTO
+                {
+                    UserId = p.UserId ?? 0,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Address = p.Address,
+                    ZipCode = p.ZipCode ?? 0,
+                    City = p.ZipCodeNavigation.City, // Get city based on zip code
+                    PhoneNumber = p.PhoneNumber,
+                    Username = p.User.Username,
+                    PasswordHash = p.User.PasswordHash,
+                    Email = p.User.Email
+                })
+                .FirstOrDefaultAsync();
+
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            return profile;
+        }
 
         // GET: api/Profiles
         [HttpGet]
@@ -56,6 +85,87 @@ namespace Scheduly.WebApi.Controllers
 
             return profile;
         }
+
+        //[HttpPut("User/{userId}")]
+        //public async Task<IActionResult> PutProfileByUserId(int userId, ProfileDTO profileDto)
+        //{
+        //    var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+        //    if (profile == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    profile.FirstName = profileDto.FirstName;
+        //    profile.LastName = profileDto.LastName;
+        //    profile.Address = profileDto.Address;
+        //    profile.ZipCode = profileDto.ZipCode;
+        //    profile.PhoneNumber = profileDto.PhoneNumber;
+        //    profile.User.Username = profileDto.Username;
+        //    profile.User.PasswordHash = profileDto.PasswordHash;
+        //    profile.User.Email = profileDto.Email;
+
+        //    _context.Entry(profile).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!ProfileExists(profile.ProfileId))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+
+        [HttpPut("User/{userId}")]
+        public async Task<IActionResult> PutProfileByUserId(int userId, ProfileDTO profileDto)
+        {
+            var profile = await _context.Profiles
+                .Include(p => p.User) // Ensure User is included
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            profile.FirstName = profileDto.FirstName;
+            profile.LastName = profileDto.LastName;
+            profile.Address = profileDto.Address;
+            profile.ZipCode = profileDto.ZipCode;
+            profile.PhoneNumber = profileDto.PhoneNumber;
+            profile.User.Username = profileDto.Username;
+            profile.User.PasswordHash = profileDto.PasswordHash;
+            profile.User.Email = profileDto.Email;
+
+            _context.Entry(profile).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProfileExists(profile.ProfileId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
 
         // PUT: api/Profiles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
