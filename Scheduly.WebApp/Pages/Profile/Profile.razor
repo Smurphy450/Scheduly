@@ -3,12 +3,17 @@
 
 <h3>Profile</h3>
 
-<MudTextField Label="FirstName" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="LastName" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="Address" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="ZipCode" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="City" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="PhoneNumber" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="Username" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="PasswordHash" @bind-Value="model.Username" Variant="Variant.Outlined" />
-<MudTextField Label="Email" @bind-Value="model.Username" Variant="Variant.Outlined" />
+<MudPaper Class="pa-4" Width="300px">
+	<MudForm Model="@model">
+		<MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.FirstName" Variant="Variant.Outlined" />
+		<MudTextField Label="LastName" InputType="InputType.Text" @bind-Value="model.LastName" Variant="Variant.Outlined" />
+		<MudTextField Label="Address" InputType="InputType.Text" @bind-Value="model.Address" Variant="Variant.Outlined" />
+		<MudTextField Label="ZipCode" InputType="InputType.Number" @bind-Value="model.ZipCode" Variant="Variant.Outlined" />
+		<MudTextField Label="City" InputType="InputType.Text" @bind-Value="model.City" Variant="Variant.Outlined" />
+		<MudTextField Label="PhoneNumber" InputType="InputType.Telephone" @bind-Value="model.PhoneNumber" Variant="Variant.Outlined" />
+		<MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.Username" Variant="Variant.Outlined" />
+		<MudTextField Label="PasswordHash" InputType="InputType.Password" @bind-Value="model.PasswordHash" Variant="Variant.Outlined" />
+		<MudTextField Label="Email" InputType="InputType.Email" @bind-Value="model.Email" Variant="Variant.Outlined" />
+		<MudButton OnClick="SaveChanges">Save Changes</MudButton>
+	</MudForm>
+</MudPaper>

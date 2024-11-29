@@ -74,7 +74,7 @@ namespace Scheduly.WebApi.Controllers
 
         // PUT: api/AdminSettings/UpdateList
         [HttpPut("UpdateList")]
-        public async Task<IActionResult> PutAdminSettingsList(List<AdminSettingDto> adminSettingsDto)
+        public async Task<IActionResult> PutAdminSettingsList(List<AdminSettingDTO> adminSettingsDto)
         {
             var adminSettings = adminSettingsDto.Select(dto => new AdminSetting
             {

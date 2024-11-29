@@ -137,13 +137,11 @@ namespace Scheduly.WebApp.Pages.Overview
         protected async Task StartDay()
         {
             await RegisterTime(true);
-            // Your logic here
         }
 
         protected async Task EndDay()
         {
             await RegisterTime(false);
-            // Your logic here
         }
 
         private async Task RegisterTime(bool isStart)

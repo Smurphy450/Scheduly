@@ -41,6 +41,22 @@ namespace Scheduly.WebApi.Controllers
             return profile;
         }
 
+        // GET: api/Profiles/User/{userId}
+        [HttpGet("User/{userId}")]
+        public async Task<ActionResult<Profile>> GetProfileByUserId(int userId)
+        {
+            var profile = await _context.Profiles
+                .Where(a => a.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            return profile;
+        }
+
         // PUT: api/Profiles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

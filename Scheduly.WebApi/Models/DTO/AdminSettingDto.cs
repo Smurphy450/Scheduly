@@ -1,6 +1,6 @@
 namespace Scheduly.WebApi.Models;
 
-public class AdminSettingDto
+public class AdminSettingDTO
 {
     public int SettingsId { get; set; }
     public string Name { get; set; } = null!;

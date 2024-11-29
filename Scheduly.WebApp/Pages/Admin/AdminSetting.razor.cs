@@ -6,13 +6,13 @@ namespace Scheduly.WebApp.Pages.Admin
 {
     public class AdminSettingBase : ComponentBase
     {
-        public List<AdminSettingDto> AdminSettingList { get; set; } = new List<AdminSettingDto>();
+        public List<AdminSettingDTO> AdminSettingList { get; set; } = new List<AdminSettingDTO>();
 
         protected override async Task OnInitializedAsync()
         {
             await GetAdminSettings();
         }
-        protected void ToggleSetting(AdminSettingDto setting)
+        protected void ToggleSetting(AdminSettingDTO setting)
         {
             var existingSetting = AdminSettingList.FirstOrDefault(s => s.SettingsId == setting.SettingsId);
             if (existingSetting != null)
@@ -33,8 +33,8 @@ namespace Scheduly.WebApp.Pages.Admin
                         if (getAllResponse.IsSuccessStatusCode)
                         {
                             var content = await getAllResponse.Content.ReadAsStringAsync();
-                            var adminSettings = JsonConvert.DeserializeObject<List<AdminSettingDto>>(content);
-                            AdminSettingList = adminSettings ?? new List<AdminSettingDto>();
+                            var adminSettings = JsonConvert.DeserializeObject<List<AdminSettingDTO>>(content);
+                            AdminSettingList = adminSettings ?? new List<AdminSettingDTO>();
 
                             Console.WriteLine("Retrieved all admin settings.");
                         }
