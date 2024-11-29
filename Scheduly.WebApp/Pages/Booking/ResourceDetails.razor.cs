@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 using System.Net.Http;
+using System.Security.Claims;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
     public class ResourceDetailsBase : ComponentBase
     {
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Parameter] public int CategoryId { get; set; }
 
         public List<Resource> ResourceList = [];
@@ -84,30 +88,43 @@ namespace Scheduly.WebApp.Pages.Booking
             }
         }
 
-        // TODO:
-        protected async Task BookResource()
+        protected async Task BookResource(int premiseId)
         {
-            //try
-            //{
-            //    var getAllResponse = await httpClient.GetAsync($"https://localhost:7171/api/Resources/Category/{CategoryId}");
-            //    if (getAllResponse.IsSuccessStatusCode)
-            //    {
-            //        var content = await getAllResponse.Content.ReadAsStringAsync();
+            try
+            {
+                int userId = await GetUserInfo();
+                if (userId > 0)
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var createBookingDTO = new CreateBookingDTO
+                        {
+                            UserId = userId,
+                            PremiseId = null,
+                            ResourceId = premiseId,
+                            Start = DateTimeOffset.Now, // TODO: de skal kunne angive start
+                            End = DateTimeOffset.Now.AddHours(1), // TODO: de skal kunne angive End
+                            Approved = false //TODO: Skal hentes fra PremisCatagory.
+                        };
 
-            //        var resource = JsonConvert.DeserializeObject<List<Resource>>(content);
-            //        ResourceList = resource ?? new List<Resource>();
+                        var content = new StringContent(JsonConvert.SerializeObject(createBookingDTO), System.Text.Encoding.UTF8, "application/json");
+                        var response = await httpClient.PostAsync("https://localhost:7171/api/Bookings/CreateBooking", content);
 
-            //        Console.WriteLine("Retrieved all resources.");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"Failed to get all resources. Status: {getAllResponse.StatusCode}");
-            //    }
-            //}
-            //catch (HttpRequestException e)
-            //{
-            //    Console.WriteLine($"An error occurred while making the request: {e.Message}");
-            //}
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Console.WriteLine("Booking created successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to create booking. Status: {response.StatusCode}");
+                        }
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
         }
 
         protected async Task DeleteResource(int resourceId)
@@ -134,6 +151,31 @@ namespace Scheduly.WebApp.Pages.Booking
             catch (HttpRequestException e)
             {
                 Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
+        }
+
+        private async Task<int> GetUserInfo()
+        {
+            try
+            {
+                var userId = 0;
+                string userName = string.Empty;
+
+                var authState = await authStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
+                    userName = user.Identity.Name;
+                }
+
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error authenticating user: {ex.Message}");
+                return 0;
             }
         }
     }
