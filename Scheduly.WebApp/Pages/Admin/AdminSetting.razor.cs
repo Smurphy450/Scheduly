@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using System.Net.Http.Json;
 
 namespace Scheduly.WebApp.Pages.Admin
 {
@@ -12,14 +13,6 @@ namespace Scheduly.WebApp.Pages.Admin
         {
             await GetAdminSettings();
         }
-        protected void ToggleSetting(AdminSettingDTO setting)
-        {
-            var existingSetting = AdminSettingList.FirstOrDefault(s => s.SettingsId == setting.SettingsId);
-            if (existingSetting != null)
-            {
-                existingSetting.Enabled = !existingSetting.Enabled;
-            }
-        }
 
         private async Task GetAdminSettings()
         {
@@ -27,25 +20,18 @@ namespace Scheduly.WebApp.Pages.Admin
             {
                 using (var httpClient = new HttpClient())
                 {
-                    try
+                    var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/AdminSettings");
+                    if (getAllResponse.IsSuccessStatusCode)
                     {
-                        var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/AdminSettings");
-                        if (getAllResponse.IsSuccessStatusCode)
-                        {
-                            var content = await getAllResponse.Content.ReadAsStringAsync();
-                            var adminSettings = JsonConvert.DeserializeObject<List<AdminSettingDTO>>(content);
-                            AdminSettingList = adminSettings ?? new List<AdminSettingDTO>();
+                        var content = await getAllResponse.Content.ReadAsStringAsync();
+                        var adminSettings = JsonConvert.DeserializeObject<List<AdminSettingDTO>>(content);
+                        AdminSettingList = adminSettings ?? new List<AdminSettingDTO>();
 
-                            Console.WriteLine("Retrieved all admin settings.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Failed to get all admin settings. Status: {getAllResponse.StatusCode}");
-                        }
+                        Console.WriteLine("Retrieved all admin settings.");
                     }
-                    catch (HttpRequestException e)
+                    else
                     {
-                        Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                        Console.WriteLine($"Failed to get all admin settings. Status: {getAllResponse.StatusCode}");
                     }
                 }
             }
@@ -54,37 +40,43 @@ namespace Scheduly.WebApp.Pages.Admin
                 Console.WriteLine($"Error retrieving admin settings: {ex.Message}");
             }
         }
+
         protected async Task SubmitSettings()
         {
             await UpdateAdminSettings();
+            await GetAdminSettings(); // Update the front end after submitting settings
         }
+
         private async Task UpdateAdminSettings()
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    try
+                    var putResponse = await httpClient.PutAsJsonAsync("https://localhost:7171/api/AdminSettings/UpdateList", AdminSettingList);
+                    if (putResponse.IsSuccessStatusCode)
                     {
-                        var putResponse = await httpClient.PutAsJsonAsync("https://localhost:7171/api/AdminSettings/UpdateList", AdminSettingList);
-                        if (putResponse.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine("Successfully updated admin settings.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Failed to update admin settings. Status: {putResponse.StatusCode}");
-                        }
+                        Console.WriteLine("Successfully updated admin settings.");
                     }
-                    catch (HttpRequestException e)
+                    else
                     {
-                        Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                        Console.WriteLine($"Failed to update admin settings. Status: {putResponse.StatusCode}");
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating admin settings: {ex.Message}");
+            }
+        }
+
+        protected void OnSwitchChanged(int settingsId, bool enabled)
+        {
+            Console.WriteLine($"Switch changed: SettingsId={settingsId}, Enabled={enabled}");
+            var setting = AdminSettingList.FirstOrDefault(s => s.SettingsId == settingsId);
+            if (setting != null)
+            {
+                setting.Enabled = enabled;
             }
         }
     }
