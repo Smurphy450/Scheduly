@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -26,7 +27,25 @@ namespace Scheduly.WebApi.Controllers
         {
             return await _context.Bookings.ToListAsync();
         }
+        // POST: api/Bookings/CreateBooking
+        [HttpPost("CreateBooking")]
+        public async Task<ActionResult<Booking>> CreateBooking(CreateBookingDTO createBookingDTO)
+        {
+            var booking = new Booking
+            {
+                UserId = createBookingDTO.UserId,
+                PremiseId = createBookingDTO.PremiseId,
+                ResourceId = createBookingDTO.ResourceId,
+                Start = createBookingDTO.Start,
+                End = createBookingDTO.End,
+                Approved = createBookingDTO.Approved
+            };
 
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
+        }
         // GET: api/Bookings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetBooking(int id)

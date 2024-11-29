@@ -24,7 +24,7 @@
                     <MudText Typo="Typo.body2">@premise.Description</MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="BookPremise" />
+                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="@(() => BookPremise(premise.PremiseId))" />
                     <AuthorizeView Roles="Administrator">
                         <Authorized>
                             <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremise(premise.PremiseId))" />
