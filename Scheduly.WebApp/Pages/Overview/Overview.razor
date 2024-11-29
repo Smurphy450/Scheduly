@@ -20,6 +20,7 @@
 		<MudDataGrid T="OverviewPremisesDTO" Items="@AllPremises" Virtualize="true" Height="auto">
 			<Columns>
 				<PropertyColumn Property="x => x.Name" />
+				<PropertyColumn Property="x => x.CategoryName" />
 				<PropertyColumn Property="x => x.Size" />
 				<PropertyColumn Property="x => x.Start" />
 				<PropertyColumn Property="x => x.End" />
@@ -37,7 +38,7 @@
 	</MudItem>
 
 	<MudItem xs="6">
-		<MudDataGrid T="OverviewResourcesDTO" Virtualize="true" Height="auto">
+		<MudDataGrid T="OverviewResourcesDTO" Items="@AllResources" Virtualize="true" Height="auto">
 			<Columns>
 				<PropertyColumn Property="x => x.CategoryName" />
 				<PropertyColumn Property="x => x.ResourceName" />

@@ -27,6 +27,57 @@ namespace Scheduly.WebApi.Controllers
         {
             return await _context.Bookings.ToListAsync();
         }
+
+        [HttpGet("GetUserOverview/{userId}")]
+        public async Task<ActionResult<UserOverviewDTO>> GetUserOverview(int userId)
+        {
+            var user = await _context.Users
+                .Include(u => u.Bookings)
+                .ThenInclude(b => b.Resource)
+                .ThenInclude(r => r.Category)
+                .Include(u => u.Bookings)
+                .ThenInclude(b => b.Premise)
+                .ThenInclude(p => p.PremiseCategory)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var overviewResources = user.Bookings
+                .Where(b => b.ResourceId != null)
+                .Select(b => new OverviewResourcesDTO
+                {
+                    CategoryName = b.Resource.Category.Name,
+                    ResourceName = b.Resource.Name,
+                    Description = b.Resource.Description,
+                    Start = b.Start,
+                    End = b.End ?? DateTimeOffset.MinValue,
+                    Approved = b.Approved ?? false
+                }).ToList();
+
+            var overviewPremises = user.Bookings
+                .Where(b => b.PremiseId != null)
+                .Select(b => new OverviewPremisesDTO
+                {
+                    Name = b.Premise.Name,
+                    CategoryName = b.Premise.PremiseCategory.Name,
+                    Size = b.Premise.Size,
+                    Start = b.Start,
+                    End = b.End,
+                    Approved = b.Approved
+                }).ToList();
+
+            var userOverview = new UserOverviewDTO
+            {
+                OverviewResources = overviewResources,
+                OverviewPremises = overviewPremises
+            };
+
+            return Ok(userOverview);
+        }
+
         // POST: api/Bookings/CreateBooking
         [HttpPost("CreateBooking")]
         public async Task<ActionResult<Booking>> CreateBooking(CreateBookingDTO createBookingDTO)

@@ -15,13 +15,14 @@ namespace Scheduly.WebApp.Pages.Overview
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         protected bool DayStarted { get; set; } = false;
         protected double AverageWeeklyWorkTime { get; set; } = 0.0;
-        protected List<OverviewPremisesDTO> AllPremises { get; set; }
+        protected List<OverviewPremisesDTO> AllPremises { get; set; } = new();
+        protected List<OverviewResourcesDTO> AllResources { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {
             await CheckDayStarted();
             await GetAverageWeeklyWorkTime();
-            await GetBookedPremises();
+            await GetUserOverview();
         }
 
         private async Task CheckDayStarted()
@@ -86,7 +87,7 @@ namespace Scheduly.WebApp.Pages.Overview
             }
         }
 
-        private async Task GetBookedPremises()
+        private async Task GetUserOverview()
         {
             var userId = await GetUserInfo();
             if (userId != 0)
@@ -95,31 +96,19 @@ namespace Scheduly.WebApp.Pages.Overview
                 {
                     using (var httpClient = new HttpClient())
                     {
-                        // TODO: Get bookings where userid is userid and premis where premisid is booked under user
-
-                        var response = await httpClient.GetAsync($"https://localhost:7171/api/Bookings/{userId}");
+                        var response = await httpClient.GetAsync($"https://localhost:7171/api/Bookings/GetUserOverview/{userId}");
                         if (response.IsSuccessStatusCode)
                         {
-                            var content = await response.Content.ReadAsStringAsync();
-
-                            var premises = JsonConvert.DeserializeObject<List<WebApi.Models.Booking>>(content);
-
-                            foreach (var premise in premises)
+                            var userOverview = await response.Content.ReadFromJsonAsync<UserOverviewDTO>();
+                            if (userOverview != null)
                             {
-                                var premisesDTO = new OverviewPremisesDTO
-                                {
-                                    Name = "Office Building",
-                                    Size = "1000 sqm",
-                                    Start = premise.Start,
-                                    End = premise.End,
-                                    Approved = premise.Approved
-                                };
-                                AllPremises.Add(premisesDTO);
+                                AllPremises = userOverview.OverviewPremises;
+                                AllResources = userOverview.OverviewResources;
                             }
                         }
                         else
                         {
-                            Console.WriteLine($"Failed to get booked premises. Status: {response.StatusCode}");
+                            Console.WriteLine($"Failed to get user overview. Status: {response.StatusCode}");
                         }
                     }
                 }
@@ -129,7 +118,7 @@ namespace Scheduly.WebApp.Pages.Overview
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error getting booked premises: {ex.Message}");
+                    Console.WriteLine($"Error getting user overview: {ex.Message}");
                 }
             }
         }
