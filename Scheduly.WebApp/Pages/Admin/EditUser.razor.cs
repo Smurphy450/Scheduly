@@ -81,16 +81,13 @@ namespace Scheduly.WebApp.Pages.Admin
         {
             const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             StringBuilder result = new StringBuilder();
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                byte[] uintBuffer = new byte[sizeof(uint)];
+            byte[] uintBuffer = new byte[sizeof(uint)];
 
-                while (length-- > 0)
-                {
-                    rng.GetBytes(uintBuffer);
-                    uint num = BitConverter.ToUInt32(uintBuffer, 0);
-                    result.Append(validChars[(int)(num % (uint)validChars.Length)]);
-                }
+            while (length-- > 0)
+            {
+                RandomNumberGenerator.Fill(uintBuffer);
+                uint num = BitConverter.ToUInt32(uintBuffer, 0);
+                result.Append(validChars[(int)(num % (uint)validChars.Length)]);
             }
 
             return result.ToString();
