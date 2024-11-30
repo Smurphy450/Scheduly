@@ -7,11 +7,15 @@
     @foreach (var user in UserList)
     {
         <MudItem>
-            <MudCard Style="height:100px; width:200px;">
+            <MudCard Style="height:160px; width:300px;">
                 <MudCardContent>
                     <MudText Typo="Typo.body1"><b>@user.Username</b></MudText>
                     <MudText Typo="Typo.body2">ID: @user.UserId</MudText>
                 </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(() => EditUser(user.UserId))" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteUser(user.UserId))" />
+                </MudCardActions>
             </MudCard>
         </MudItem>
     }

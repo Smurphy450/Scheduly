@@ -38,5 +38,35 @@ namespace Scheduly.WebApp.Pages.Admin
                 Console.WriteLine($"An error occurred while making the request: {e.Message}");
             }
         }
+        protected async Task DeleteUser(int userId)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.DeleteAsync($"https://localhost:7171/api/Users/{userId}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UserList = UserList.Where(u => u.UserId != userId).ToList();
+                        Console.WriteLine("User deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to delete user. Status: {response.StatusCode}");
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+            }
+        }
+
+        protected void EditUser(int userId)
+        {
+            // Navigate to the edit user page or open a dialog for editing
+            // For example:
+            // NavigationManager.NavigateTo($"/EditUser/{userId}");
+        }
     }
 }

@@ -106,7 +106,6 @@ namespace Scheduly.WebApi.Controllers
             return NotFound();
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -114,6 +113,12 @@ namespace Scheduly.WebApi.Controllers
             if (user == null)
             {
                 return NotFound();
+            }
+
+            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == id);
+            if (profile != null)
+            {
+                _context.Profiles.Remove(profile);
             }
 
             _context.Users.Remove(user);
