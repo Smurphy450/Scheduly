@@ -1,7 +1,11 @@
-﻿@page "/AdminOverview";
+﻿@page "/AdminPanel/Overview";
 @inherits AdminOverviewBase;
 
 <h3>Admin Overview</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>
 
 <MudGrid>
     @foreach (var user in UserList)

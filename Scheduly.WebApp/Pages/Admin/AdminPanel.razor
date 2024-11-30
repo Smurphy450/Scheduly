@@ -1,0 +1,50 @@
+﻿@page "/AdminPanel";
+@inherits AdminPanelBase;
+
+<h3>Admin Panel</h3>
+
+ <MudStack Row="true">
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Admin Overview</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/Overview")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Admin Settings</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/Settings")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Approve Booking</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/ApproveBooking")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Approve Absence</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/ApproveAbsence")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudStack>

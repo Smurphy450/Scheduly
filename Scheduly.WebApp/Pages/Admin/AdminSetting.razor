@@ -1,7 +1,11 @@
-﻿@page "/AdminSetting";
+﻿@page "/AdminPanel/Settings";
 @inherits AdminSettingBase;
 
-<h3>AdminSetting</h3>
+<h3>Admin Settings</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>
 
 @foreach (var setting in AdminSettingList)
 {
