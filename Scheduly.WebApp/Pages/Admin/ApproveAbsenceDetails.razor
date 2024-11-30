@@ -1,4 +1,21 @@
-﻿@page "/AdminPanel/ApproveAbsence/AbsenceDetails";
+﻿@page "/AdminPanel/ApproveAbsence/AbsenceDetails/{AbsenceId:int}";
 @inherits ApproveAbsenceDetailsBase;
 
 <h3>ApproveAbsenceDetails</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>
+
+<MudPaper Class="pa-4" Width="500px">
+	<MudForm Model="@model">
+		<MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.AbsenceId" Variant="Variant.Outlined" />
+		<MudTextField Label="LastName" InputType="InputType.Text" @bind-Value="model.AbsenceTypeId" Variant="Variant.Outlined" />
+		<MudTextField Label="Address" InputType="InputType.Text" @bind-Value="model.UserId" Variant="Variant.Outlined" />
+		<MudTextField Label="Address" InputType="InputType.Text" @bind-Value="model.User.Username" Variant="Variant.Outlined" />
+		<MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.AbsenceType.Name" Variant="Variant.Outlined" />
+		<MudTextField Label="ZipCode" InputType="InputType.Number" @bind-Value="model.Start" Variant="Variant.Outlined" />
+		<MudTextField Label="City" InputType="InputType.Text" @bind-Value="model.End" Variant="Variant.Outlined" />
+		<MudTextField Label="PhoneNumber" InputType="InputType.Telephone" @bind-Value="model.Description" Variant="Variant.Outlined" />
+	</MudForm>
+</MudPaper>

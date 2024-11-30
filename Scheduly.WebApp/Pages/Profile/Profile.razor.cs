@@ -13,7 +13,7 @@ namespace Scheduly.WebApp.Pages.Profile
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
-        protected ProfileDTO model { get; set; } = new ProfileDTO(); // Initialize the model
+        protected ProfileDTO model { get; set; } = new ProfileDTO();
 
         protected override async Task OnInitializedAsync()
         {

@@ -1,4 +1,8 @@
-﻿@page "/AdminPanel/ApproveBooking/BookingDetails";
+﻿@page "/AdminPanel/ApproveBooking/BookingDetails/{BookingId:int}";
 @inherits ApproveBookingDetailsBase;
 
 <h3>ApproveBookingDetails</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>

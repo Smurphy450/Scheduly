@@ -9,7 +9,7 @@
     <BackButton />
 </MudItem>
 
-<MudDataGrid T="ApproveAbsenceDTO" Items="@AllAbsence" Virtualize="true" Height="auto">
+<MudDataGrid T="ApproveAbsenceDTO" Items="@AllAbsence" @bind-SelectedItems="@SelectedItems" Virtualize="true" Height="auto">
 	<Columns>
 		<PropertyColumn Property="x => x.AbsenceId" />
 		<PropertyColumn Property="x => x.UserId" />
@@ -24,7 +24,7 @@
 				<MudStack Row>
 					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success">Approve</MudButton>
 					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error">Disapprove</MudButton>
-					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" Href="@("/AdminPanel/ApproveAbsence/AbsenceDetails")">Details</MudButton>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" Href="@($"/AdminPanel/ApproveAbsence/AbsenceDetails/{SelectedItems.FirstOrDefault()?.AbsenceId}")">Details</MudButton>
 				</MudStack>
 			</CellTemplate>
 		</TemplateColumn>

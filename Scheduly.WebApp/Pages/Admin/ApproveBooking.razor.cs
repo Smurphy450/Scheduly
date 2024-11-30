@@ -11,8 +11,9 @@ namespace Scheduly.WebApp.Pages.Admin
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
+		protected HashSet<ApproveBookingDTO> SelectedItems { get; set; } = new HashSet<ApproveBookingDTO>();
 
-        protected List<ApproveBookingDTO> AllBookings { get; set; } = new();
+		protected List<ApproveBookingDTO> AllBookings { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {
