@@ -19,6 +19,15 @@
 		<PropertyColumn Property="x => x.Start" />
 		<PropertyColumn Property="x => x.End" />
 		<PropertyColumn Property="x => x.Approved" />
+		<TemplateColumn CellClass="d-flex justify-end">
+			<CellTemplate>
+				<MudStack Row>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success">Approve</MudButton>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error">Disapprove</MudButton>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" Href="@($"/AdminPanel/ApproveBooking/BookingDetails")">Details</MudButton>
+				</MudStack>
+			</CellTemplate>
+		</TemplateColumn>
 	</Columns>
 	<LoadingContent>
 		<MudText Typo="Typo.h6">Loading...</MudText>

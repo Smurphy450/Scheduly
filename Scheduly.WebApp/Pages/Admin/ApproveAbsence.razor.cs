@@ -9,7 +9,6 @@ namespace Scheduly.WebApp.Pages.Admin
     public class ApproveAbsenceBase : ComponentBase
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
-        [Inject] private HttpClient HttpClient { get; set; }
 
         protected List<ApproveAbsenceDTO> AllAbsence { get; set; } = new();
 
@@ -22,15 +21,18 @@ namespace Scheduly.WebApp.Pages.Admin
         {
             try
             {
-                var response = await HttpClient.GetAsync("api/Absence/PendingApproval");
-                if (response.IsSuccessStatusCode)
-                {
-                    AllAbsence = await response.Content.ReadFromJsonAsync<List<ApproveAbsenceDTO>>() ?? new List<ApproveAbsenceDTO>();
-                }
-                else
-                {
-                    Console.WriteLine($"Failed to get pending approval absences. Status: {response.StatusCode}");
-                }
+				using (var httpClient = new HttpClient())
+				{
+					var response = await httpClient.GetAsync("api/Absence/PendingApproval");
+					if (response.IsSuccessStatusCode)
+					{
+						AllAbsence = await response.Content.ReadFromJsonAsync<List<ApproveAbsenceDTO>>() ?? new List<ApproveAbsenceDTO>();
+					}
+					else
+					{
+						Console.WriteLine($"Failed to get pending approval absences. Status: {response.StatusCode}");
+					}
+				}
             }
             catch (HttpRequestException e)
             {
