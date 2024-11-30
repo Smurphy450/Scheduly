@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
@@ -9,6 +10,7 @@ namespace Scheduly.WebApp.Pages.Admin
     public class ApproveAbsenceBase : ComponentBase
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
         protected List<ApproveAbsenceDTO> AllAbsence { get; set; } = new();
 
@@ -21,18 +23,21 @@ namespace Scheduly.WebApp.Pages.Admin
         {
             try
             {
-				using (var httpClient = new HttpClient())
-				{
-					var response = await httpClient.GetAsync("api/Absence/PendingApproval");
-					if (response.IsSuccessStatusCode)
-					{
-						AllAbsence = await response.Content.ReadFromJsonAsync<List<ApproveAbsenceDTO>>() ?? new List<ApproveAbsenceDTO>();
-					}
-					else
-					{
-						Console.WriteLine($"Failed to get pending approval absences. Status: {response.StatusCode}");
-					}
-				}
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync("https://localhost:7171/api/Absence/PendingApproval");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        AllAbsence = await response.Content.ReadFromJsonAsync<List<ApproveAbsenceDTO>>() ?? new List<ApproveAbsenceDTO>();
+                    }
+                    else
+                    {
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                        Snackbar.Add("Failed to get pending approval absences!", Severity.Error);
+
+                        Console.WriteLine($"Failed to get pending approval absences. Status: {response.StatusCode}");
+                    }
+                }
             }
             catch (HttpRequestException e)
             {
@@ -40,9 +45,11 @@ namespace Scheduly.WebApp.Pages.Admin
             }
             catch (Exception ex)
             {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add("Error getting absences!", Severity.Error);
+
                 Console.WriteLine($"Error getting absences: {ex.Message}");
             }
         }
     }
 }
-
