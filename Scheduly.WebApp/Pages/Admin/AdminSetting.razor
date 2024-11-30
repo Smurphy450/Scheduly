@@ -1,5 +1,6 @@
 ﻿@page "/AdminPanel/Settings";
 @inherits AdminSettingBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Admin Settings</h3>
 

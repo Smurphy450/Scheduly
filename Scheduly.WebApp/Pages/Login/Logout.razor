@@ -9,7 +9,7 @@
     protected override async Task OnInitializedAsync()
     {
         var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-        await customAuthStateProvider.Logout();
-        NavigationManager.NavigateTo("/");
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+        NavigationManager.NavigateTo("/", true);
     }
 }
