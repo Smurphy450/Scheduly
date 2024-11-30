@@ -69,17 +69,5 @@ namespace Scheduly.WebApp.Pages.Admin
                 Console.WriteLine($"Error updating admin settings: {ex.Message}");
             }
         }
-
-        protected void OnSwitchChanged(int settingsId, bool enabled)
-        {
-            //TODO: Fix så den opdaterer AdminSettingList
-
-            Console.WriteLine($"Switch changed: SettingsId={settingsId}, Enabled={enabled}");
-            var setting = AdminSettingList.FirstOrDefault(s => s.SettingsId == settingsId);
-            if (setting != null)
-            {
-                setting.Enabled = enabled;
-            }
-        }
     }
 }

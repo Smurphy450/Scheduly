@@ -5,7 +5,7 @@
 
 @foreach (var setting in AdminSettingList)
 {
-    <MudSwitch @bind-Checked="setting.Enabled" Label="@setting.Name" Value="setting.Enabled" T="bool?" @onchange="(e) => OnSwitchChanged(setting.SettingsId, (bool)e.Value)" />
+    <MudSwitch Label="@setting.Name" @bind-Checked="setting.Enabled" @bind-Value="setting.Enabled" />
 }
 
 <MudButton OnClick="SubmitSettings">Submit</MudButton>
