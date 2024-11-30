@@ -142,6 +142,32 @@ namespace Scheduly.WebApi.Controllers
             return booking;
         }
 
+        [HttpGet("PendingApproval")]
+        public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
+        {
+            var pendingBookings = await _context.Bookings
+                .Where(b => b.Start > DateTimeOffset.Now && b.Approved == false)
+                .Include(b => b.User)
+                .Include(b => b.Premise)
+                .ThenInclude(p => p.PremiseCategory)
+                .Include(b => b.Resource)
+                .ThenInclude(r => r.Category)
+                .Select(b => new ApproveBookingDTO
+                {
+                    BookingId = b.BookingsId,
+                    UserId = b.UserId,
+                    Username = b.User.Username,
+                    ItemName = b.Premise != null ? b.Premise.Name : b.Resource.Name,
+                    CategoryName = b.Premise != null ? b.Premise.PremiseCategory.Name : b.Resource.Category.Name,
+                    Start = b.Start,
+                    End = b.End,
+                    Approved = b.Approved ?? false
+                })
+                .ToListAsync();
+
+            return Ok(pendingBookings);
+        }
+
         // PUT: api/Bookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
