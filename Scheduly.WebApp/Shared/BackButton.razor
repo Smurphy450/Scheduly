@@ -1,0 +1,10 @@
+﻿@inject IJSRuntime JSRuntime
+
+<MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBackIosNew" OnClick="GoBack">Back</MudButton>
+
+@code {
+    private async Task GoBack()
+    {
+        await JSRuntime.InvokeVoidAsync("history.back");
+    }
+}
