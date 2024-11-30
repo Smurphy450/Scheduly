@@ -1,8 +1,18 @@
 ﻿@page "/AdminOverview";
 @inherits AdminOverviewBase;
 
-<h3>AdminOverview</h3>
+<h3>Admin Overview</h3>
 
-@code {
-
-}
+<MudGrid>
+    @foreach (var user in UserList)
+    {
+        <MudItem>
+            <MudCard Style="height:100px; width:200px;">
+                <MudCardContent>
+                    <MudText Typo="Typo.body1"><b>@user.Username</b></MudText>
+                    <MudText Typo="Typo.body2">ID: @user.UserId</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
