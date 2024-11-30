@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Scheduly.WebApi.Models.DTO;
 using System.Net.Http.Json;
+using System.Security.Claims;
 
 namespace Scheduly.WebApp.Pages.Admin
 {
     public class AdminOverviewBase : ComponentBase
     {
+        [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         public List<UserInfoDTO> UserList { get; set; } = new List<UserInfoDTO>();
 
         protected override async Task OnInitializedAsync()
@@ -40,6 +44,14 @@ namespace Scheduly.WebApp.Pages.Admin
         }
         protected async Task DeleteUser(int userId)
         {
+            int currentUserId = await GetUserInfo();
+
+            if (userId == currentUserId)
+            {
+                Console.WriteLine("You cannot delete your own user.");
+                return;
+            }
+
             try
             {
                 using (var httpClient = new HttpClient())
@@ -62,11 +74,34 @@ namespace Scheduly.WebApp.Pages.Admin
             }
         }
 
+        private async Task<int> GetUserInfo()
+        {
+            try
+            {
+                var userId = 0;
+                string userName = string.Empty;
+
+                var authState = await authStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
+                    userName = user.Identity.Name;
+                }
+
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error authenticating user: {ex.Message}");
+                return 0;
+            }
+        }
+
         protected void EditUser(int userId)
         {
-            // Navigate to the edit user page or open a dialog for editing
-            // For example:
-            // NavigationManager.NavigateTo($"/EditUser/{userId}");
+            NavigationManager.NavigateTo($"/Admin/EditUser/{userId}");
         }
     }
 }

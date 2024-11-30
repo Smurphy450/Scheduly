@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -85,44 +86,86 @@ namespace Scheduly.WebApi.Controllers
             return profile;
         }
 
-        //[HttpPut("User/{userId}")]
-        //public async Task<IActionResult> PutProfileByUserId(int userId, ProfileDTO profileDto)
-        //{
-        //    var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
-        //    if (profile == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: api/Profiles/UserProfile/{userId}
+        [HttpGet("UserProfile/{userId}")]
+        public async Task<ActionResult<UserProfileDTO>> GetUserProfileByUserId(int userId)
+        {
+            var profile = await _context.Profiles
+                .Include(p => p.User)
+                .Where(a => a.UserId == userId)
+                .Select(p => new UserProfileDTO
+                {
+                    UserId = p.UserId ?? 0,
+                    Username = p.User.Username,
+                    Email = p.User.Email,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Address = p.Address,
+                    ZipCode = p.ZipCode,
+                    PhoneNumber = p.PhoneNumber,
+                    Admin = p.Admin,
+                    City = p.ZipCodeNavigation.City // Get city based on zip code
+                })
+                .FirstOrDefaultAsync();
 
-        //    profile.FirstName = profileDto.FirstName;
-        //    profile.LastName = profileDto.LastName;
-        //    profile.Address = profileDto.Address;
-        //    profile.ZipCode = profileDto.ZipCode;
-        //    profile.PhoneNumber = profileDto.PhoneNumber;
-        //    profile.User.Username = profileDto.Username;
-        //    profile.User.PasswordHash = profileDto.PasswordHash;
-        //    profile.User.Email = profileDto.Email;
+            if (profile == null)
+            {
+                return NotFound();
+            }
 
-        //    _context.Entry(profile).State = EntityState.Modified;
+            return profile;
+        }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProfileExists(profile.ProfileId))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        // PUT: api/Profiles/UserProfile/{userId}
+        [HttpPut("UserProfile/{userId}")]
+        public async Task<IActionResult> PutUserProfileByUserId(int userId, UserProfileDTO userProfileDto)
+        {
+            var profile = await _context.Profiles
+                .Include(p => p.User) // Ensure User is included
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent();
-        //}
+            // Update profile properties
+            profile.FirstName = userProfileDto.FirstName;
+            profile.LastName = userProfileDto.LastName;
+            profile.Address = userProfileDto.Address;
+            profile.ZipCode = userProfileDto.ZipCode;
+            profile.PhoneNumber = userProfileDto.PhoneNumber;
+            profile.Admin = userProfileDto.Admin;
+
+            // Update user properties
+            profile.User.Username = userProfileDto.Username;
+            profile.User.Email = userProfileDto.Email;
+
+            // Update password hash if provided
+            if (!string.IsNullOrEmpty(userProfileDto.PasswordHash))
+            {
+                profile.User.PasswordHash = userProfileDto.PasswordHash;
+            }
+
+            _context.Entry(profile).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProfileExists(profile.ProfileId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         [HttpPut("User/{userId}")]
         public async Task<IActionResult> PutProfileByUserId(int userId, ProfileDTO profileDto)
