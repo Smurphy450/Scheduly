@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
 
 <PageTitle>Scheduly</PageTitle>
 
@@ -8,16 +9,19 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-	<MudAppBar Elevation="0">
-		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-		<MudSpacer />
-		<MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnDarkModeChanged"
-							 Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Title="Switch to Light Mode"
-							 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Warning" ToggledTitle="Switch to Dark Mode" />
-	</MudAppBar>
-	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
-		<NavMenu />
-	</MudDrawer>
+	@if (!IsLoginPage)
+	{
+		<MudAppBar Elevation="0">
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+			<MudSpacer />
+			<MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnDarkModeChanged"
+								 Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Title="Switch to Light Mode"
+								 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Warning" ToggledTitle="Switch to Dark Mode" />
+		</MudAppBar>
+		<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+			<NavMenu />
+		</MudDrawer>
+	}
 	<MudMainContent>
 		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-2 pt-2">
 			@Body
@@ -26,9 +30,25 @@
 </MudLayout>
 
 @code {
+	private bool IsLoginPage => Navigation.Uri.EndsWith("/");
 	private Breakpoint _breakpoint = Breakpoint.Xl;
 	private bool _isDarkMode = true;
 	private bool _drawerOpen = false;
+
+	protected override void OnInitialized()
+	{
+		Navigation.LocationChanged += HandleLocationChanged;
+	}
+
+	private void HandleLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+	{
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		Navigation.LocationChanged -= HandleLocationChanged;
+	}
 
 	void DrawerToggle()
 	{
