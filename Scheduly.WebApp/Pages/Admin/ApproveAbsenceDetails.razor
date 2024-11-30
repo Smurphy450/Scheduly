@@ -1,4 +1,11 @@
-﻿@page "/AdminPanel/ApproveAbsence/AbsenceDetails";
+﻿@page "/AdminPanel/ApproveAbsence/AbsenceDetails/{id:int}";
 @inherits ApproveAbsenceDetailsBase;
 
-<h3>ApproveAbsenceDetails</h3>
+<h3>Approve Absence Details</h3>
+
+<p>Absence ID: @Id</p>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+}
