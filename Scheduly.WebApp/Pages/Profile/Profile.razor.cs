@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApp.Utilities;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -22,7 +23,7 @@ namespace Scheduly.WebApp.Pages.Profile
 
         private async Task GetAllProfileInfo()
         {
-            var userId = await GetUserInfo();
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId != 0)
             {
                 try
@@ -79,31 +80,6 @@ namespace Scheduly.WebApp.Pages.Profile
             catch (Exception ex)
             {
                 Console.WriteLine($"Error when updating profile: {ex.Message}");
-            }
-        }
-
-        private async Task<int> GetUserInfo()
-        {
-            try
-            {
-                var userId = 0;
-                string userName = string.Empty;
-
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                    userName = user.Identity.Name;
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
-                return 0;
             }
         }
     }

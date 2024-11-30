@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http;
 using System.Security.Claims;
 
@@ -92,7 +93,7 @@ namespace Scheduly.WebApp.Pages.Booking
         {
             try
             {
-                int userId = await GetUserInfo();
+                int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                 if (userId > 0)
                 {
                     using (var httpClient = new HttpClient())
@@ -151,31 +152,6 @@ namespace Scheduly.WebApp.Pages.Booking
             catch (HttpRequestException e)
             {
                 Console.WriteLine($"An error occurred while making the request: {e.Message}");
-            }
-        }
-
-        private async Task<int> GetUserInfo()
-        {
-            try
-            {
-                var userId = 0;
-                string userName = string.Empty;
-
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                    userName = user.Identity.Name;
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
-                return 0;
             }
         }
     }

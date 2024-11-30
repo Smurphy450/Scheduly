@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 using System.Security.Claims;
 
@@ -44,7 +45,7 @@ namespace Scheduly.WebApp.Pages.Admin
         }
         protected async Task DeleteUser(int userId)
         {
-            int currentUserId = await GetUserInfo();
+            int currentUserId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
 
             if (userId == currentUserId)
             {
@@ -71,31 +72,6 @@ namespace Scheduly.WebApp.Pages.Admin
             catch (HttpRequestException e)
             {
                 Console.WriteLine($"An error occurred while making the request: {e.Message}");
-            }
-        }
-
-        private async Task<int> GetUserInfo()
-        {
-            try
-            {
-                var userId = 0;
-                string userName = string.Empty;
-
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                    userName = user.Identity.Name;
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
-                return 0;
             }
         }
 

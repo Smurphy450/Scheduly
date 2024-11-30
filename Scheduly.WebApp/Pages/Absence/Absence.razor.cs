@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using MudBlazor;
 using Newtonsoft.Json;
 using Scheduly.WebApp.Authentication;
+using Scheduly.WebApp.Utilities;
 using System.Security.Claims;
 
 namespace Scheduly.WebApp.Pages.Absence
@@ -22,7 +23,7 @@ namespace Scheduly.WebApp.Pages.Absence
 
         protected override async Task OnInitializedAsync()
         {
-            int userId = await GetUserInfo();
+            int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId > 0)
             {
                 await GetAbsenceInfo(userId);
@@ -71,31 +72,6 @@ namespace Scheduly.WebApp.Pages.Absence
             catch (Exception ex)
             {
                 Console.WriteLine($"Error retrieving absence for user: {ex.Message}");
-            }
-        }
-
-        private async Task<int> GetUserInfo()
-        {
-            try
-            {
-                var userId = 0;
-                string userName = string.Empty;
-
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                    userName = user.Identity.Name;
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
-                return 0;
             }
         }
     }

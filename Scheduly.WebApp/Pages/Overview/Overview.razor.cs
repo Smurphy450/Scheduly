@@ -7,6 +7,7 @@ using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Models;
 using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Pages.Booking;
+using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Overview
 {
@@ -27,7 +28,7 @@ namespace Scheduly.WebApp.Pages.Overview
 
         private async Task CheckDayStarted()
         {
-            var userId = await GetUserInfo();
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId != 0)
             {
                 try
@@ -58,7 +59,7 @@ namespace Scheduly.WebApp.Pages.Overview
 
         private async Task GetAverageWeeklyWorkTime()
         {
-            var userId = await GetUserInfo();
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId != 0)
             {
                 try
@@ -89,7 +90,7 @@ namespace Scheduly.WebApp.Pages.Overview
 
         private async Task GetUserOverview()
         {
-            var userId = await GetUserInfo();
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId != 0)
             {
                 try
@@ -135,7 +136,7 @@ namespace Scheduly.WebApp.Pages.Overview
 
         private async Task RegisterTime(bool isStart)
         {
-            var userId = await GetUserInfo();
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             if (userId != 0)
             {
                 var timeRegistrationDto = new TimeRegistrationDTO
@@ -166,31 +167,6 @@ namespace Scheduly.WebApp.Pages.Overview
                 }
             }
             await CheckDayStarted();
-        }
-
-        private async Task<int> GetUserInfo()
-        {
-            try
-            {
-                var userId = 0;
-                string userName = string.Empty;
-
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    userId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                    userName = user.Identity.Name;
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
-                return 0;
-            }
         }
     }
 }
