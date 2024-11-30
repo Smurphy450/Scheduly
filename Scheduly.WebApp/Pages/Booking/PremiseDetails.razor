@@ -1,5 +1,6 @@
 ﻿@page "/Booking/PremiseDetails/{PremiseCategoryId:int}";
 @inherits PremiseDetailsBase;
+@attribute [Authorize(Roles = "Administrator,User")]
 
 <h3>@PremiseCategoryName</h3>
 

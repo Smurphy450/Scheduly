@@ -1,6 +1,7 @@
 ﻿@page "/Overview";
 @inherits OverviewBase;
 @using Scheduly.WebApi.Models.DTO;
+@attribute [Authorize(Roles = "Administrator,User")]
 
 <h3>Overview</h3>
 

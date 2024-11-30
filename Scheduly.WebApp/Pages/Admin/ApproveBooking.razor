@@ -1,5 +1,6 @@
 ﻿@page "/AdminPanel/ApproveBooking";
 @inherits ApproveBookingBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Approve Booking</h3>
 

@@ -1,21 +1,4 @@
-﻿@* <MudNavMenu Color="Color.Info">
-	<AuthorizeView Roles="Administrator,User">
-		<Authorized>
-			<MudNavLink Href="Profile" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
-			<MudNavLink Href="Absence" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sick">Absence</MudNavLink>
-			<MudNavLink Href="Booking" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.BookOnline">Booking</MudNavLink>
-			<MudNavLink Href="Overview" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Overview</MudNavLink>
-			<MudNavLink Href="TimeRegistration" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AvTimer">TimeRegistration</MudNavLink>
-		</Authorized>
-	</AuthorizeView>
-	<AuthorizeView Roles="Administrator">
-        <Authorized>
-			<MudNavLink Href="AdminPanel" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AdminPanelSettings">Admin</MudNavLink>
-        </Authorized>
-	</AuthorizeView>
-</MudNavMenu>
- *@
-<MudNavMenu Color="Color.Info">
+﻿<MudNavMenu Color="Color.Info">
     <AuthorizeView Roles="Administrator,User">
         <Authorized>
             <MudNavLink Href="Profile" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>

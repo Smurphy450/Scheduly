@@ -1,5 +1,6 @@
 ﻿@page "/AdminPanel/Overview";
 @inherits AdminOverviewBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Admin Overview</h3>
 

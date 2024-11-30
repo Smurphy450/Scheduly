@@ -1,5 +1,6 @@
 ﻿@page "/Admin/EditUser/{UserId:int}"
 @inherits EditUserBase
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Edit User</h3>
 

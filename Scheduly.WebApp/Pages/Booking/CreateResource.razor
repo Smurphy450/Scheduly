@@ -1,5 +1,6 @@
 ﻿@page "/Booking/ResourceDetails/{CategoryId:int}/CreateResource";
 @inherits CreateResourceBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Create Resource</h3>
 

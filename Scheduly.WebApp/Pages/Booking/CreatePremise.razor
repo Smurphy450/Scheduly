@@ -1,5 +1,6 @@
 ﻿@page "/Booking/PremiseDetails/{PremiseCategoryId:int}/CreatePremise";
 @inherits CreatePremiseBase;
+@attribute [Authorize(Roles = "Administrator")]
 
 <h3>Create Premise</h3>
 
