@@ -1,0 +1,15 @@
+﻿@page "/Logout"
+@using Scheduly.WebApp.Authentication
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Logging out...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+        await customAuthStateProvider.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+}

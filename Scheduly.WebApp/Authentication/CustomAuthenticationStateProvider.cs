@@ -62,5 +62,11 @@ namespace Scheduly.WebApp.Authentication
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
         }
+        public async Task Logout()
+        {
+            var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            NotifyAuthenticationStateChanged(Task.FromResult(authState));
+            await Task.CompletedTask;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/Absence";
 @inherits AbsenceBase;
+@attribute [Authorize(Roles = "Administrator,User")]
 
 <h3>Absence</h3>
 
