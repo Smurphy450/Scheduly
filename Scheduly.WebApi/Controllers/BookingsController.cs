@@ -122,7 +122,8 @@ namespace Scheduly.WebApi.Controllers
                 ItemName = booking.Premise != null ? booking.Premise.Name : booking.Resource.Name,
                 CategoryName = booking.Premise != null ? booking.Premise.PremiseCategory.Name : booking.Resource.Category.Name,
                 Start = booking.Start,
-                End = booking.End
+                End = booking.End,
+                Approved = booking.Approved ?? false
             };
 
             return Ok(approveBookingDTO);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Models;
 
 namespace Scheduly.WebApi.Controllers
@@ -51,6 +52,34 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return absences;
+        }
+
+        [HttpGet("ApproveAbsence/{id}")]
+        public async Task<ActionResult<ApproveAbsenceDTO>> GetApproveAbsence(int id)
+        {
+            var absence = await _context.Absences
+                .Include(a => a.User)
+                .Include(a => a.AbsenceType)
+                .FirstOrDefaultAsync(a => a.AbsenceId == id);
+
+            if (absence == null)
+            {
+                return NotFound();
+            }
+
+            var approveAbsenceDTO = new ApproveAbsenceDTO
+            {
+                AbsenceId = absence.AbsenceId,
+                UserId = absence.UserId,
+                Username = absence.User.Username,
+                AbsenceTypeName = absence.AbsenceType.Name,
+                Start = absence.Start,
+                End = absence.End,
+                Description = absence.Description,
+                Approved = absence.Approved ?? false
+            };
+
+            return Ok(approveAbsenceDTO);
         }
 
         // PUT: api/Absence/5
