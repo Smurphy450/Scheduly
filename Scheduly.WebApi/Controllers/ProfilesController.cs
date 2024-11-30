@@ -36,7 +36,6 @@ namespace Scheduly.WebApi.Controllers
                     City = p.ZipCodeNavigation.City, // Get city based on zip code
                     PhoneNumber = p.PhoneNumber,
                     Username = p.User.Username,
-                    PasswordHash = p.User.PasswordHash,
                     Email = p.User.Email
                 })
                 .FirstOrDefaultAsync();
@@ -142,7 +141,6 @@ namespace Scheduly.WebApi.Controllers
             profile.ZipCode = profileDto.ZipCode;
             profile.PhoneNumber = profileDto.PhoneNumber;
             profile.User.Username = profileDto.Username;
-            profile.User.PasswordHash = profileDto.PasswordHash;
             profile.User.Email = profileDto.Email;
 
             _context.Entry(profile).State = EntityState.Modified;
