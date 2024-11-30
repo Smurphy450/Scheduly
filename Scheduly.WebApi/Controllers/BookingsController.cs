@@ -97,6 +97,36 @@ namespace Scheduly.WebApi.Controllers
 
             return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
         }
+
+        [HttpGet("ApproveBooking/{id}")]
+        public async Task<ActionResult<ApproveBookingDTO>> GetApproveBooking(int id)
+        {
+            var booking = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Premise)
+                .ThenInclude(p => p.PremiseCategory)
+                .Include(b => b.Resource)
+                .ThenInclude(r => r.Category)
+                .FirstOrDefaultAsync(b => b.BookingsId == id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            var approveBookingDTO = new ApproveBookingDTO
+            {
+                BookingId = booking.BookingsId,
+                UserId = booking.UserId,
+                Username = booking.User.Username,
+                ItemName = booking.Premise != null ? booking.Premise.Name : booking.Resource.Name,
+                CategoryName = booking.Premise != null ? booking.Premise.PremiseCategory.Name : booking.Resource.Category.Name,
+                Start = booking.Start,
+                End = booking.End
+            };
+
+            return Ok(approveBookingDTO);
+        }
         // GET: api/Bookings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetBooking(int id)
