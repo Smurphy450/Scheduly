@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -123,6 +124,43 @@ namespace Scheduly.WebApi.Controllers
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            var user = await _context.Users.FindAsync(changePasswordDTO.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.PasswordHash != changePasswordDTO.OldPasswordHash)
+            {
+                return BadRequest("Current password is incorrect.");
+            }
+
+            user.PasswordHash = changePasswordDTO.NewPasswordHash;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(changePasswordDTO.UserId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
