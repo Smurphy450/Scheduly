@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
@@ -9,7 +10,7 @@ namespace Scheduly.WebApp.Pages.Admin
     public class ApproveBookingBase : ComponentBase
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
-        [Inject] private HttpClient HttpClient { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
         protected List<ApproveBookingDTO> AllBookings { get; set; } = new();
 
@@ -22,14 +23,20 @@ namespace Scheduly.WebApp.Pages.Admin
         {
             try
             {
-                var response = await HttpClient.GetAsync("api/Bookings/PendingApproval");
-                if (response.IsSuccessStatusCode)
+                using (var httpClient = new HttpClient())
                 {
-                    AllBookings = await response.Content.ReadFromJsonAsync<List<ApproveBookingDTO>>() ?? new List<ApproveBookingDTO>();
-                }
-                else
-                {
-                    Console.WriteLine($"Failed to get pending approval bookings. Status: {response.StatusCode}");
+                    var response = await httpClient.GetAsync("https://localhost:7171/api/Bookings/PendingApproval");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        AllBookings = await response.Content.ReadFromJsonAsync<List<ApproveBookingDTO>>() ?? new List<ApproveBookingDTO>();
+                    }
+                    else
+                    {
+                        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                        Snackbar.Add("Failed to get pending approval bookings!", Severity.Error);
+
+                        Console.WriteLine($"Failed to get pending approval bookings. Status: {response.StatusCode}");
+                    }
                 }
             }
             catch (HttpRequestException e)
@@ -38,6 +45,9 @@ namespace Scheduly.WebApp.Pages.Admin
             }
             catch (Exception ex)
             {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add("Error getting bookings!", Severity.Error);
+
                 Console.WriteLine($"Error getting bookings: {ex.Message}");
             }
         }

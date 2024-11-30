@@ -103,8 +103,8 @@ namespace Scheduly.WebApp.Pages.Booking
                             UserId = userId,
                             PremiseId = premiseId,
                             ResourceId = null,
-                            Start = DateTimeOffset.Now, // TODO: de skal kunne angive start
-                            End = DateTimeOffset.Now.AddHours(1), // TODO: de skal kunne angive End
+                            Start = DateTimeOffset.Now.AddHours(15), // TODO: de skal kunne angive start
+                            End = DateTimeOffset.Now.AddHours(16), // TODO: de skal kunne angive End
                             Approved = false //TODO: Skal hentes fra PremisCatagory.
                         };
 
