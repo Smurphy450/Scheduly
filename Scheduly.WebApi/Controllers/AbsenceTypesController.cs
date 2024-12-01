@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -49,6 +50,73 @@ namespace Scheduly.WebApi.Controllers
                 .ToListAsync();
 
             return Ok(absenceTypeNames);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult<AbsenceType>> PostAbsenceType(int id, AbsenceTypeDTO absenceTypeDTO)
+        {
+            if (id == 0)
+            {
+                return Ok(new AbsenceTypeDTO());
+            }
+
+            var absenceType = await _context.AbsenceTypes.FindAsync(id);
+            if (absenceType == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(absenceType);
+        }
+
+        // POST: api/AbsenceTypes/Upsert
+        [HttpPost("Upsert")]
+        public async Task<IActionResult> UpsertAbsenceType(AbsenceTypeDTO absenceTypeDTO)
+        {
+            var absenceType = await _context.AbsenceTypes.FindAsync(absenceTypeDTO.AbsenceTypeId);
+
+            if (absenceType == null)
+            {
+                // Create new AbsenceType
+                absenceType = new AbsenceType
+                {
+                    Name = absenceTypeDTO.Name,
+                    WageFactor = absenceTypeDTO.WageFactor,
+                    MustBeApproved = absenceTypeDTO.MustBeApproved
+                };
+
+                _context.AbsenceTypes.Add(absenceType);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetAbsenceType", new { id = absenceType.AbsenceTypeId }, absenceType);
+            }
+            else
+            {
+                // Update existing AbsenceType
+                absenceType.Name = absenceTypeDTO.Name;
+                absenceType.WageFactor = absenceTypeDTO.WageFactor;
+                absenceType.MustBeApproved = absenceTypeDTO.MustBeApproved;
+
+                _context.Entry(absenceType).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AbsenceTypeExists(absenceTypeDTO.AbsenceTypeId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
         }
 
         //[HttpGet("UserAbsences/{userId}")]
