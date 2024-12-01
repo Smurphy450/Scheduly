@@ -319,6 +319,16 @@ namespace Scheduly.WebApi.Controllers
             booking.Approved = isApproved;
             _context.Entry(booking).State = EntityState.Modified;
 
+            var notification = new Notification
+            {
+                UserId = booking.UserId,
+                Sms = true,
+                Email = true,
+                Message = $"Your booking request has been {(booking.Approved == true ? "approved" : "denied")}."
+            };
+
+            _context.Notifications.Add(notification);
+
             try
             {
                 await _context.SaveChangesAsync();

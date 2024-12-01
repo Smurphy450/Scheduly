@@ -251,6 +251,16 @@ namespace Scheduly.WebApi.Controllers
             absence.Approved = isApproved;
             _context.Entry(absence).State = EntityState.Modified;
 
+            var notification = new Notification
+            {
+                UserId = absence.UserId,
+                Sms = true,
+                Email = true,
+                Message = $"Your absence request has been {(absence.Approved == true ? "approved" : "denied")}."
+            };
+
+            _context.Notifications.Add(notification);
+
             try
             {
                 await _context.SaveChangesAsync();
