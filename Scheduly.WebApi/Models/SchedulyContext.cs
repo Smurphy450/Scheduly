@@ -23,6 +23,8 @@ public partial class SchedulyContext : DbContext
 
     public virtual DbSet<Booking> Bookings { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+
     public virtual DbSet<Premise> Premises { get; set; }
 
     public virtual DbSet<PremiseCategory> PremiseCategories { get; set; }
@@ -33,13 +35,15 @@ public partial class SchedulyContext : DbContext
 
     public virtual DbSet<ResourceCategory> ResourceCategories { get; set; }
 
+    public virtual DbSet<SchedulyLogging> SchedulyLoggings { get; set; }
+
     public virtual DbSet<TimeRegistration> TimeRegistrations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<ZipCode> ZipCodes { get; set; }
 
-    // TODO: If connection doesnt work, remove '\\SQLEXPRESS'
+    // TODO: If Database connection doesn't work, delete '\\SQLEXPRESS'
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=Scheduly;TrustServerCertificate=True;Trusted_Connection=True;");
@@ -120,6 +124,20 @@ public partial class SchedulyContext : DbContext
                 .HasConstraintName("FK_dbo_User$Bookings_UserID");
         });
 
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotificationId).HasName("PK_dbo_Notifications$NotificationID");
+
+            entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
+            entity.Property(e => e.Message).HasMaxLength(255);
+            entity.Property(e => e.Sms).HasColumnName("SMS");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Notifications)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_dbo_User$Notifications_UserID");
+        });
+
         modelBuilder.Entity<Premise>(entity =>
         {
             entity.HasKey(e => e.PremiseId).HasName("PK_dbo_Premises$PremiseID");
@@ -187,6 +205,21 @@ public partial class SchedulyContext : DbContext
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<SchedulyLogging>(entity =>
+        {
+            entity.HasKey(e => e.LogId).HasName("PK_dbo_SchedulyLogging$LogID");
+
+            entity.ToTable("SchedulyLogging");
+
+            entity.Property(e => e.LogId).HasColumnName("LogID");
+            entity.Property(e => e.Action).HasMaxLength(20);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.SchedulyLoggings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_dbo_User$SchedulyLogging_UserID");
         });
 
         modelBuilder.Entity<TimeRegistration>(entity =>

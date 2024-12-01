@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Scheduly.WebApi.Models;
 
-public partial class TimeRegistration
+public partial class SchedulyLogging
 {
-    public int TimeId { get; set; }
+    public int LogId { get; set; }
 
     public int UserId { get; set; }
 
-    public DateTimeOffset Start { get; set; }
+    public string Action { get; set; } = null!;
 
-    public DateTimeOffset? End { get; set; }
+    public string AffectedData { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

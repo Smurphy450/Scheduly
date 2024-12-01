@@ -79,5 +79,7 @@
     <Build Include="Schema\Tables\ResourceCategory.sql" />
     <Build Include="Schema\Tables\PremiseCategory.sql" />
     <Build Include="Schema\Tables\AdminSettings.sql" />
+    <Build Include="Schema\Tables\Notifications.sql" />
+    <Build Include="Schema\Tables\SchedulyLogging.sql" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,11 @@ public partial class User
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
     public virtual ICollection<Profile> Profiles { get; set; } = new List<Profile>();
+
+    public virtual ICollection<SchedulyLogging> SchedulyLoggings { get; set; } = new List<SchedulyLogging>();
 
     public virtual ICollection<TimeRegistration> TimeRegistrations { get; set; } = new List<TimeRegistration>();
 }
