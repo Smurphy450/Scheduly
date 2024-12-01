@@ -52,15 +52,46 @@ namespace Scheduly.WebApp.Pages.Admin
             }
 		}
 
-		protected async Task ApproveBooking(int id)
-		{
-			Snackbar.Add("It Works!", Severity.Success);
-		}
+        protected async Task ApproveBooking(int id)
+        {
+            await UpdateBookingApproval(id, true);
+        }
 
-		protected async Task DisApproveBooking(int id)
-		{
-			Snackbar.Add("It Works!", Severity.Success);
-		}
-	}
+        protected async Task DisApproveBooking(int id)
+        {
+            await UpdateBookingApproval(id, false);
+        }
+
+        private async Task UpdateBookingApproval(int id, bool isApproved)
+        {
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+            if (userId != 0)
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var response = await httpClient.PutAsJsonAsync($"https://localhost:7171/api/Bookings/Booking/{id}", isApproved);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Snackbar.Add(isApproved ? "Booking approved successfully." : "Booking disapproved successfully.", Severity.Success);
+                        }
+                        else
+                        {
+                            Snackbar.Add("Failed to update booking approval status.", Severity.Error);
+                        }
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
+                }
+                catch (Exception ex)
+                {
+                    Snackbar.Add($"Error when updating booking approval status: {ex.Message}", Severity.Error);
+                }
+            }
+        }
+    }
 }
 

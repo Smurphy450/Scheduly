@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApp.Models;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -82,6 +83,26 @@ namespace Scheduly.WebApi.Controllers
         [HttpPost("CreateBooking")]
         public async Task<ActionResult<Booking>> CreateBooking(CreateBookingDTO createBookingDTO)
         {
+            bool mustBeApproved = false;
+
+            var premise = await _context.Premises.FindAsync(createBookingDTO.PremiseId);
+            if (premise != null)
+            {
+                mustBeApproved = premise.MustBeApproved == true;
+            }
+            else
+            {
+                var resource = await _context.Resources.FindAsync(createBookingDTO.ResourceId);
+                if (resource != null)
+                {
+                    mustBeApproved = resource.MustBeApproved == true;
+                }
+                else
+                {
+                    return BadRequest("Invalid PremiseId or ResourceId");
+                }
+            }
+
             var booking = new Booking
             {
                 UserId = createBookingDTO.UserId,
@@ -89,7 +110,7 @@ namespace Scheduly.WebApi.Controllers
                 ResourceId = createBookingDTO.ResourceId,
                 Start = createBookingDTO.Start,
                 End = createBookingDTO.End,
-                Approved = createBookingDTO.Approved
+                Approved = mustBeApproved ? (bool?)null : true
             };
 
             _context.Bookings.Add(booking);
@@ -204,7 +225,7 @@ namespace Scheduly.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
         {
             var pendingBookings = await _context.Bookings
-                .Where(b => b.Start > DateTimeOffset.Now && b.Approved == false)
+                .Where(b => b.Start > DateTimeOffset.Now && b.Approved == null)
                 .Include(b => b.User)
                 .Include(b => b.Premise)
                 .ThenInclude(p => p.PremiseCategory)

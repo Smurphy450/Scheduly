@@ -86,7 +86,7 @@ namespace Scheduly.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<ApproveAbsenceDTO>>> GetPendingApprovalAbsences()
         {
             var pendingAbsences = await _context.Absences
-                .Where(a => a.Approved == false && (a.End == null || a.End > DateTimeOffset.Now))
+                .Where(a => a.Approved == null && (a.End == null || a.End > DateTimeOffset.Now))
                 .Include(a => a.User)
                 .Include(a => a.AbsenceType)
                 .Select(a => new ApproveAbsenceDTO
@@ -189,7 +189,7 @@ namespace Scheduly.WebApi.Controllers
                 Start = reportAbsenceDTO.DatetimeStart,
                 End = reportAbsenceDTO.DatetimeEnd,
                 Description = reportAbsenceDTO.Description,
-                Approved = !(absenceType.MustBeApproved ?? false)
+                Approved = absenceType.MustBeApproved == true ? (bool?)null : true
             };
 
             _context.Absences.Add(absence);
