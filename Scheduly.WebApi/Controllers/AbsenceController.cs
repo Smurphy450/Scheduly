@@ -105,6 +105,29 @@ namespace Scheduly.WebApi.Controllers
             return Ok(pendingAbsences);
         }
 
+        [HttpPost("AbsenceDTOs")]
+        public async Task<ActionResult<IEnumerable<AbsenceDTO>>> GetAbsenceDTOs([FromBody] AbsenceQueryDTO query)
+        {
+            var absences = await _context.Absences
+                .Where(a => a.UserId == query.UserId && a.Start >= query.StartDate && a.Start <= query.EndDate)
+                .Include(a => a.User)
+                .Include(a => a.AbsenceType)
+                .Select(a => new AbsenceDTO
+                {
+                    AbsenceId = a.AbsenceId,
+                    UserId = a.UserId,
+                    Username = a.User.Username,
+                    AbsenceTypeName = a.AbsenceType.Name,
+                    Start = a.Start,
+                    End = a.End,
+                    Description = a.Description,
+                    Approved = a.Approved ?? false
+                })
+                .ToListAsync();
+
+            return Ok(absences);
+        }
+
         // PUT: api/Absence/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

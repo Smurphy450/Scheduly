@@ -47,7 +47,7 @@ namespace Scheduly.WebApi.Controllers
             }
 
             var overviewResources = user.Bookings
-                .Where(b => b.ResourceId != null)
+                .Where(b => b.ResourceId != null && (b.End == null || b.End > DateTimeOffset.Now))
                 .Select(b => new OverviewResourcesDTO
                 {
                     CategoryName = b.Resource.Category.Name,
@@ -59,7 +59,7 @@ namespace Scheduly.WebApi.Controllers
                 }).ToList();
 
             var overviewPremises = user.Bookings
-                .Where(b => b.PremiseId != null)
+                .Where(b => b.PremiseId != null && (b.End == null || b.End > DateTimeOffset.Now))
                 .Select(b => new OverviewPremisesDTO
                 {
                     Name = b.Premise.Name,
@@ -67,7 +67,7 @@ namespace Scheduly.WebApi.Controllers
                     Size = b.Premise.Size,
                     Start = b.Start,
                     End = b.End,
-                    Approved = b.Approved
+                    Approved = b.Approved ?? false
                 }).ToList();
 
             var userOverview = new UserOverviewDTO
