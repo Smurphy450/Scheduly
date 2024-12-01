@@ -14,6 +14,8 @@
 		<MudAppBar Elevation="0">
 			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
 			<MudSpacer />
+			<MudImage Src="./Images/Scheduly_Logo.ico" Width="100" Alt="Scheduly" />
+			<MudSpacer />
 			<MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnDarkModeChanged"
 								 Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Title="Switch to Light Mode"
 								 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Warning" ToggledTitle="Switch to Dark Mode" />
