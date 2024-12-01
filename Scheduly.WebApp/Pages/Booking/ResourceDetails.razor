@@ -12,19 +12,31 @@
     @foreach (var resource in ResourceList)
     {
         <MudItem>
-            <MudCard Style="height:160px; width:300px;">
+            <MudCard Style="min-height:160px; width:300px;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6" Class="pb-2"><b>@resource.Name</b></MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <AuthorizeView Roles="Administrator">
+                            <Authorized>
+                                <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeleteResource(resource.ResourceId))" />
+                            </Authorized>
+                        </AuthorizeView>
+                    </CardHeaderActions>
+                </MudCardHeader>
                 <MudCardContent>
-                    <MudText Typo="Typo.body1" Class="pb-2"><b>@resource.Name</b></MudText>
-                    <MudText Typo="Typo.body2">@resource.Description</MudText>
-                    <MudText Typo="Typo.body2"><b>Amount: @resource.Amount</b></MudText>
+                    <MudText>@resource.Description</MudText>
+                    <MudText><b>Amount: @resource.Amount</b></MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" Color="Color.Success" OnClick="@(() => BookResource(resource.ResourceId))" />
-                    <AuthorizeView Roles="Administrator">
-                        <Authorized>
-                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeleteResource(resource.ResourceId))" />
-                        </Authorized>
-                    </AuthorizeView>
+                    <MudExpansionPanel Icon="@Icons.Material.Filled.ShoppingBag">
+                        <MudDatePicker Label="Start Date" @bind-Date="startDate" />
+                        <MudTimePicker Label="Start Time" @bind-Date="startTime" />
+                        <MudDatePicker Label="End Date" @bind-Date="endDate" />
+                        <MudTimePicker Label="End Time" @bind-Date="endTime" />
+                        <MudButton Class="ma-4" Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => BookResource(resource.ResourceId))">Book</MudButton>
+                    </MudExpansionPanel>
                 </MudCardActions>
             </MudCard>
         </MudItem>

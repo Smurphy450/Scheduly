@@ -16,6 +16,11 @@ namespace Scheduly.WebApp.Pages.Booking
 
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? startTime { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? endDate { get; set; }
+        protected DateTime? endTime { get; set; }
+
 
         public List<WebApi.Models.Resource> ResourceList = [];
         public string ResourceCategoryName = "";
