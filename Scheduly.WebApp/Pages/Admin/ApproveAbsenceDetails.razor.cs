@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Utilities;
 
@@ -10,8 +11,9 @@ namespace Scheduly.WebApp.Pages.Admin
 		[Parameter] public int AbsenceId { get; set; }
 
 		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
 
-		protected WebApi.Models.DTO.ApproveAbsenceDTO model { get; set; } = new WebApi.Models.DTO.ApproveAbsenceDTO();
+        protected WebApi.Models.DTO.ApproveAbsenceDTO model { get; set; } = new WebApi.Models.DTO.ApproveAbsenceDTO();
 		
 		protected override async Task OnInitializedAsync()
 		{
@@ -48,6 +50,16 @@ namespace Scheduly.WebApp.Pages.Admin
 					Console.WriteLine($"Error when retrieving absence info: {ex.Message}");
 				}
 			}
-		}
-	}
+        }
+
+        protected async Task ApproveAbsence()
+        {
+            Snackbar.Add("It Works!", Severity.Success);
+        }
+
+        protected async Task DisApproveAbsence()
+        {
+            Snackbar.Add("It Works!", Severity.Success);
+        }
+    }
 }

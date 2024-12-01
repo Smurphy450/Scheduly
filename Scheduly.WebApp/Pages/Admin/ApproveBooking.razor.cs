@@ -50,7 +50,17 @@ namespace Scheduly.WebApp.Pages.Admin
 
                 Console.WriteLine($"Error getting bookings: {ex.Message}");
             }
-        }
-    }
+		}
+
+		protected async Task ApproveBooking()
+		{
+			Snackbar.Add("It Works!", Severity.Success);
+		}
+
+		protected async Task DisApproveBooking()
+		{
+			Snackbar.Add("It Works!", Severity.Success);
+		}
+	}
 }
 

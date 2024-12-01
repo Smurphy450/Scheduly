@@ -16,8 +16,8 @@
 		<MudTextField Label="Approved" InputType="InputType.Telephone" @bind-Value="model.Approved" Variant="Variant.Outlined" />
 
 		<MudStack Row>
-			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success">Approve</MudButton>
-			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error">Disapprove</MudButton>
+			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success" @onclick="(() => ApproveBooking())">Approve</MudButton>
+			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DisApproveBooking())">Disapprove</MudButton>
 		</MudStack>
 	</MudForm>
 </MudPaper>

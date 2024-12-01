@@ -51,5 +51,15 @@ namespace Scheduly.WebApp.Pages.Admin
                 Console.WriteLine($"Error getting absences: {ex.Message}");
             }
         }
-    }
+
+        protected async Task ApproveAbsence()
+        {
+			Snackbar.Add("It Works!", Severity.Success);
+		}
+
+		protected async Task DisApproveAbsence()
+		{
+			Snackbar.Add("It Works!", Severity.Success);
+		}
+	}
 }

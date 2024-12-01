@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin
@@ -9,6 +10,7 @@ namespace Scheduly.WebApp.Pages.Admin
 		[Parameter] public int BookingId { get; set; }
 
 		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+		[Inject] private ISnackbar Snackbar { get; set; }
 
 		protected WebApi.Models.DTO.ApproveBookingDTO model { get; set; } = new WebApi.Models.DTO.ApproveBookingDTO();
 
@@ -47,6 +49,16 @@ namespace Scheduly.WebApp.Pages.Admin
 					Console.WriteLine($"Error when retrieving booking info: {ex.Message}");
 				}
 			}
+		}
+
+		protected async Task ApproveBooking()
+		{
+			Snackbar.Add("It Works!", Severity.Success);
+		}
+
+		protected async Task DisApproveBooking()
+		{
+			Snackbar.Add("It Works!", Severity.Success);
 		}
 	}
 }
