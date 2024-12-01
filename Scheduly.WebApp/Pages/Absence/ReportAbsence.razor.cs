@@ -129,7 +129,6 @@ namespace Scheduly.WebApp.Pages.Absence
                     {
                         AbsenceTypes = await response.Content.ReadFromJsonAsync<List<AbsenceType>>();
                         AbsenceTypeNames = AbsenceTypes.Select(at => at.Name).ToArray();
-                        Snackbar.Add("Absence type names loaded successfully.", Severity.Success);
                     }
                     else
                     {

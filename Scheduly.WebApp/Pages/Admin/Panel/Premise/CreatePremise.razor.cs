@@ -51,7 +51,6 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                     {
                         PremiseCategories = await response.Content.ReadFromJsonAsync<List<PremiseCategory>>();
                         PremiseCategoryNames = PremiseCategories.Select(at => at.Name).ToArray();
-                        Snackbar.Add("Premise category names loaded successfully.", Severity.Success);
                     }
                     else
                     {

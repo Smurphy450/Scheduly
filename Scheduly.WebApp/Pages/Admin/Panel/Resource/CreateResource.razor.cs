@@ -48,7 +48,6 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
                     {
                         ResourceCategories = await response.Content.ReadFromJsonAsync<List<ResourceCategory>>();
                         ResourceCategoryNames = ResourceCategories.Select(at => at.Name).ToArray();
-                        Snackbar.Add("Resource category names loaded successfully.", Severity.Success);
                     }
                     else
                     {
