@@ -11,7 +11,7 @@ namespace Scheduly.WebApp.Pages.Admin
 
 		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
-		protected WebApi.Models.Absence model { get; set; } = new WebApi.Models.Absence();
+		protected WebApi.Models.DTO.ApproveAbsenceDTO model { get; set; } = new WebApi.Models.DTO.ApproveAbsenceDTO();
 		
 		protected override async Task OnInitializedAsync()
 		{
@@ -30,8 +30,8 @@ namespace Scheduly.WebApp.Pages.Admin
 						var response = await httpClient.GetAsync($"https://localhost:7171/api/Absence/{AbsenceId}");
 						if (response.IsSuccessStatusCode)
 						{
-							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.Absence>();
-							model = absence ?? new WebApi.Models.Absence();
+							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.DTO.ApproveAbsenceDTO>();
+							model = absence ?? new WebApi.Models.DTO.ApproveAbsenceDTO();
 						}
 						else
 						{
