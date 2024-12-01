@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApp.Pages.Booking;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin
@@ -27,7 +28,7 @@ namespace Scheduly.WebApp.Pages.Admin
 				{
 					using (var httpClient = new HttpClient())
 					{
-						var response = await httpClient.GetAsync($"https://localhost:7171/api/Absence/{AbsenceId}");
+						var response = await httpClient.GetAsync($"https://localhost:7171/api/Absence/ApproveAbsence/{AbsenceId}");
 						if (response.IsSuccessStatusCode)
 						{
 							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.DTO.ApproveAbsenceDTO>();
@@ -48,6 +49,6 @@ namespace Scheduly.WebApp.Pages.Admin
 					Console.WriteLine($"Error when retrieving absence info: {ex.Message}");
 				}
 			}
-		}
+        }
 	}
 }
