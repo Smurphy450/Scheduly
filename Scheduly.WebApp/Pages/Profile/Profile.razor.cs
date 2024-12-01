@@ -34,7 +34,7 @@ namespace Scheduly.WebApp.Pages.Profile
                         if (response.IsSuccessStatusCode)
                         {
                             var profile = await response.Content.ReadFromJsonAsync<ProfileDTO>();
-                            model = profile ?? new ProfileDTO(); // Ensure model is not null
+                            model = profile ?? new ProfileDTO();
                         }
                         else
                         {

@@ -13,7 +13,6 @@ namespace Scheduly.WebApp.Pages.Admin
         [Inject] private ISnackbar Snackbar { get; set; }
 
         protected List<ApproveAbsenceDTO> AllAbsence { get; set; } = new();
-		protected HashSet<ApproveAbsenceDTO> SelectedItems { get; set; } = new HashSet<ApproveAbsenceDTO>();
 
 		protected override async Task OnInitializedAsync()
         {
