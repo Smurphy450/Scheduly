@@ -16,11 +16,10 @@ namespace Scheduly.WebApp.Pages.Booking
 
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
-        protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
-        protected DateTime? startTime { get; set; } = DateTime.Now.AddMonths(-3);
-        protected DateTime? endDate { get; set; }
-        protected DateTime? endTime { get; set; }
-
+        protected DateTime? startDate { get; set; } = DateTime.Now.Date;
+        protected TimeSpan? startTime { get; set; } = new TimeSpan(8, 0, 0);
+        protected DateTime? endDate { get; set; } = DateTime.Now.Date;
+        protected TimeSpan? endTime { get; set; } = new TimeSpan(16, 0, 0);
 
         public List<WebApi.Models.Resource> ResourceList = [];
         public string ResourceCategoryName = "";
@@ -106,28 +105,31 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     using (var httpClient = new HttpClient())
                     {
-                        var createBookingDTO = new CreateBookingDTO
-                        {
-                            UserId = userId,
-                            PremiseId = null,
-                            ResourceId = premiseId,
-                            Start = DateTimeOffset.Now.AddHours(15), // TODO: de skal kunne angive start
-                            End = DateTimeOffset.Now.AddHours(16), // TODO: de skal kunne angive End
-                            Approved = false //TODO: Skal hentes fra PremisCatagory.
-                        };
+                        if (startDate.HasValue && startTime.HasValue && endDate.HasValue && endTime.HasValue)
+                        { 
+                            var createBookingDTO = new CreateBookingDTO
+                            {
+                                UserId = userId,
+                                PremiseId = null,
+                                ResourceId = premiseId,
+                                Start = CombineDateTimeAndTimeSpan(startDate, startTime),
+                                End = CombineDateTimeAndTimeSpan(endDate, endTime),
+                                Approved = false //TODO: Skal hentes fra PremisCatagory.
+                            };
 
-                        var content = new StringContent(JsonConvert.SerializeObject(createBookingDTO), System.Text.Encoding.UTF8, "application/json");
-                        var response = await httpClient.PostAsync("https://localhost:7171/api/Bookings/CreateBooking", content);
+                            var content = new StringContent(JsonConvert.SerializeObject(createBookingDTO), System.Text.Encoding.UTF8, "application/json");
+                            var response = await httpClient.PostAsync("https://localhost:7171/api/Bookings/CreateBooking", content);
 
-                        if (response.IsSuccessStatusCode)
-                        {
-                            Snackbar.Add("Booking created successfully.", Severity.Error);
-                            Console.WriteLine("Booking created successfully.");
-                        }
-                        else
-                        {
-                            Snackbar.Add("Failed to create booking.", Severity.Error);
-                            Console.WriteLine($"Failed to create booking. Status: {response.StatusCode}");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                Snackbar.Add("Booking created successfully.", Severity.Success);
+                                Console.WriteLine("Booking created successfully.");
+                            }
+                            else
+                            {
+                                Snackbar.Add("Failed to create booking.", Severity.Error);
+                                Console.WriteLine($"Failed to create booking. Status: {response.StatusCode}");
+                            }
                         }
                     }
                 }
@@ -136,6 +138,15 @@ namespace Scheduly.WebApp.Pages.Booking
             {
                 Console.WriteLine($"An error occurred while making the request: {e.Message}");
             }
+        }
+
+        private DateTimeOffset CombineDateTimeAndTimeSpan(DateTime? date, TimeSpan? time)
+        {
+            if (date.HasValue && time.HasValue)
+            {
+                return new DateTimeOffset(date.Value.Date + time.Value);
+            }
+            throw new ArgumentException("Date or Time is null");
         }
 
         protected async Task DeleteResource(int resourceId)
