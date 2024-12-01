@@ -5,22 +5,22 @@
 <h3>Profile</h3>
 
 <MudItem xs="12" Class="d-flex mud-width-full">
-	<BackButton />
+    <BackButton />
 </MudItem>
 
 <MudPaper Class="pa-4" Width="500px">
-	<MudForm Model="@model">
-		<MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.FirstName" Variant="Variant.Outlined" />
-		<MudTextField Label="LastName" InputType="InputType.Text" @bind-Value="model.LastName" Variant="Variant.Outlined" />
-		<MudTextField Label="Address" InputType="InputType.Text" @bind-Value="model.Address" Variant="Variant.Outlined" />
-		<MudTextField Label="ZipCode" InputType="InputType.Number" @bind-Value="model.ZipCode" Variant="Variant.Outlined" />
-		<MudTextField Label="City" InputType="InputType.Text" @bind-Value="model.City" Variant="Variant.Outlined" />
-		<MudTextField Label="PhoneNumber" InputType="InputType.Telephone" @bind-Value="model.PhoneNumber" Variant="Variant.Outlined" />
-		<MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.Username" Variant="Variant.Outlined" />
-		<MudTextField Label="Email" InputType="InputType.Email" @bind-Value="model.Email" Variant="Variant.Outlined" />
-		<MudStack Row="true">
-			<MudButton Variant="Variant.Filled" OnClick="SaveChanges">Save Changes</MudButton>
-			<MudButton Variant="Variant.Filled" Href="@("/Profile/ChangePassword")">Change password</MudButton>
-		</MudStack>
-	</MudForm>
+    <MudForm Model="@model">
+        <MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.FirstName" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(5) ? false : true)" />
+        <MudTextField Label="LastName" InputType="InputType.Text" @bind-Value="model.LastName" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(6) ? false : true)" />
+        <MudTextField Label="Address" InputType="InputType.Text" @bind-Value="model.Address" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(1) ? false : true)" />
+        <MudTextField Label="ZipCode" InputType="InputType.Number" @bind-Value="model.ZipCode" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(1) ? false : true)" />
+        <MudTextField Label="City" InputType="InputType.Text" @bind-Value="model.City" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(1) ? false : true)" />
+        <MudTextField Label="PhoneNumber" InputType="InputType.Telephone" @bind-Value="model.PhoneNumber" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(3) ? false : true)" />
+        <MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.Username" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(7) ? false : true)" />
+        <MudTextField Label="Email" InputType="InputType.Email" @bind-Value="model.Email" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(2) ? false : true)" />
+        <MudStack Row="true">
+            <MudButton Variant="Variant.Filled" OnClick="SaveChanges">Save Changes</MudButton>
+            <MudButton Variant="Variant.Filled" Href="@("/Profile/ChangePassword")">Change password</MudButton>
+        </MudStack>
+    </MudForm>
 </MudPaper>
