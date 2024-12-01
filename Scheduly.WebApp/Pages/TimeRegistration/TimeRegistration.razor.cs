@@ -12,8 +12,8 @@ namespace Scheduly.WebApp.Pages.TimeRegistration
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
         protected List<TimeRegistrationDTO> TimeRegistration { get; set; } = new List<TimeRegistrationDTO>();
-        protected DateTimeOffset startDate = DateTimeOffset.Now.AddMonths(-3);
-        protected DateTimeOffset endDate = DateTimeOffset.Now.AddMonths(1);
+        protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? endDate { get; set; } = DateTime.Now.AddMonths(1);
 
         protected override async Task OnInitializedAsync()
         {
@@ -28,8 +28,8 @@ namespace Scheduly.WebApp.Pages.TimeRegistration
                 var query = new TimeRegistrationDTO
                 {
                     UserId = userId,
-                    Start = startDate,
-                    End = endDate
+                    Start = (DateTimeOffset)startDate,
+                    End = (DateTimeOffset)endDate
                 };
 
                 using (var httpClient = new HttpClient())
@@ -45,6 +45,10 @@ namespace Scheduly.WebApp.Pages.TimeRegistration
                     }
                 }
             }
+        }
+        protected async Task UpdateTimeRegistrations()
+        {
+            await LoadTimeRegistrations();
         }
 
         protected async Task DeleteTime(int timeId)

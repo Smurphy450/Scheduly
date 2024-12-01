@@ -56,30 +56,6 @@ namespace Scheduly.WebApi.Controllers
         }
 
 
-        // POST: api/TimeRegistrations/TimeRegistrationDTOs
-        //[HttpPost("TimeRegistrationDTOs")]
-        //public async Task<ActionResult<IEnumerable<AbsenceDTO>>> GetAbsenceDTOs([FromBody] AbsenceQueryDTO query)
-        //{
-        //    var absences = await _context.Absences
-        //        .Where(a => a.UserId == query.UserId && a.Start >= query.StartDate && a.Start <= query.EndDate)
-        //        .Include(a => a.User)
-        //        .Include(a => a.AbsenceType)
-        //        .Select(a => new AbsenceDTO
-        //        {
-        //            AbsenceId = a.AbsenceId,
-        //            UserId = a.UserId,
-        //            Username = a.User.Username,
-        //            AbsenceTypeName = a.AbsenceType.Name,
-        //            Start = a.Start,
-        //            End = a.End,
-        //            Description = a.Description,
-        //            Approved = a.Approved ?? false
-        //        })
-        //        .ToListAsync();
-
-        //    return Ok(absences);
-        //}
-
         // PUT: api/TimeRegistrations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -109,6 +85,24 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return NoContent();
+        }
+
+        // POST: api/TimeRegistrations/TimeRegistrationDTOs
+        [HttpPost("TimeRegistrationDTOs")]
+        public async Task<ActionResult<IEnumerable<TimeRegistrationDTO>>> GetTimeRegistrationsByDateRange([FromBody] TimeRegistrationDTO query)
+        {
+            var timeRegistrations = await _context.TimeRegistrations
+                .Where(tr => tr.UserId == query.UserId && tr.Start >= query.Start && tr.Start <= query.End)
+                .Select(tr => new TimeRegistrationDTO
+                {
+                    TimeId = tr.TimeId,
+                    UserId = tr.UserId,
+                    Start = tr.Start,
+                    End = tr.End
+                })
+                .ToListAsync();
+
+            return Ok(timeRegistrations);
         }
 
         //// POST: api/TimeRegistrations
