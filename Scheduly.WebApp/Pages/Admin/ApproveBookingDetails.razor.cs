@@ -51,12 +51,12 @@ namespace Scheduly.WebApp.Pages.Admin
 			}
 		}
 
-		protected async Task ApproveBooking()
+		protected async Task ApproveBooking(int id)
 		{
 			Snackbar.Add("It Works!", Severity.Success);
 		}
 
-		protected async Task DisApproveBooking()
+		protected async Task DisApproveBooking(int id)
 		{
 			Snackbar.Add("It Works!", Severity.Success);
 		}

@@ -23,8 +23,8 @@
 		<TemplateColumn CellClass="d-flex justify-end">
 			<CellTemplate Context="booking">
 				<MudStack Row="true">
-					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success" @onclick="(() => ApproveBooking())">Approve</MudButton>
-					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DisApproveBooking())">Disapprove</MudButton>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success" @onclick="(() => ApproveBooking(booking.Item.BookingId))">Approve</MudButton>
+					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DisApproveBooking(booking.Item.BookingId))">Disapprove</MudButton>
 					<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" Href="@($"/AdminPanel/ApproveBooking/BookingDetails/{booking.Item.BookingId}")">Details</MudButton>
 				</MudStack>
 			</CellTemplate>

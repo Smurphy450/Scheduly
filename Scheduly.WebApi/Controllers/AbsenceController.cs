@@ -214,6 +214,38 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
+        // PUT: api/Absence/Approve/{id}
+        [HttpPut("Approve/{id}")]
+        public async Task<IActionResult> ApproveAbsence(int id, [FromBody] bool isApproved)
+        {
+            var absence = await _context.Absences.FindAsync(id);
+            if (absence == null)
+            {
+                return NotFound();
+            }
+
+            absence.Approved = isApproved;
+            _context.Entry(absence).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AbsenceExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         private bool AbsenceExists(int id)
         {
             return _context.Absences.Any(e => e.AbsenceId == id);
