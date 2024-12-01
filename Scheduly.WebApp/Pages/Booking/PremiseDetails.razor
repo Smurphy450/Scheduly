@@ -12,19 +12,31 @@
     @foreach (var premise in PremiseList)
     {
         <MudItem>
-            <MudCard Style="height:160px; width:300px;">
+            <MudCard Style="min-height:160px; width:300px;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6" Class="pb-2"><b>@premise.Name</b></MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <AuthorizeView Roles="Administrator">
+                            <Authorized>
+                                <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeletePremise(premise.PremiseId))" />
+                            </Authorized>
+                        </AuthorizeView>
+                    </CardHeaderActions>
+                </MudCardHeader>
                 <MudCardContent>
-                    <MudText Typo="Typo.body1" Class="pb-2"><b>@premise.Name</b></MudText>
-                    <MudText Typo="Typo.body2"><b>Size: @premise.Size</b></MudText>
-                    <MudText Typo="Typo.body2">@premise.Description</MudText>
+                    <MudText><b>Size: @premise.Size</b></MudText>
+                    <MudText>@premise.Description</MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="@(() => BookPremise(premise.PremiseId))" />
-                    <AuthorizeView Roles="Administrator">
-                        <Authorized>
-                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremise(premise.PremiseId))" />
-                        </Authorized>
-                    </AuthorizeView>
+                    <MudExpansionPanel Icon="@Icons.Material.Filled.ShoppingBag">
+                        <MudDatePicker Label="Start Date" @bind-Date="startDate" />
+                        <MudTimePicker Label="Start Time" @bind-Date="startTime" />
+                        <MudDatePicker Label="End Date" @bind-Date="endDate" />
+                        <MudTimePicker Label="End Time" @bind-Date="endTime" />
+                        <MudButton Class="ma-4" Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => BookPremise(premise.PremiseId))">Book</MudButton>
+                    </MudExpansionPanel>
                 </MudCardActions>
             </MudCard>
         </MudItem>

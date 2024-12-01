@@ -9,7 +9,6 @@ namespace Scheduly.WebApp.Pages.Absence
 {
     public class AbsenceBase : ComponentBase
     {
-        [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
         protected List<AbsenceDTO> Absences { get; set; } = new List<AbsenceDTO>(); //im getting a cannot convert from 'system.DateTimeOffset' to 'system.DateTime?'

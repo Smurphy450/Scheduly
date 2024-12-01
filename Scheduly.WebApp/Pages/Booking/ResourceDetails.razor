@@ -19,10 +19,10 @@
                     <MudText Typo="Typo.body2"><b>Amount: @resource.Amount</b></MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" OnClick="@(() => BookResource(resource.ResourceId))" />
+                    <MudIconButton Icon="@Icons.Material.Filled.ShoppingBag" Color="Color.Success" OnClick="@(() => BookResource(resource.ResourceId))" />
                     <AuthorizeView Roles="Administrator">
                         <Authorized>
-                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResource(resource.ResourceId))" />
+                            <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeleteResource(resource.ResourceId))" />
                         </Authorized>
                     </AuthorizeView>
                 </MudCardActions>

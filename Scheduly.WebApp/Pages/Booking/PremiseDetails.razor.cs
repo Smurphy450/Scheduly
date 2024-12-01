@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
@@ -11,8 +12,14 @@ namespace Scheduly.WebApp.Pages.Booking
 {
     public class PremiseDetailsBase : ComponentBase
     {
-        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Parameter] public int PremiseCategoryId { get; set; }
+
+        [Inject] private ISnackbar Snackbar { get; set; }
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? startTime { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? endDate { get; set; }
+        protected DateTime? endTime { get; set; }
 
         public List<Premise> PremiseList = [];
         public string PremiseCategoryName = "";
@@ -113,10 +120,12 @@ namespace Scheduly.WebApp.Pages.Booking
 
                         if (response.IsSuccessStatusCode)
                         {
+                            Snackbar.Add("Booking created successfully.", Severity.Error);
                             Console.WriteLine("Booking created successfully.");
                         }
                         else
                         {
+                            Snackbar.Add("Failed to create booking.", Severity.Error);
                             Console.WriteLine($"Failed to create booking. Status: {response.StatusCode}");
                         }
                     }
