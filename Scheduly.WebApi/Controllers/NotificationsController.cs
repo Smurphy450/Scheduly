@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -41,46 +37,22 @@ namespace Scheduly.WebApi.Controllers
             return notification;
         }
 
-        // PUT: api/Notifications/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNotification(int id, Notification notification)
-        {
-            if (id != notification.NotificationId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(notification).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NotificationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Notifications
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Notification>> PostNotification(Notification notification)
+        public async Task<ActionResult<Notification>> PostNotification(CreateNotificationDTO createNotificationDTO)
         {
+            var notification = new Notification
+            {
+                UserId = createNotificationDTO.UserId,
+                Sms = createNotificationDTO.Sms,
+                Email = createNotificationDTO.Email,
+                Message = createNotificationDTO.Message
+            };
+
             _context.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetNotification", new { id = notification.NotificationId }, notification);
+            return Ok(new { Success = true });
         }
 
         // DELETE: api/Notifications/5
