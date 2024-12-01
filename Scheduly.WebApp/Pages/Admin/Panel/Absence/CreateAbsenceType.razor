@@ -1,4 +1,4 @@
-﻿@page "/AdminPanel/CreateAbsenceType";
+﻿@page "/AdminPanel/CreateAbsenceType/{Id:int?}"
 @inherits CreateAbsenceTypeBase;
 @attribute [Authorize(Roles = "Administrator")]
 
@@ -11,7 +11,7 @@
 <MudPaper Class="pa-4">
     <MudForm>
         <MudTextField @bind-Value="Name" Immediate="true" Label="Name" />
-        <MudTextField @bind-Value="WageFactor" Immediate="true" Label="Wage factor" />
+        <MudNumericField T="decimal" @bind-Value="WageFactor" Immediate="true" Label="Wage factor" Min="0" Max="100" />
         <MudCheckBox @bind-Value="MustBeApproved" Label="Must Be Approved" />
     </MudForm>
     <MudCardActions Class="pt-4">
