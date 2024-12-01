@@ -6,3 +6,13 @@
 <MudItem xs="12" Class="d-flex mud-width-full">
     <BackButton />
 </MudItem>
+
+<MudPaper Class="pa-4" Width="500px">
+	<MudForm Model="@model">
+		<MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.Username" Variant="Variant.Outlined" />
+		<MudTextField Label="AbsenceType" InputType="InputType.Text" @bind-Value="model.CategoryName" Variant="Variant.Outlined" />
+		<MudTextField Label="Start" InputType="InputType.Number" @bind-Value="model.Start" Variant="Variant.Outlined" />
+		<MudTextField Label="End" InputType="InputType.Text" @bind-Value="model.End" Variant="Variant.Outlined" />
+		<MudTextField Label="Approved" InputType="InputType.Telephone" @bind-Value="model.Approved" Variant="Variant.Outlined" />
+	</MudForm>
+</MudPaper>

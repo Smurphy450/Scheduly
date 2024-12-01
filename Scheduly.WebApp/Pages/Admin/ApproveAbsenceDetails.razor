@@ -9,13 +9,11 @@
 
 <MudPaper Class="pa-4" Width="500px">
 	<MudForm Model="@model">
-		<MudTextField Label="AbsenceId" InputType="InputType.Text" @bind-Value="model.AbsenceId" Variant="Variant.Outlined" />
-		<MudTextField Label="AbsenceTypeId" InputType="InputType.Text" @bind-Value="model.AbsenceTypeId" Variant="Variant.Outlined" />
-		<MudTextField Label="UserId" InputType="InputType.Text" @bind-Value="model.UserId" Variant="Variant.Outlined" />
 		<MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.User.Username" Variant="Variant.Outlined" />
 		<MudTextField Label="AbsenceType" InputType="InputType.Text" @bind-Value="model.AbsenceType.Name" Variant="Variant.Outlined" />
 		<MudTextField Label="Start" InputType="InputType.Number" @bind-Value="model.Start" Variant="Variant.Outlined" />
 		<MudTextField Label="End" InputType="InputType.Text" @bind-Value="model.End" Variant="Variant.Outlined" />
 		<MudTextField Label="Description" InputType="InputType.Telephone" @bind-Value="model.Description" Variant="Variant.Outlined" />
+		<MudTextField Label="Approved" InputType="InputType.Telephone" @bind-Value="model.Approved" Variant="Variant.Outlined" />
 	</MudForm>
 </MudPaper>
