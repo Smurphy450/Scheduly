@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
 using System.Net.Http.Json;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
 {
     public class AdminSettingBase : ComponentBase
     {

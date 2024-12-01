@@ -1,0 +1,31 @@
+﻿@page "/AdminPanel/CreatePremise";
+@inherits CreatePremiseBase;
+@attribute [Authorize(Roles = "Administrator")]
+
+<h3>Create Premise</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full py-2">
+    <BackButton />
+</MudItem>
+
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudSelect T="int" Label="PremiseCategory" @bind-Value="_selectedPremiseCategoryId" Clearable="true" Variant="Variant.Outlined">
+            @if (PremiseCategories != null)
+            {
+                @foreach (var premiseCategory in PremiseCategories)
+                {
+                    <MudSelectItem Value="@(premiseCategory.PremiseCategoryId)">@premiseCategory.Name</MudSelectItem>
+                }
+            }
+        </MudSelect>
+
+        <MudTextField @bind-Value="PremiseName" Immediate="true" Label="Premise name" Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="PremiseSize" Immediate="true" Label="Size" />
+        <MudTextField @bind-Value="PremiseDescription" Immediate="true" Label="Description" Variant="Variant.Outlined" />
+        <MudCheckBox @bind-Value="MustBeApproved" Label="Must Be Approved" Variant="Variant.Outlined" />
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="CreateNewResource">Create</MudButton>
+    </MudCardActions>
+</MudPaper>

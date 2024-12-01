@@ -3,7 +3,7 @@
 
 <h3>Admin Panel</h3>
 
- <MudStack Row="true">
+ <MudStack Row="true" Wrap="Wrap.Wrap">
     <MudItem>
         <MudCard Style="height:120px; width:300px;">
             <MudCardContent>
@@ -55,6 +55,50 @@
             </MudCardContent>
             <MudCardActions>
                 <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreateAbsenceType")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Create Premise Category</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreatePremiseCategory")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Create Premise</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreatePremise")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Create Resource Category</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreateResourceCategory")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Create Resource</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreateResource")">Go to</MudButton>
             </MudCardActions>
         </MudCard>
     </MudItem>

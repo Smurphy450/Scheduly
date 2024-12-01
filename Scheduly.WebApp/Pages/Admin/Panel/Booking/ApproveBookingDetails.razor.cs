@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Scheduly.WebApp.Utilities;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Booking
 {
 	public class ApproveBookingDetailsBase : ComponentBase
 	{

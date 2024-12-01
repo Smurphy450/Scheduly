@@ -14,7 +14,7 @@ namespace Scheduly.WebApp.Pages.Booking
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Parameter] public int CategoryId { get; set; }
 
-        public List<Resource> ResourceList = [];
+        public List<WebApi.Models.Resource> ResourceList = [];
         public string ResourceCategoryName = "";
 
         protected override async Task OnInitializedAsync()
@@ -73,8 +73,8 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     var content = await getAllResponse.Content.ReadAsStringAsync();
 
-                    var resource = JsonConvert.DeserializeObject<List<Resource>>(content);
-                    ResourceList = resource ?? new List<Resource>();
+                    var resource = JsonConvert.DeserializeObject<List<WebApi.Models.Resource>>(content);
+                    ResourceList = resource ?? new List<WebApi.Models.Resource>();
 
                     Console.WriteLine("Retrieved all resources.");
                 }

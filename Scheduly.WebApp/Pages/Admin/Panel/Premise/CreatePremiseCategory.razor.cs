@@ -2,7 +2,7 @@
 using MudBlazor;
 using System.Net.Http.Headers;
 
-namespace Scheduly.WebApp.Pages.Booking
+namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
 {
     public class CreatePremiseCategoryBase : ComponentBase
     {

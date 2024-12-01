@@ -1,0 +1,31 @@
+﻿@page "/AdminPanel/CreateResource";
+@inherits CreateResourceBase;
+@attribute [Authorize(Roles = "Administrator")]
+
+<h3>Create Resource</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full py-2">
+    <BackButton />
+</MudItem>
+
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudSelect T="int" Label="ResourceCategory" @bind-Value="_selectedResourceCategoryId" Clearable="true" Variant="Variant.Outlined">
+            @if (ResourceCategories != null)
+            {
+                @foreach (var resourceCategory in ResourceCategories)
+                {
+                    <MudSelectItem Value="@(resourceCategory.CategoryId)">@resourceCategory.Name</MudSelectItem>
+                }
+            }
+        </MudSelect>
+
+        <MudTextField @bind-Value="ResourceName" Immediate="true" Label="Resource name" Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="ResourceDescription" Immediate="true" Label="Description" Variant="Variant.Outlined" />
+        <MudNumericField @bind-Value="ResourceAmount" Immediate="true" Label="Amount" Variant="Variant.Outlined" />
+        <MudCheckBox @bind-Value="MustBeApproved" Label="Must Be Approved" Variant="Variant.Outlined" />
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="CreateNewResource">Create</MudButton>
+    </MudCardActions>
+</MudPaper>

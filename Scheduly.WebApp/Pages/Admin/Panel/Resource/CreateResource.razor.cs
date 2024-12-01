@@ -6,12 +6,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace Scheduly.WebApp.Pages.Booking
+namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
 {
     public class CreateResourceBase : ComponentBase
     {
-        [Parameter] public int CategoryId { get; set; }
-
         [Inject] private ISnackbar Snackbar { get; set; }
 
         public string ResourceName { get; set; }
@@ -19,13 +17,58 @@ namespace Scheduly.WebApp.Pages.Booking
         public string ResourceDescription { get; set; }
         public bool MustBeApproved { get; set; }
 
-        public async Task CreateNewResource()
+        protected List<ResourceCategory> ResourceCategories;
+        public string[] ResourceCategoryNames { get; set; }
+        protected int _selectedResourceCategoryId;
+
+        protected class ResourceCategory
+        {
+            public int CategoryId { get; set; }
+            public string Name { get; set; }
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadResourceCategoryNames();
+            _selectedResourceCategoryId = ResourceCategories.FirstOrDefault()?.CategoryId ?? 0;
+        }
+
+        private async Task LoadResourceCategoryNames()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var url = "https://localhost:7171/api/ResourceCategories";
+
+                    var response = await httpClient.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        ResourceCategories = await response.Content.ReadFromJsonAsync<List<ResourceCategory>>();
+                        ResourceCategoryNames = ResourceCategories.Select(at => at.Name).ToArray();
+                        Snackbar.Add("Resource category names loaded successfully.", Severity.Success);
+                    }
+                    else
+                    {
+                        Snackbar.Add("Failed to load resource category names.", Severity.Error);
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
+            }
+        }
+
+        protected async Task CreateNewResource()
         {
             if (ValidateResourceInputs())
             {
                 var resourceDto = new CreateResourceDTO
                 {
-                    CategoryId = CategoryId,
+                    CategoryId = _selectedResourceCategoryId,
                     Name = ResourceName,
                     Amount = ResourceAmount,
                     Description = ResourceDescription ?? string.Empty,
@@ -42,7 +85,7 @@ namespace Scheduly.WebApp.Pages.Booking
 
         private bool ValidateResourceInputs()
         {
-            return CategoryId > 0 && !string.IsNullOrEmpty(ResourceName) && ResourceAmount > 0;
+            return _selectedResourceCategoryId > 0 && !string.IsNullOrEmpty(ResourceName) && ResourceAmount > 0;
         }
 
         private async Task SendResourceCreationRequest(CreateResourceDTO resourceDto)

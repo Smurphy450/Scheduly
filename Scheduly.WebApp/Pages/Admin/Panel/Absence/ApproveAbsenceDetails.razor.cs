@@ -5,7 +5,7 @@ using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Pages.Booking;
 using Scheduly.WebApp.Utilities;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 {
 	public class ApproveAbsenceDetailsBase : ComponentBase
 	{

@@ -8,11 +8,9 @@
     <BackButton />
 </MudItem>
 
-<MudStack Row Class="justify-space-between mud-width-full">
-    <MudStack Style="width: 300px">
-        <MudSelect T="int" @bind-Value="_selectedAbsenceTypeId"
-                   Label="AbsenceType"
-                   Clearable="true">
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudSelect T="int" Label="AbsenceType" @bind-Value="_selectedAbsenceTypeId" Clearable="true" Variant="Variant.Outlined">
             @if (AbsenceTypes != null)
             {
                 @foreach (var absenceType in AbsenceTypes)
@@ -21,14 +19,15 @@
                 }
             }
         </MudSelect>
-    </MudStack>
-</MudStack>
 
-<MudDatePicker Label="Start of absence" ShowWeekNumbers="true" @bind-Date="DatetimeStart" Variant="Variant.Outlined" />
-<MudTimePicker Label="Start time of absence" @bind-Time="StartTime" />
-<MudDatePicker Label="End of absence" ShowWeekNumbers="true" @bind-Date="DatetimeEnd" Variant="Variant.Outlined" />
-<MudTimePicker Label="End time of absence" @bind-Time="EndTime" />
+        <MudDatePicker Label="Start of absence" ShowWeekNumbers="true" @bind-Date="DatetimeStart" Variant="Variant.Outlined" />
+        <MudTimePicker Label="Start time of absence" @bind-Time="StartTime" Variant="Variant.Outlined" />
+        <MudDatePicker Label="End of absence" ShowWeekNumbers="true" @bind-Date="DatetimeEnd" Variant="Variant.Outlined" />
+        <MudTimePicker Label="End time of absence" @bind-Time="EndTime" Variant="Variant.Outlined" />
 
-<MudTextField @bind-Value="Description" Immediate="true" Label="Description" Variant="Variant.Outlined"></MudTextField>
-
-<MudButton Variant="Variant.Filled" @onclick="ReportAbsenceAsync">Report abscence</MudButton>
+        <MudTextField @bind-Value="Description" Immediate="true" Label="Description" Variant="Variant.Outlined"></MudTextField>
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="ReportAbsenceAsync">Report abscence</MudButton>
+    </MudCardActions>
+</MudPaper>

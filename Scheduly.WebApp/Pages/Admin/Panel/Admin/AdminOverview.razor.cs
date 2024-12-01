@@ -5,7 +5,7 @@ using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 using System.Security.Claims;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
 {
     public class AdminOverviewBase : ComponentBase
     {

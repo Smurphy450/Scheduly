@@ -4,7 +4,7 @@ using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
 using System.Text;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 {
     public class CreateAbsenceTypeBase : ComponentBase
     {

@@ -5,7 +5,7 @@ using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 
-namespace Scheduly.WebApp.Pages.Admin
+namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 {
     public class ApproveAbsenceBase : ComponentBase
     {
