@@ -15,5 +15,10 @@
 		<MudTextField Label="End" InputType="InputType.Text" @bind-Value="model.End" Variant="Variant.Outlined" />
 		<MudTextField Label="Description" InputType="InputType.Telephone" @bind-Value="model.Description" Variant="Variant.Outlined" />
 		<MudTextField Label="Approved" InputType="InputType.Telephone" @bind-Value="model.Approved" Variant="Variant.Outlined" />
+
+		<MudStack Row>
+			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Success">Approve</MudButton>
+			<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error">Disapprove</MudButton>
+		</MudStack>
 	</MudForm>
 </MudPaper>
