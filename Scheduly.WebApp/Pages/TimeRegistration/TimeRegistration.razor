@@ -1,5 +1,26 @@
 ﻿@page "/TimeRegistration";
 @inherits TimeRegistrationBase;
+@using Scheduly.WebApp.Models.DTO;
 @attribute [Authorize(Roles = "Administrator,User")]
 
 <h3>TimeRegistration</h3>
+
+<MudDataGrid T="TimeRegistrationDTO" Items="@TimeRegistration" Virtualize="true" Height="auto" Class="pa-4 mt-2">
+    <Columns>
+        <PropertyColumn Property="x => x.TimeId" />
+        <PropertyColumn Property="x => x.UserId" />
+        <PropertyColumn Property="x => x.Start" />
+        <PropertyColumn Property="x => x.End" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate Context="absence">
+                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DeleteTime(absence.Item.TimeId))">Delete</MudButton>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <LoadingContent>
+        <MudText Typo="Typo.h6">Loading...</MudText>
+    </LoadingContent>
+    <NoRecordsContent>
+        No data available
+    </NoRecordsContent>
+</MudDataGrid>

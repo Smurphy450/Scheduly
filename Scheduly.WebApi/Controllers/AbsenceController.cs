@@ -105,6 +105,7 @@ namespace Scheduly.WebApi.Controllers
             return Ok(pendingAbsences);
         }
 
+        // POST: api/Absence/AbsenceDTOs
         [HttpPost("AbsenceDTOs")]
         public async Task<ActionResult<IEnumerable<AbsenceDTO>>> GetAbsenceDTOs([FromBody] AbsenceQueryDTO query)
         {

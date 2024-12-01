@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApp.Models;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApp.Models.DTO;
 using Scheduly.WebApp.Pages.Booking;
 using Scheduly.WebApp.Utilities;
 
