@@ -32,9 +32,9 @@
                 <MudCardActions>
                     <MudExpansionPanel Icon="@Icons.Material.Filled.ShoppingBag">
                         <MudDatePicker Label="Start Date" @bind-Date="startDate" />
-                        <MudTimePicker Label="Start Time" @bind-Date="startTime" />
+                        <MudTimePicker Label="Start Time" @bind-Time="startTime" />
                         <MudDatePicker Label="End Date" @bind-Date="endDate" />
-                        <MudTimePicker Label="End Time" @bind-Date="endTime" />
+                        <MudTimePicker Label="End Time" @bind-Time="endTime" />
                         <MudButton Class="ma-4" Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => BookPremise(premise.PremiseId))">Book</MudButton>
                     </MudExpansionPanel>
                 </MudCardActions>

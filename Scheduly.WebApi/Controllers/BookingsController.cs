@@ -81,7 +81,7 @@ namespace Scheduly.WebApi.Controllers
 
         // POST: api/Bookings/CreateBooking
         [HttpPost("CreateBooking")]
-        public async Task<ActionResult<Booking>> CreateBooking(CreateBookingDTO createBookingDTO)
+        public async Task<IActionResult> CreateBooking(CreateBookingDTO createBookingDTO)
         {
             bool mustBeApproved = false;
 
@@ -116,7 +116,7 @@ namespace Scheduly.WebApi.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
+            return Ok(new { Success = true });
         }
 
         //[HttpGet("ApproveBooking/{id}")]
