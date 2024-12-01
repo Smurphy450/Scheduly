@@ -10,5 +10,6 @@
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset? End { get; set; }
         public bool Approved { get; set; }
+        public string Description { get; set; }
     }
 }

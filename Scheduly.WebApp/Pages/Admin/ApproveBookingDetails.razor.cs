@@ -26,7 +26,7 @@ namespace Scheduly.WebApp.Pages.Admin
 				{
 					using (var httpClient = new HttpClient())
 					{
-						var response = await httpClient.GetAsync($"https://localhost:7171/api/Bookings/{BookingId}");
+						var response = await httpClient.GetAsync($"https://localhost:7171/api/Bookings/ApproveBooking/{BookingId}");
 						if (response.IsSuccessStatusCode)
 						{
 							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.DTO.ApproveBookingDTO>();

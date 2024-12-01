@@ -98,6 +98,37 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
         }
 
+        //[HttpGet("ApproveBooking/{id}")]
+        //public async Task<ActionResult<ApproveBookingDTO>> GetApproveBooking(int id)
+        //{
+        //    var booking = await _context.Bookings
+        //        .Include(b => b.User)
+        //        .Include(b => b.Premise)
+        //        .ThenInclude(p => p.PremiseCategory)
+        //        .Include(b => b.Resource)
+        //        .ThenInclude(r => r.Category)
+        //        .FirstOrDefaultAsync(b => b.BookingsId == id);
+
+        //    if (booking == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var approveBookingDTO = new ApproveBookingDTO
+        //    {
+        //        BookingId = booking.BookingsId,
+        //        UserId = booking.UserId,
+        //        Username = booking.User.Username,
+        //        ItemName = booking.Premise != null ? booking.Premise.Name : booking.Resource.Name,
+        //        CategoryName = booking.Premise != null ? booking.Premise.PremiseCategory.Name : booking.Resource.Category.Name,
+        //        Start = booking.Start,
+        //        End = booking.End,
+        //        Approved = booking.Approved ?? false
+        //    };
+
+        //    return Ok(approveBookingDTO);
+        //}
+
         [HttpGet("ApproveBooking/{id}")]
         public async Task<ActionResult<ApproveBookingDTO>> GetApproveBooking(int id)
         {
@@ -123,7 +154,8 @@ namespace Scheduly.WebApi.Controllers
                 CategoryName = booking.Premise != null ? booking.Premise.PremiseCategory.Name : booking.Resource.Category.Name,
                 Start = booking.Start,
                 End = booking.End,
-                Approved = booking.Approved ?? false
+                Approved = booking.Approved ?? false,
+                Description = booking.Premise != null ? booking.Premise.Description : booking.Resource.Description
             };
 
             return Ok(approveBookingDTO);
@@ -141,6 +173,32 @@ namespace Scheduly.WebApi.Controllers
 
             return booking;
         }
+
+        //[HttpGet("PendingApproval")]
+        //public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
+        //{
+        //    var pendingBookings = await _context.Bookings
+        //        .Where(b => b.Start > DateTimeOffset.Now && b.Approved == false)
+        //        .Include(b => b.User)
+        //        .Include(b => b.Premise)
+        //        .ThenInclude(p => p.PremiseCategory)
+        //        .Include(b => b.Resource)
+        //        .ThenInclude(r => r.Category)
+        //        .Select(b => new ApproveBookingDTO
+        //        {
+        //            BookingId = b.BookingsId,
+        //            UserId = b.UserId,
+        //            Username = b.User.Username,
+        //            ItemName = b.Premise != null ? b.Premise.Name : b.Resource.Name,
+        //            CategoryName = b.Premise != null ? b.Premise.PremiseCategory.Name : b.Resource.Category.Name,
+        //            Start = b.Start,
+        //            End = b.End,
+        //            Approved = b.Approved ?? false
+        //        })
+        //        .ToListAsync();
+
+        //    return Ok(pendingBookings);
+        //}
 
         [HttpGet("PendingApproval")]
         public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
@@ -161,7 +219,8 @@ namespace Scheduly.WebApi.Controllers
                     CategoryName = b.Premise != null ? b.Premise.PremiseCategory.Name : b.Resource.Category.Name,
                     Start = b.Start,
                     End = b.End,
-                    Approved = b.Approved ?? false
+                    Approved = b.Approved ?? false,
+                    Description = b.Premise != null ? b.Premise.Description : b.Resource.Description
                 })
                 .ToListAsync();
 
