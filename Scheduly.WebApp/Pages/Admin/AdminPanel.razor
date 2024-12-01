@@ -1,5 +1,4 @@
 ﻿@page "/AdminPanel";
-@inherits AdminPanelBase;
 @attribute [Authorize(Roles = "Administrator")]
 
 <h3>Admin Panel</h3>
@@ -45,6 +44,17 @@
             </MudCardContent>
             <MudCardActions>
                 <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/ApproveAbsence")">Go to</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem>
+        <MudCard Style="height:120px; width:300px;">
+            <MudCardContent>
+                <MudText Typo="Typo.body1"><b>Create AbsenceType</b</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/AdminPanel/CreateAbsenceType")">Go to</MudButton>
             </MudCardActions>
         </MudCard>
     </MudItem>

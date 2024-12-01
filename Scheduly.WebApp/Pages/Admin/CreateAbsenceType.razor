@@ -1,0 +1,20 @@
+﻿@page "/AdminPanel/CreateAbsenceType";
+@inherits CreateAbsenceTypeBase;
+@attribute [Authorize(Roles = "Administrator")]
+
+<h3>Create AbsenceType</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full py-2">
+    <BackButton />
+</MudItem>
+
+<MudPaper Class="pa-4">
+    <MudForm>
+        <MudTextField @bind-Value="Name" Immediate="true" Label="Name" />
+        <MudTextField @bind-Value="WageFactor" Immediate="true" Label="Wage factor" />
+        <MudCheckBox @bind-Value="MustBeApproved" Label="Must Be Approved" />
+    </MudForm>
+    <MudCardActions Class="pt-4">
+        <MudButton Variant="Variant.Filled" @onclick="CreateAbsenceType">Create</MudButton>
+    </MudCardActions>
+</MudPaper>
