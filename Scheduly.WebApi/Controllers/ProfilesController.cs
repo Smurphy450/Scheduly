@@ -250,6 +250,54 @@ namespace Scheduly.WebApi.Controllers
             return CreatedAtAction("GetProfile", new { id = profile.ProfileId }, profile);
         }
 
+        // POST: api/Profiles/UserProfile
+        [HttpPost("UserProfile")]
+        public async Task<ActionResult<UserProfileDTO>> PostUserProfile(UserProfileDTO userProfileDto)
+        {
+            if (userProfileDto == null || string.IsNullOrEmpty(userProfileDto.Username) || string.IsNullOrEmpty(userProfileDto.Email) || string.IsNullOrEmpty(userProfileDto.PasswordHash))
+            {
+                return BadRequest("Invalid user profile data.");
+            }
+
+            var user = new User
+            {
+                Username = userProfileDto.Username,
+                Email = userProfileDto.Email,
+                PasswordHash = userProfileDto.PasswordHash
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var profile = new Profile
+            {
+                UserId = user.UserId,
+                FirstName = userProfileDto.FirstName,
+                LastName = userProfileDto.LastName,
+                Address = userProfileDto.Address,
+                ZipCode = userProfileDto.ZipCode,
+                PhoneNumber = userProfileDto.PhoneNumber,
+                Admin = userProfileDto.Admin
+            };
+
+            _context.Profiles.Add(profile);
+            await _context.SaveChangesAsync();
+
+            // Create a notification for the new user
+            var notification = new Notification
+            {
+                UserId = user.UserId,
+                Sms = true,
+                Email = true,
+                Message = $"New password: '{userProfileDto.Password}' for Scheduly" // Use the unhashed password
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetUserProfileByUserId", new { userId = user.UserId }, userProfileDto);
+        }
+
         // DELETE: api/Profiles/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProfile(int id)

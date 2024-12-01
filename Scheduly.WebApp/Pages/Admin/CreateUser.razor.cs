@@ -12,26 +12,25 @@ namespace Scheduly.WebApp.Pages.Admin
         public UserProfileDTO UserProfile { get; set; } = new UserProfileDTO();
         public string NewPassword { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected async Task CreateUser()
         {
-            await LoadUserProfile();
-        }
+            NewPassword = GenerateNewPassword(8);
+            UserProfile.Password = NewPassword; // Set the unhashed password
+            UserProfile.PasswordHash = PasswordHasher.HashPassword(NewPassword);
 
-        private async Task LoadUserProfile()
-        {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.GetAsync($"https://localhost:7171/api/Profiles/UserProfile/{UserId}");
+                    var response = await httpClient.PostAsJsonAsync("https://localhost:7171/api/Profiles/UserProfile", UserProfile);
                     if (response.IsSuccessStatusCode)
                     {
-                        UserProfile = await response.Content.ReadFromJsonAsync<UserProfileDTO>();
-                        Console.WriteLine("User profile loaded successfully.");
+                        Console.WriteLine("User profile created successfully.");
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to load user profile. Status: {response.StatusCode}");
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Failed to create user profile. Status: {response.StatusCode}, Response: {responseContent}");
                     }
                 }
             }
@@ -41,42 +40,7 @@ namespace Scheduly.WebApp.Pages.Admin
             }
         }
 
-        protected async Task SaveChanges()
-        {
-            if (!string.IsNullOrEmpty(NewPassword))
-            {
-                UserProfile.PasswordHash = PasswordHasher.HashPassword(NewPassword);
-            }
-
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.PutAsJsonAsync($"https://localhost:7171/api/Profiles/UserProfile/{UserId}", UserProfile);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine("User profile updated successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed to update user profile. Status: {response.StatusCode}");
-                    }
-                }
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"An error occurred while making the request: {e.Message}");
-            }
-        }
-
-        protected void GenerateNewPassword()
-        {
-            var newPassword = GenerateRandomPassword(8);
-            NewPassword = newPassword;
-            Console.WriteLine($"New password (unencrypted): {newPassword}");
-        }
-
-        private string GenerateRandomPassword(int length)
+        private string GenerateNewPassword(int length)
         {
             const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             StringBuilder result = new StringBuilder();

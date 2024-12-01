@@ -9,6 +9,9 @@
 </MudItem>
 
 <MudGrid>
+    <MudItem xs="12" Class="d-flex justify-end">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/Admin/CreateUser">Create New User</MudButton>
+    </MudItem>
     @foreach (var user in UserList)
     {
         <MudItem>
