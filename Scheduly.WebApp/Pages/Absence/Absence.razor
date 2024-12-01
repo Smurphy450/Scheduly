@@ -1,30 +1,26 @@
-﻿@* @page "/Absence";
-@inherits AbsenceBase;
-@attribute [Authorize(Roles = "Administrator,User")]
-
-<h3>Absence</h3>
-
-<MudPaper Class="pa-4">
-    <MudText>Total Absence</MudText>
-    <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@AbsenceArray" Width="300px" Height="300px" />
-</MudPaper>
-<MudPaper Class="pa-4 mt-2 d-flex justify-center">
-    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/Absence/ReportAbsence")">Report abscence</MudButton>
-</MudPaper> *@
-
-@page "/Absence";
+﻿@page "/Absence";
 @inherits AbsenceBase;
 @using Scheduly.WebApi.Models.DTO;
 @attribute [Authorize(Roles = "Administrator,User")]
 
 <h3>Absence</h3>
 
+<MudPaper Class="pa-4 mt-2 d-flex justify-center">
+    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/Absence/ReportAbsence")">Report absence</MudButton>
+</MudPaper>
+
 @* <MudPaper Class="pa-4">
     <MudText>Total Absence</MudText>
     <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@AbsenceArray" Width="300px" Height="300px" />
-</MudPaper> *@
+</MudPaper> 
 <MudPaper Class="pa-4 mt-2 d-flex justify-center">
     <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@("/Absence/ReportAbsence")">Report abscence</MudButton>
+</MudPaper> *@
+
+<MudPaper Class="pa-4 mt-2 d-flex justify-center">
+    <MudDatePicker Label="Start Date" @bind-Date="startDate" />
+    <MudDatePicker Label="End Date" @bind-Date="endDate" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="UpdateAbsences">Update</MudButton>
 </MudPaper>
 
 <MudPaper Class="pa-4 mt-2">
@@ -40,7 +36,10 @@
             <PropertyColumn Property="x => x.Approved" />
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate Context="absence">
-                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DeleteAbsence(absence.Item.AbsenceId))">Delete</MudButton>
+                    @if (absence.Item.Start > DateTimeOffset.Now)
+                    {
+                        <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" @onclick="(() => DeleteAbsence(absence.Item.AbsenceId))">Delete</MudButton>
+                    }
                 </CellTemplate>
             </TemplateColumn>
         </Columns>

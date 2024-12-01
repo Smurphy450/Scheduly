@@ -12,9 +12,9 @@ namespace Scheduly.WebApp.Pages.Absence
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
-        protected List<AbsenceDTO> Absences { get; set; } = new List<AbsenceDTO>();
-        protected DateTimeOffset startDate = DateTimeOffset.Now.AddMonths(-3);
-        protected DateTimeOffset endDate = DateTimeOffset.Now.AddMonths(1);
+        protected List<AbsenceDTO> Absences { get; set; } = new List<AbsenceDTO>(); //im getting a cannot convert from 'system.DateTimeOffset' to 'system.DateTime?'
+        protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
+        protected DateTime? endDate { get; set; } = DateTime.Now.AddMonths(1);
 
         protected override async Task OnInitializedAsync()
         {
@@ -29,8 +29,8 @@ namespace Scheduly.WebApp.Pages.Absence
                 var query = new AbsenceQueryDTO
                 {
                     UserId = userId,
-                    StartDate = startDate,
-                    EndDate = endDate
+                    StartDate = (DateTimeOffset)startDate,
+                    EndDate = (DateTimeOffset)endDate
                 };
 
                 using (var httpClient = new HttpClient())
@@ -46,6 +46,11 @@ namespace Scheduly.WebApp.Pages.Absence
                     }
                 }
             }
+        }
+
+        protected async Task UpdateAbsences()
+        {
+            await LoadAbsences();
         }
 
         protected async Task DeleteAbsence(int absenceId)
