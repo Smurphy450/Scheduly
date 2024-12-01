@@ -74,6 +74,38 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
+        [HttpPost("UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordDTO updatePasswordDTO)
+        {
+            var user = await _context.Users.FindAsync(updatePasswordDTO.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.PasswordHash = updatePasswordDTO.PasswordHash;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(updatePasswordDTO.UserId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
