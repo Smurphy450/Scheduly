@@ -74,8 +74,6 @@ namespace Scheduly.WebApp.Pages.Login
                                 UserID = userAuthResponse.UserID,
                                 Role = userAuthResponse.Role
                             });
-                            // Handle successful authentication
-                            Snackbar.Add("Login successful!", Severity.Success);
 
                             NavigationManager.NavigateTo("/Overview");
                         }

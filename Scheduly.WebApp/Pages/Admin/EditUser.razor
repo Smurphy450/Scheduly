@@ -1,27 +1,4 @@
-﻿@* @page "/Admin/EditUser/{UserId:int}"
-@inherits EditUserBase
-@attribute [Authorize(Roles = "Administrator")]
-
-<h3>Edit User</h3>
-
-<MudPaper Class="pa-4" Width="300px">
-    <MudForm Model="@UserProfile">
-        <MudTextField Label="Username" @bind-Value="UserProfile.Username" Variant="Variant.Outlined" />
-        <MudTextField Label="Email" @bind-Value="UserProfile.Email" Variant="Variant.Outlined" />
-        <MudTextField Label="First Name" @bind-Value="UserProfile.FirstName" Variant="Variant.Outlined" />
-        <MudTextField Label="Last Name" @bind-Value="UserProfile.LastName" Variant="Variant.Outlined" />
-        <MudTextField Label="Address" @bind-Value="UserProfile.Address" Variant="Variant.Outlined" />
-        <MudTextField Label="Zip Code" @bind-Value="UserProfile.ZipCode" Variant="Variant.Outlined" />
-        <MudTextField Label="City" @bind-Value="UserProfile.City" Variant="Variant.Outlined" Disabled="true" />
-        <MudTextField Label="Phone Number" @bind-Value="UserProfile.PhoneNumber" Variant="Variant.Outlined" />
-        <MudButton OnClick="GenerateNewPassword">Generate New Password</MudButton>
-        <MudCheckBox @bind-Value="UserProfile.Admin" @bind-Checked="UserProfile.Admin" Label="Admin" />
-        <MudButton OnClick="SaveChanges">Save Changes</MudButton>
-    </MudForm>
-</MudPaper>
- *@
-
-@page "/Admin/EditUser/{UserId:int}"
+﻿@page "/Admin/EditUser/{UserId:int}"
 @inherits EditUserBase
 @attribute [Authorize(Roles = "Administrator")]
 

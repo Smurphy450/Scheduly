@@ -50,6 +50,7 @@ namespace Scheduly.WebApi.Controllers
                 .Where(b => b.ResourceId != null && (b.End == null || b.End > DateTimeOffset.Now))
                 .Select(b => new OverviewResourcesDTO
                 {
+                    BookingId = b.BookingsId,
                     CategoryName = b.Resource.Category.Name,
                     ResourceName = b.Resource.Name,
                     Description = b.Resource.Description,
@@ -62,7 +63,8 @@ namespace Scheduly.WebApi.Controllers
                 .Where(b => b.PremiseId != null && (b.End == null || b.End > DateTimeOffset.Now))
                 .Select(b => new OverviewPremisesDTO
                 {
-                    Name = b.Premise.Name,
+					BookingId = b.BookingsId,
+					Name = b.Premise.Name,
                     CategoryName = b.Premise.PremiseCategory.Name,
                     Size = b.Premise.Size,
                     Start = b.Start,
@@ -119,38 +121,8 @@ namespace Scheduly.WebApi.Controllers
             return Ok(new { Success = true });
         }
 
-        //[HttpGet("ApproveBooking/{id}")]
-        //public async Task<ActionResult<ApproveBookingDTO>> GetApproveBooking(int id)
-        //{
-        //    var booking = await _context.Bookings
-        //        .Include(b => b.User)
-        //        .Include(b => b.Premise)
-        //        .ThenInclude(p => p.PremiseCategory)
-        //        .Include(b => b.Resource)
-        //        .ThenInclude(r => r.Category)
-        //        .FirstOrDefaultAsync(b => b.BookingsId == id);
-
-        //    if (booking == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var approveBookingDTO = new ApproveBookingDTO
-        //    {
-        //        BookingId = booking.BookingsId,
-        //        UserId = booking.UserId,
-        //        Username = booking.User.Username,
-        //        ItemName = booking.Premise != null ? booking.Premise.Name : booking.Resource.Name,
-        //        CategoryName = booking.Premise != null ? booking.Premise.PremiseCategory.Name : booking.Resource.Category.Name,
-        //        Start = booking.Start,
-        //        End = booking.End,
-        //        Approved = booking.Approved ?? false
-        //    };
-
-        //    return Ok(approveBookingDTO);
-        //}
-
-        [HttpGet("ApproveBooking/{id}")]
+		// GET: api/Bookings/ApproveBooking/5
+		[HttpGet("ApproveBooking/{id}")]
         public async Task<ActionResult<ApproveBookingDTO>> GetApproveBooking(int id)
         {
             var booking = await _context.Bookings
@@ -181,6 +153,7 @@ namespace Scheduly.WebApi.Controllers
 
             return Ok(approveBookingDTO);
         }
+
         // GET: api/Bookings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetBooking(int id)
@@ -193,35 +166,10 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return booking;
-        }
+		}
 
-        //[HttpGet("PendingApproval")]
-        //public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
-        //{
-        //    var pendingBookings = await _context.Bookings
-        //        .Where(b => b.Start > DateTimeOffset.Now && b.Approved == false)
-        //        .Include(b => b.User)
-        //        .Include(b => b.Premise)
-        //        .ThenInclude(p => p.PremiseCategory)
-        //        .Include(b => b.Resource)
-        //        .ThenInclude(r => r.Category)
-        //        .Select(b => new ApproveBookingDTO
-        //        {
-        //            BookingId = b.BookingsId,
-        //            UserId = b.UserId,
-        //            Username = b.User.Username,
-        //            ItemName = b.Premise != null ? b.Premise.Name : b.Resource.Name,
-        //            CategoryName = b.Premise != null ? b.Premise.PremiseCategory.Name : b.Resource.Category.Name,
-        //            Start = b.Start,
-        //            End = b.End,
-        //            Approved = b.Approved ?? false
-        //        })
-        //        .ToListAsync();
-
-        //    return Ok(pendingBookings);
-        //}
-
-        [HttpGet("PendingApproval")]
+		// GET: api/Bookings/PendingApproval
+		[HttpGet("PendingApproval")]
         public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
         {
             var pendingBookings = await _context.Bookings
@@ -279,33 +227,6 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Bookings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Booking>> PostBooking(Booking booking)
-        {
-            _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
-        }
-
-        // DELETE: api/Bookings/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBooking(int id)
-        {
-            var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
-
-            _context.Bookings.Remove(booking);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         // PUT: api/Absence/Approve/{id}
         [HttpPut("Booking/{id}")]
         public async Task<IActionResult> ApproveBooking(int id, [FromBody] bool isApproved)
@@ -348,9 +269,36 @@ namespace Scheduly.WebApi.Controllers
             return NoContent();
         }
 
-        private bool BookingExists(int id)
-        {
-            return _context.Bookings.Any(e => e.BookingsId == id);
-        }
-    }
+		// POST: api/Bookings
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Booking>> PostBooking(Booking booking)
+		{
+			_context.Bookings.Add(booking);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
+		}
+
+		// DELETE: api/Bookings/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteBooking(int id)
+		{
+			var booking = await _context.Bookings.FindAsync(id);
+			if (booking == null)
+			{
+				return NotFound();
+			}
+
+			_context.Bookings.Remove(booking);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		private bool BookingExists(int id)
+		{
+			return _context.Bookings.Any(e => e.BookingsId == id);
+		}
+	}
 }

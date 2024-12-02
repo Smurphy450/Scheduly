@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Newtonsoft.Json;
-using System.Security.Claims;
-using Scheduly.WebApi.Models;
-using Scheduly.WebApp.Models;
 using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Models.DTO;
-using Scheduly.WebApp.Pages.Booking;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Overview
 {
     public class OverviewBase : ComponentBase
-    {
-        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+	{
+		[Inject] private ISnackbar Snackbar { get; set; }
+		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         protected bool DayStarted { get; set; } = false;
         protected double AverageWeeklyWorkTime { get; set; } = 0.0;
         protected List<OverviewPremisesDTO> AllPremises { get; set; } = new();
@@ -168,6 +164,32 @@ namespace Scheduly.WebApp.Pages.Overview
                 }
             }
             await CheckDayStarted();
-        }
-    }
+		}
+
+		protected async Task DeleteBooking(int bookingId)
+		{
+			try
+			{
+				using (var httpClient = new HttpClient())
+				{
+					var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Bookings/{bookingId}");
+					if (getAllResponse.IsSuccessStatusCode)
+					{
+                        Snackbar.Add("Unbooked item.", Severity.Success);
+						Console.WriteLine("Unbooked booking.");
+
+						await GetUserOverview();
+					}
+					else
+					{
+						Console.WriteLine($"Failed to Delete booking. Status: {getAllResponse.StatusCode}");
+					}
+				}
+			}
+			catch (HttpRequestException e)
+			{
+				Console.WriteLine($"An error occurred while making the request: {e.Message}");
+			}
+		}
+	}
 }
