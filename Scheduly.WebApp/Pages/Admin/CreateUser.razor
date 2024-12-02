@@ -2,7 +2,11 @@
 @inherits CreateUserBase
 @attribute [Authorize(Roles = "Administrator")]
 
-<h3>Edit User</h3>
+<h3>Create User</h3>
+
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>
 
 <MudPaper Class="pa-4" Width="300px">
     <MudForm Model="@UserProfile">

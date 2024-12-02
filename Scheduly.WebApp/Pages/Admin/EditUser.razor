@@ -4,6 +4,10 @@
 
 <h3>Edit User</h3>
 
+<MudItem xs="12" Class="d-flex mud-width-full">
+    <BackButton />
+</MudItem>
+
 <MudPaper Class="pa-4" Width="300px">
     <MudForm Model="@UserProfile">
         <MudTextField Label="Username" @bind-Value="UserProfile.Username" Variant="Variant.Outlined" />
