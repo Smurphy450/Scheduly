@@ -22,13 +22,6 @@ namespace Scheduly.WebApi.Controllers
             _context = context;
         }
 
-        // GET: api/Bookings
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
-        {
-            return await _context.Bookings.ToListAsync();
-        }
-
         [HttpGet("GetUserOverview/{userId}")]
         public async Task<ActionResult<UserOverviewDTO>> GetUserOverview(int userId)
         {
@@ -154,20 +147,6 @@ namespace Scheduly.WebApi.Controllers
             return Ok(approveBookingDTO);
         }
 
-        // GET: api/Bookings/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Booking>> GetBooking(int id)
-        {
-            var booking = await _context.Bookings.FindAsync(id);
-
-            if (booking == null)
-            {
-                return NotFound();
-            }
-
-            return booking;
-		}
-
 		// GET: api/Bookings/PendingApproval
 		[HttpGet("PendingApproval")]
         public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
@@ -194,37 +173,6 @@ namespace Scheduly.WebApi.Controllers
                 .ToListAsync();
 
             return Ok(pendingBookings);
-        }
-
-        // PUT: api/Bookings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBooking(int id, Booking booking)
-        {
-            if (id != booking.BookingsId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(booking).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // PUT: api/Absence/Approve/{id}
@@ -267,18 +215,7 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return NoContent();
-        }
-
-		// POST: api/Bookings
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
-		public async Task<ActionResult<Booking>> PostBooking(Booking booking)
-		{
-			_context.Bookings.Add(booking);
-			await _context.SaveChangesAsync();
-
-			return CreatedAtAction("GetBooking", new { id = booking.BookingsId }, booking);
-		}
+        }		
 
 		// DELETE: api/Bookings/5
 		[HttpDelete("{id}")]
