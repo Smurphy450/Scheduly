@@ -21,27 +21,6 @@ namespace Scheduly.WebApi.Controllers
             _context = context;
         }
 
-        // GET: api/Resources
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Resource>>> GetResources()
-        {
-            return await _context.Resources.ToListAsync();
-        }
-
-        // GET: api/Resources/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Resource>> GetResource(int id)
-        {
-            var resource = await _context.Resources.FindAsync(id);
-
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return resource;
-        }
-
         // GET: api/Resources/Category/{categoryId}
         [HttpGet("Category/{categoryId}")]
         public async Task<ActionResult<IEnumerable<Resource>>> GetResourcesByCategory(int categoryId)
@@ -56,48 +35,6 @@ namespace Scheduly.WebApi.Controllers
             return await _context.Resources
                 .Where(r => r.CategoryId == categoryId)
                 .ToListAsync();
-        }
-
-        // PUT: api/Resources/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutResource(int id, Resource resource)
-        {
-            if (id != resource.ResourceId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(resource).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ResourceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Resources
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Resource>> PostResource(Resource resource)
-        {
-            _context.Resources.Add(resource);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetResource", new { id = resource.ResourceId }, resource);
         }
 
         // POST: api/Resources/CreateResource
@@ -140,11 +77,6 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ResourceExists(int id)
-        {
-            return _context.Resources.Any(e => e.ResourceId == id);
         }
     }
 }
