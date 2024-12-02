@@ -15,28 +15,7 @@ namespace Scheduly.WebApi.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Notifications
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Notification>>> GetNotifications()
-        {
-            return await _context.Notifications.ToListAsync();
-        }
-
-        // GET: api/Notifications/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Notification>> GetNotification(int id)
-        {
-            var notification = await _context.Notifications.FindAsync(id);
-
-            if (notification == null)
-            {
-                return NotFound();
-            }
-
-            return notification;
-        }
-
+       
         // POST: api/Notifications
         [HttpPost]
         public async Task<ActionResult<Notification>> PostNotification(CreateNotificationDTO createNotificationDTO)
@@ -53,27 +32,6 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { Success = true });
-        }
-
-        // DELETE: api/Notifications/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNotification(int id)
-        {
-            var notification = await _context.Notifications.FindAsync(id);
-            if (notification == null)
-            {
-                return NotFound();
-            }
-
-            _context.Notifications.Remove(notification);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool NotificationExists(int id)
-        {
-            return _context.Notifications.Any(e => e.NotificationId == id);
         }
     }
 }
