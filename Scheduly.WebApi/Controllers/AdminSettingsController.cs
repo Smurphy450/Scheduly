@@ -25,52 +25,7 @@ namespace Scheduly.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<AdminSetting>>> GetAdminSettings()
         {
             return await _context.AdminSettings.ToListAsync();
-        }
-
-        // GET: api/AdminSettings/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AdminSetting>> GetAdminSetting(int id)
-        {
-            var adminSetting = await _context.AdminSettings.FindAsync(id);
-
-            if (adminSetting == null)
-            {
-                return NotFound();
-            }
-
-            return adminSetting;
-        }
-
-        // PUT: api/AdminSettings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdminSetting(int id, AdminSetting adminSetting)
-        {
-            if (id != adminSetting.SettingsId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(adminSetting).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdminSettingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        }        
 
         // PUT: api/AdminSettings/UpdateList
         [HttpPut("UpdateList")]
@@ -103,33 +58,6 @@ namespace Scheduly.WebApi.Controllers
                 }
                 throw;
             }
-
-            return NoContent();
-        }
-
-        // POST: api/AdminSettings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<AdminSetting>> PostAdminSetting(AdminSetting adminSetting)
-        {
-            _context.AdminSettings.Add(adminSetting);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAdminSetting", new { id = adminSetting.SettingsId }, adminSetting);
-        }
-
-        // DELETE: api/AdminSettings/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAdminSetting(int id)
-        {
-            var adminSetting = await _context.AdminSettings.FindAsync(id);
-            if (adminSetting == null)
-            {
-                return NotFound();
-            }
-
-            _context.AdminSettings.Remove(adminSetting);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
