@@ -40,38 +40,7 @@ namespace Scheduly.WebApi.Controllers
             }
 
             return premiseCategory;
-        }
-
-        // PUT: api/PremiseCategories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPremiseCategory(int id, PremiseCategory premiseCategory)
-        {
-            if (id != premiseCategory.PremiseCategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(premiseCategory).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PremiseCategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        }       
 
         // POST: api/PremiseCategories/CreatePremiseCategory
         [HttpPost("CreatePremiseCategory")]
@@ -109,11 +78,6 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool PremiseCategoryExists(int id)
-        {
-            return _context.PremiseCategories.Any(e => e.PremiseCategoryId == id);
         }
     }
 }
