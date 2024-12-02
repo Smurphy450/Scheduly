@@ -22,27 +22,6 @@ namespace Scheduly.WebApi.Controllers
             _context = context;
         }
 
-        // GET: api/TimeRegistrations
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimeRegistration>>> GetTimeRegistrations()
-        {
-            return await _context.TimeRegistrations.ToListAsync();
-        }
-
-        // GET: api/TimeRegistrations/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TimeRegistration>> GetTimeRegistration(int id)
-        {
-            var timeRegistration = await _context.TimeRegistrations.FindAsync(id);
-
-            if (timeRegistration == null)
-            {
-                return NotFound();
-            }
-
-            return timeRegistration;
-        }
-
         // GET: api/TimeRegistrations/Exists/{userId}
         [HttpGet("Exists/{userId}")]
         public async Task<ActionResult<bool>> TimeRegistrationExistsForToday(int userId)
@@ -53,38 +32,6 @@ namespace Scheduly.WebApi.Controllers
                                 (tr.End == null || tr.End == DateTimeOffset.MinValue || tr.Start == tr.End));
 
             return exists;
-        }
-
-
-        // PUT: api/TimeRegistrations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTimeRegistration(int id, TimeRegistration timeRegistration)
-        {
-            if (id != timeRegistration.TimeId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(timeRegistration).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TimeRegistrationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/TimeRegistrations/TimeRegistrationDTOs
@@ -104,17 +51,6 @@ namespace Scheduly.WebApi.Controllers
 
             return Ok(timeRegistrations);
         }
-
-        //// POST: api/TimeRegistrations
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<TimeRegistration>> PostTimeRegistration(TimeRegistration timeRegistration)
-        //{
-        //    _context.TimeRegistrations.Add(timeRegistration);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetTimeRegistration", new { id = timeRegistration.TimeId }, timeRegistration);
-        //}
 
         [HttpPost]
         public async Task<ActionResult<TimeRegistration>> PostTimeRegistration(TimeRegistrationDTO timeRegistrationDto)
@@ -203,11 +139,6 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool TimeRegistrationExists(int id)
-        {
-            return _context.TimeRegistrations.Any(e => e.TimeId == id);
         }
     }
 }
