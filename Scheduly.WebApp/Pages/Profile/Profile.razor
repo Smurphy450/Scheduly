@@ -4,10 +4,6 @@
 
 <h3>Profile</h3>
 
-<MudItem xs="12" Class="d-flex mud-width-full">
-    <BackButton />
-</MudItem>
-
 <MudPaper Class="pa-4" Width="500px">
     <MudForm Model="@model">
         <MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.FirstName" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(5) ? false : true)" />
