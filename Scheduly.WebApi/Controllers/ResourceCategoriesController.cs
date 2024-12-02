@@ -42,37 +42,6 @@ namespace Scheduly.WebApi.Controllers
             return resourceCategory;
         }
 
-        // PUT: api/ResourceCategories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutResourceCategory(int id, ResourceCategory resourceCategory)
-        {
-            if (id != resourceCategory.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(resourceCategory).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ResourceCategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/ResourceCategories/CreateResourceCategory
         [HttpPost("CreateResourceCategory")]
         public async Task<ActionResult<ResourceCategory>> CreateResourceCategory([FromForm] CreateResourceCategoryDTO resourceCategoryDTO)
@@ -109,11 +78,6 @@ namespace Scheduly.WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ResourceCategoryExists(int id)
-        {
-            return _context.ResourceCategories.Any(e => e.CategoryId == id);
         }
     }
 }
