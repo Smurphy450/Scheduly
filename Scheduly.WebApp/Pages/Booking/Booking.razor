@@ -12,13 +12,13 @@
                 <MudItem>
                     <MudCard Style="height:120px; width:300px;">
                         <MudCardContent>
-                            <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
+                            <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b></MudText>
                         </MudCardContent>
                         <MudCardActions>
                             <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/ResourceDetails/{resourceCategory.CategoryId}")">Details</MudButton>
                             <AuthorizeView Roles="Administrator">
                                 <Authorized>
-                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResourceCategory(resourceCategory.CategoryId))" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeleteResourceCategory(resourceCategory.CategoryId))" />
                                 </Authorized>
                             </AuthorizeView>
                         </MudCardActions>
@@ -45,7 +45,7 @@
                             <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/PremiseDetails/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
                             <AuthorizeView Roles="Administrator">
                                 <Authorized>
-                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremiseCategory(premiseCategory.PremiseCategoryId))" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeletePremiseCategory(premiseCategory.PremiseCategoryId))" />
                                 </Authorized>
                             </AuthorizeView>
                         </MudCardActions>
