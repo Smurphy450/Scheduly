@@ -54,6 +54,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<SchedulyContext>();
     context.SeedZipCodes();
     context.SeedAdminSettings();
+    context.SeedAdminUser();
 }
 
 app.Run();

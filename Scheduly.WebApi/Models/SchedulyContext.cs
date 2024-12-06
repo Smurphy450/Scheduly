@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Scheduly.WebApi.Models;
@@ -901,6 +903,39 @@ public partial class SchedulyContext : DbContext
                 new AdminSetting { Name = "Må skifte Username", Enabled = true },
             };
             AdminSettings.AddRange(adminSetting);
+            SaveChanges();
+        }
+    }
+
+    public void SeedAdminUser()
+    {
+        if (!Users.Any(u => u.Username == "Admin"))
+        {
+            //kan ikke få lov til at kalde utilities herfra. Heller ikke med using statement
+            //var passwordHash = PasswordHasher.HashPassword("Administrator");
+
+            var adminUser = new User
+            {
+                Username = "Admin",
+                PasswordHash = "59PnafP1k9rcuGNMxbCfyQ3TphxKBqecsJI2Yv5vrms=",
+                Email = "admin@scheduly.com"
+            };
+
+            Users.Add(adminUser);
+            SaveChanges();
+
+            var adminProfile = new Profile
+            {
+                UserId = adminUser.UserId,
+                FirstName = "Admin",
+                LastName = "User",
+                Address = "Admin Address",
+                PhoneNumber = "1234567890",
+                ZipCode = 8000,
+                Admin = true
+            };
+
+            Profiles.Add(adminProfile);
             SaveChanges();
         }
     }
