@@ -2,7 +2,7 @@
 @inherits BookingBase;
 @attribute [Authorize(Roles = "Administrator,User")]
 
-<MudGrid >
+<MudGrid>
     <MudItem xs="12">
         <h3>Resources</h3>
 
@@ -10,17 +10,21 @@
             @foreach (var resourceCategory in ResourceCategoryList)
             {
                 <MudItem>
-                    <MudCard Style="height:120px; width:300px;">
-                        <MudCardContent>
-                            <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b</MudText>
-                        </MudCardContent>
+                    <MudCard Style="min-height:120px; width:300px;">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.body1"><b>@resourceCategory.Name</b></MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <AuthorizeView Roles="Administrator">
+                                    <Authorized>
+                                        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeleteResourceCategory(resourceCategory.CategoryId))" />
+                                    </Authorized>
+                                </AuthorizeView>
+                            </CardHeaderActions>
+                        </MudCardHeader>
                         <MudCardActions>
                             <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/ResourceDetails/{resourceCategory.CategoryId}")">Details</MudButton>
-                            <AuthorizeView Roles="Administrator">
-                                <Authorized>
-                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeleteResourceCategory(resourceCategory.CategoryId))" />
-                                </Authorized>
-                            </AuthorizeView>
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
@@ -38,16 +42,20 @@
             {
                 <MudItem>
                     <MudCard Style="height:120px; width:300px;">
-                        <MudCardContent>
+                        <MudCardHeader>
+                            <CardHeaderContent>
                             <MudText Typo="Typo.body1"><b>@premiseCategory.Name</b</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/PremiseDetails/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
-                            <AuthorizeView Roles="Administrator">
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <AuthorizeView Roles="Administrator">
                                 <Authorized>
-                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="@(() => DeletePremiseCategory(premiseCategory.PremiseCategoryId))" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" OnClick="@(() => DeletePremiseCategory(premiseCategory.PremiseCategoryId))" />
                                 </Authorized>
                             </AuthorizeView>
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/Booking/PremiseDetails/{premiseCategory.PremiseCategoryId}")">Details</MudButton>
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
