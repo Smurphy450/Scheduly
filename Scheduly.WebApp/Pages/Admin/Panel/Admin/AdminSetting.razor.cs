@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
 {
     public class AdminSettingBase : ComponentBase
     {
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         public List<AdminSettingDTO> AdminSettingList { get; set; } = new List<AdminSettingDTO>();
 
         protected override async Task OnInitializedAsync()
@@ -18,6 +21,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
         {
             try
             {
+                var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                 using (var httpClient = new HttpClient())
                 {
                     var getAllResponse = await httpClient.GetAsync("https://localhost:7171/api/AdminSettings");
@@ -26,6 +30,12 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
                         var content = await getAllResponse.Content.ReadAsStringAsync();
                         var adminSettings = JsonConvert.DeserializeObject<List<AdminSettingDTO>>(content);
                         AdminSettingList = adminSettings ?? new List<AdminSettingDTO>();
+
+                        // Update each setting with the userId
+                        foreach (var setting in AdminSettingList)
+                        {
+                            setting.UserId = userId;
+                        }
 
                         Console.WriteLine("Retrieved all admin settings.");
                     }

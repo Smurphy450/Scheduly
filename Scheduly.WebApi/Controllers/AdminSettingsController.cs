@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Utilities;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -25,12 +27,13 @@ namespace Scheduly.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<AdminSetting>>> GetAdminSettings()
         {
             return await _context.AdminSettings.ToListAsync();
-        }        
+        }       
 
         // PUT: api/AdminSettings/UpdateList
         [HttpPut("UpdateList")]
         public async Task<IActionResult> PutAdminSettingsList(List<AdminSettingDTO> adminSettingsDto)
         {
+            var userId = adminSettingsDto.FirstOrDefault()?.UserId ?? 0;
             var adminSettings = adminSettingsDto.Select(dto => new AdminSetting
             {
                 SettingsId = dto.SettingsId,
@@ -46,8 +49,15 @@ namespace Scheduly.WebApi.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                {
+                    UserId = userId,
+                    Action = "UpdateAdminSettings",
+                    AffectedData = "Updated admin settings list"
+                });
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 foreach (var adminSetting in adminSettings)
                 {
@@ -56,7 +66,14 @@ namespace Scheduly.WebApi.Controllers
                         return NotFound();
                     }
                 }
+
+                await ErrorLoggingHelper.LogErrorAsync(_context, userId, "UpdateAdminSettings", ex);
                 throw;
+            }
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, userId, "UpdateAdminSettings", ex);
+                return StatusCode(500, "Internal server error");
             }
 
             return NoContent();
