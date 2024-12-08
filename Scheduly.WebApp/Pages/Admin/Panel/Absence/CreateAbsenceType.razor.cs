@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -9,6 +11,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 {
     public class CreateAbsenceTypeBase : ComponentBase
     {
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
         [Parameter] public int Id { get; set; } = 0;
         public string Name { get; set; }
@@ -19,6 +22,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
         {
             if (ValidateAbsenceInputs())
             {
+                var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                 // Adjust WageFactor
                 WageFactor = WageFactor / 100;
 
@@ -27,7 +31,8 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
                     AbsenceTypeId = Id, // ID is set to 0 for creation
                     Name = Name,
                     WageFactor = WageFactor,
-                    MustBeApproved = MustBeApproved
+                    MustBeApproved = MustBeApproved,
+                    UserId = userId
                 };
 
                 await SendAbsenceTypeCreationRequest(absenceTypeDto);
