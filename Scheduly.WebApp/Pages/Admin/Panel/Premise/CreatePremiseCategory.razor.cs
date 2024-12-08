@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http.Headers;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
 {
     public class CreatePremiseCategoryBase : ComponentBase
     {
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
 
         public string CategoryName { get; set; }
@@ -18,12 +21,14 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                 {
                     try
                     {
+                        var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
                         var url = "https://localhost:7171/api/PremiseCategories/CreatePremiseCategory";
 
                         var formData = new Dictionary<string, string>
                         {
-                            { "name", CategoryName }
+                            { "name", CategoryName },
+                            { "userId", userId.ToString() }
                         };
 
                         var content = new FormUrlEncodedContent(formData);

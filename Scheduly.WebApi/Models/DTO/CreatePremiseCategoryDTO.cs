@@ -6,4 +6,5 @@ namespace Scheduly.WebApi.Models.DTO;
 public class CreatePremiseCategoryDTO
 {
     public string Name { get; set; }
+    public int UserId { get; set; }
 }
