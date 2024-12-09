@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Booking
 {
 	public class BookingBase : ComponentBase
     {
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         public List<ResourceCategory> ResourceCategoryList = [];
         public List<PremiseCategory> PremiseCategoryList = [];
 
@@ -118,14 +121,13 @@ namespace Scheduly.WebApp.Pages.Booking
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/PremiseCategories/{premiseCategoryId}");
+                    var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/PremiseCategories/{premiseCategoryId}?userId={userId}");
                     if (getAllResponse.IsSuccessStatusCode)
                     {
                         // Load items again
                         PremiseCategoryList.Clear();
                         await GetAllPremiseTypes();
-
-                        Console.WriteLine("Deleted category.");
                     }
                     else
                     {

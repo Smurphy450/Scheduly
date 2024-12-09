@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Headers;
 
@@ -22,25 +23,21 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                     try
                     {
                         var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
-                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var url = "https://localhost:7171/api/PremiseCategories/CreatePremiseCategory";
 
-                        var formData = new Dictionary<string, string>
+                        var premiseCategoryDTO = new CreatePremiseCategoryDTO
                         {
-                            { "name", CategoryName },
-                            { "userId", userId.ToString() }
+                            Name = CategoryName,
+                            UserId = userId
                         };
 
-                        var content = new FormUrlEncodedContent(formData);
-
-                        var response = await httpClient.PostAsync(url, content);
+                        var response = await httpClient.PostAsJsonAsync(url, premiseCategoryDTO);
 
                         if (response.IsSuccessStatusCode)
                         {
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                             Snackbar.Add("Created new category.", Severity.Success);
-
-                            Console.WriteLine("Created new category.");
 
                             CategoryName = string.Empty;
                         }
@@ -48,8 +45,6 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                         {
                             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                             Snackbar.Add("Failed to create new premise category!", Severity.Error);
-
-                            Console.WriteLine($"Failed to create new premise category. Status: {response.StatusCode}");
                         }
                     }
                     catch (HttpRequestException e)
@@ -62,8 +57,6 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
             {
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                 Snackbar.Add("Error creating new premise category!", Severity.Error);
-
-                Console.WriteLine($"Error creating new premise category: {ex.Message}");
             }
         }
     }
