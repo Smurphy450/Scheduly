@@ -13,7 +13,6 @@ namespace Scheduly.WebApp.Pages.Booking
     public class PremiseDetailsBase : ComponentBase
     {
         [Parameter] public int PremiseCategoryId { get; set; }
-
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         protected DateTime? startDate { get; set; } = DateTime.Now.Date;
@@ -21,7 +20,7 @@ namespace Scheduly.WebApp.Pages.Booking
         protected DateTime? endDate { get; set; } = DateTime.Now.Date;
         protected TimeSpan? endTime { get; set; } = new TimeSpan(16, 0, 0);
 
-        public List<Premise> PremiseList = [];
+        public List<PremiseDTO> PremiseList = [];
         public string PremiseCategoryName = "";
 
         protected override async Task OnInitializedAsync()
@@ -80,8 +79,8 @@ namespace Scheduly.WebApp.Pages.Booking
                 {
                     var content = await getAllResponse.Content.ReadAsStringAsync();
 
-                    var premise = JsonConvert.DeserializeObject<List<Premise>>(content);
-                    PremiseList = premise ?? new List<Premise>();
+                    var premises = JsonConvert.DeserializeObject<List<PremiseDTO>>(content);
+                    PremiseList = premises ?? new List<PremiseDTO>();
 
                     Console.WriteLine("Retrieved all premises.");
                 }
@@ -158,7 +157,8 @@ namespace Scheduly.WebApp.Pages.Booking
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Premises/{premiseId}");
+                    int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Premises/{premiseId}?userId={userId}");
                     if (getAllResponse.IsSuccessStatusCode)
                     {
                         // Load items again

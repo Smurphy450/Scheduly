@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
@@ -47,16 +42,17 @@ namespace Scheduly.WebApi.Controllers
         [HttpPost("CreatePremiseCategory")]
         public async Task<ActionResult<PremiseCategory>> CreatePremiseCategory([FromBody] CreatePremiseCategoryDTO premiseCategoryDTO)
         {
-            if (!string.IsNullOrEmpty(premiseCategoryDTO.Name))
+            try
             {
-                var premiseCategory = new PremiseCategory
+                if (!string.IsNullOrEmpty(premiseCategoryDTO.Name))
                 {
-                    Name = premiseCategoryDTO.Name
-                };
+                    var premiseCategory = new PremiseCategory
+                    {
+                        Name = premiseCategoryDTO.Name
+                    };
 
-                _context.PremiseCategories.Add(premiseCategory);
-                try
-                {
+                    _context.PremiseCategories.Add(premiseCategory);
+                
                     await _context.SaveChangesAsync();
 
                     await LoggingHelper.LogActionAsync(_context, new LoggingDTO
@@ -67,36 +63,36 @@ namespace Scheduly.WebApi.Controllers
                     });
 
                     return Ok(new { Success = true });
+                
                 }
-                catch (Exception ex)
+                else
                 {
-                    await ErrorLoggingHelper.LogErrorAsync(_context, premiseCategoryDTO.UserId, "CreatePremiseCategory", ex);
-                    return StatusCode(500, "Internal server error");
+                    return BadRequest("Name is required");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Name is required");
+                await ErrorLoggingHelper.LogErrorAsync(_context, premiseCategoryDTO.UserId, "CreatePremiseCategory", ex);
+                return StatusCode(500, "Internal server error");
             }
         }
 
         // DELETE: api/PremiseCategories/5
-        
-
-        [HttpDelete("{id}")] //with logging
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePremiseCategory(int id, [FromQuery] int userId)
         {
-            var premiseCategory = await _context.PremiseCategories.FindAsync(id);
-            if (premiseCategory == null)
-            {
-                return NotFound();
-            }
-
-            var premiseCategoryName = premiseCategory.Name;
-
-            _context.PremiseCategories.Remove(premiseCategory);
             try
             {
+                var premiseCategory = await _context.PremiseCategories.FindAsync(id);
+                if (premiseCategory == null)
+                {
+                    return NotFound();
+                }
+
+                var premiseCategoryName = premiseCategory.Name;
+
+                _context.PremiseCategories.Remove(premiseCategory);
+            
                 await _context.SaveChangesAsync();
 
                 await LoggingHelper.LogActionAsync(_context, new LoggingDTO

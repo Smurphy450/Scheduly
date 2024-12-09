@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Utilities;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -23,60 +24,111 @@ namespace Scheduly.WebApi.Controllers
 
         // GET: api/Premises/Category/{premisecategoryId}
         [HttpGet("Category/{premisecategoryId}")]
-        public async Task<ActionResult<IEnumerable<Premise>>> GetResourcesByCategory(int premisecategoryId)
+        public async Task<ActionResult<IEnumerable<PremiseDTO>>> GetPremisesByCategory(int premisecategoryId)
         {
-            var category = await _context.Resources.FindAsync(premisecategoryId);
-
-            if (category == null)
+            try
             {
-                return NotFound();
-            }
+                var category = await _context.PremiseCategories.FindAsync(premisecategoryId);
 
-            return await _context.Premises
-                .Where(r => r.PremiseCategoryId == premisecategoryId)
-                .ToListAsync();
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                var premises = await _context.Premises
+                    .Where(r => r.PremiseCategoryId == premisecategoryId)
+                    .Select(p => new PremiseDTO
+                    {
+                        PremiseId = p.PremiseId,
+                        PremiseCategoryId = p.PremiseCategoryId,
+                        Name = p.Name,
+                        Size = p.Size,
+                        Description = p.Description,
+                        MustBeApproved = p.MustBeApproved
+                    })
+                    .ToListAsync();
+
+                return Ok(premises);
+            }
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, 0, "GetPremisesByCategory", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("CreatePremise")]
-        public async Task<ActionResult<Premise>> CreateResource([FromBody] CreatePremiseDTO premiseDTO)
+        public async Task<ActionResult<Premise>> CreatePremise([FromBody] CreatePremiseDTO premiseDTO)
         {
-            if (!string.IsNullOrEmpty(premiseDTO.Name))
+            try
             {
-                var premise = new Premise
+                if (!string.IsNullOrEmpty(premiseDTO.Name))
                 {
-                    PremiseCategoryId = premiseDTO.PremiseCategoryId,
-                    Name = premiseDTO.Name,
-                    Size = premiseDTO.Size,
-                    Description = premiseDTO.Description,
-                    MustBeApproved = premiseDTO.MustBeApproved,
-                };
+                    var premise = new Premise
+                    {
+                        PremiseCategoryId = premiseDTO.PremiseCategoryId,
+                        Name = premiseDTO.Name,
+                        Size = premiseDTO.Size,
+                        Description = premiseDTO.Description,
+                        MustBeApproved = premiseDTO.MustBeApproved,
+                    };
 
-                _context.Premises.Add(premise);
-                await _context.SaveChangesAsync();
+                    _context.Premises.Add(premise);
+                
+                    await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetPremise", new { id = premise.PremiseCategoryId }, premise);
+                    await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                    {
+                        UserId = premiseDTO.UserId,
+                        Action = "CreatePremise",
+                        AffectedData = $"Created premise with name {premiseDTO.Name}"
+                    });
+
+                    return Ok(new { Success = true });
+                }
+                else
+                {
+                    return BadRequest("Name is required");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Name is required");
+                await ErrorLoggingHelper.LogErrorAsync(_context, premiseDTO.UserId, "CreatePremise", ex);
+                return StatusCode(500, "Internal server error");
             }
         }
 
-
-        // DELETE: api/Premises/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePremise(int id)
+        public async Task<IActionResult> DeletePremise(int id, [FromQuery] int userId)
         {
-            var premise = await _context.Premises.FindAsync(id);
-            if (premise == null)
+            try
             {
-                return NotFound();
+                var premise = await _context.Premises.FindAsync(id);
+                if (premise == null)
+                {
+                    return NotFound();
+                }
+
+                var premiseName = premise.Name;
+
+                _context.Premises.Remove(premise);
+            
+                await _context.SaveChangesAsync();
+
+                await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                {
+                    UserId = userId,
+                    Action = "DeletePremise",
+                    AffectedData = $"Deleted premise with ID {id} and Name {premiseName}"
+                });
+
+                return NoContent();
             }
-
-            _context.Premises.Remove(premise);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, userId, "DeletePremise", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

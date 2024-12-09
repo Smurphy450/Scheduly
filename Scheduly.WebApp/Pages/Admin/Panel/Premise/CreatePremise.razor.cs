@@ -8,13 +8,15 @@ using System.Text;
 using System.Text.Json;
 using Scheduly.WebApp.Models;
 using System;
+using Microsoft.AspNetCore.Components.Authorization;
+using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
 {
     public class CreatePremiseBase : ComponentBase
     {
         [Inject] private ISnackbar Snackbar { get; set; }
-
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         protected string PremiseName { get; set; }
         protected string PremiseSize { get; set; }
         protected string PremiseDescription { get; set; }
@@ -68,13 +70,15 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
         {
             if (ValidateResourceInputs())
             {
+                var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                 var premiseDto = new CreatePremiseDTO
                 {
                     PremiseCategoryId = _selectedPremiseCategoryId,
                     Name = PremiseName,
                     Size = PremiseSize,
                     Description = PremiseDescription ?? string.Empty,
-                    MustBeApproved = MustBeApproved
+                    MustBeApproved = MustBeApproved,
+                    UserId = userId
                 };
 
                 await SendResourceCreationRequest(premiseDto);
