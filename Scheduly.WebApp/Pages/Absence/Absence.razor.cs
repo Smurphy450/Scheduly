@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Absence;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 

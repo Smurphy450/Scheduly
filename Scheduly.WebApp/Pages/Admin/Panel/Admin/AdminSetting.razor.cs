@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
-using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO.AdminSettings;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 

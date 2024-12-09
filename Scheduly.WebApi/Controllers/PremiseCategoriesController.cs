@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Common;
+using Scheduly.WebApi.Models.DTO.Premise;
 using Scheduly.WebApi.Utilities;
 
 namespace Scheduly.WebApi.Controllers

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.User;
 
 namespace Scheduly.WebApi.Controllers
 {

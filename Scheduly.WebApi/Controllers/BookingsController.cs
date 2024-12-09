@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
-using Scheduly.WebApi.Models.DTO;
-using Scheduly.WebApp.Models;
+using Scheduly.WebApi.Models.DTO.Common;
+using Scheduly.WebApi.Models.DTO.Booking;
+using Scheduly.WebApi.Models.DTO.User;
 
 namespace Scheduly.WebApi.Controllers
 {

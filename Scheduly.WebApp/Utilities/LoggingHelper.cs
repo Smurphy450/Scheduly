@@ -1,5 +1,5 @@
 ﻿using Scheduly.WebApi.Models;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Common;
 
 namespace Scheduly.WebApp.Utilities
 {

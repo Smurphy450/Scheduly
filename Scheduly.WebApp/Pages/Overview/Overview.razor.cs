@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Scheduly.WebApi.Models.DTO;
-using Scheduly.WebApp.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Common;
+using Scheduly.WebApi.Models.DTO.User;
+using Scheduly.WebApi.Models.DTO.TimeRegistration;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Overview

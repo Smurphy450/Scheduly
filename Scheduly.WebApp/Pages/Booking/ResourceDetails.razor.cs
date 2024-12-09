@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Newtonsoft.Json;
 using Scheduly.WebApi.Models;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Booking;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http;
 using System.Security.Claims;

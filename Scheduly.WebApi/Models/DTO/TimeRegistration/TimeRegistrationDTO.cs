@@ -1,4 +1,4 @@
-﻿namespace Scheduly.WebApp.Models.DTO
+﻿namespace Scheduly.WebApi.Models.DTO.TimeRegistration
 {
     public class TimeRegistrationDTO
     {

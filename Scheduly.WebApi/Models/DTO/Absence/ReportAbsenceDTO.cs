@@ -1,4 +1,4 @@
-﻿namespace Scheduly.WebApp.Models
+﻿namespace Scheduly.WebApi.Models.DTO.Absence
 {
     public class ReportAbsenceDTO
     {

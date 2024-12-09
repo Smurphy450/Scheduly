@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Scheduly.WebApi.Models.DTO.Booking;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Booking
 {
-	public class ApproveBookingDetailsBase : ComponentBase
+    public class ApproveBookingDetailsBase : ComponentBase
 	{
 		[Parameter] public int BookingId { get; set; }
 
 		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 		[Inject] private ISnackbar Snackbar { get; set; }
 
-		protected WebApi.Models.DTO.ApproveBookingDTO model { get; set; } = new WebApi.Models.DTO.ApproveBookingDTO();
+		protected ApproveBookingDTO model { get; set; } = new ApproveBookingDTO();
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -31,8 +32,8 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Booking
 						var response = await httpClient.GetAsync($"https://localhost:7171/api/Bookings/ApproveBooking/{BookingId}");
 						if (response.IsSuccessStatusCode)
 						{
-							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.DTO.ApproveBookingDTO>();
-							model = absence ?? new WebApi.Models.DTO.ApproveBookingDTO();
+							var absence = await response.Content.ReadFromJsonAsync<ApproveBookingDTO>();
+							model = absence ?? new ApproveBookingDTO();
 						}
 						else
 						{

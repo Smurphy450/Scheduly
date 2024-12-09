@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using Scheduly.WebApp.Models;
 using Scheduly.WebApi.Models;
 using static System.Net.WebRequestMethods;
+using Scheduly.WebApi.Models.DTO.Absence;
 
 namespace Scheduly.WebApp.Pages.Absence
 {

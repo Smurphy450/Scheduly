@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Premise;
 using Scheduly.WebApi.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Scheduly.WebApp.Models;
+using Scheduly.WebApi.Models.DTO.TimeRegistration;
 using System;
 using Microsoft.AspNetCore.Components.Authorization;
 using Scheduly.WebApp.Utilities;

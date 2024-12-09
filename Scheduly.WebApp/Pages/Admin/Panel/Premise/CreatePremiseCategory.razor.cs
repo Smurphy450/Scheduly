@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Premise;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Headers;
 

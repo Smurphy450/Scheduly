@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO.Absence;
 using Scheduly.WebApp.Pages.Booking;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 {
-	public class ApproveAbsenceDetailsBase : ComponentBase
+    public class ApproveAbsenceDetailsBase : ComponentBase
 	{
 		[Parameter] public int AbsenceId { get; set; }
 
 		[Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
 
-        protected WebApi.Models.DTO.ApproveAbsenceDTO model { get; set; } = new WebApi.Models.DTO.ApproveAbsenceDTO();
+        protected ApproveAbsenceDTO model { get; set; } = new ApproveAbsenceDTO();
 		
 		protected override async Task OnInitializedAsync()
 		{
@@ -33,8 +33,8 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Absence
 						var response = await httpClient.GetAsync($"https://localhost:7171/api/Absence/ApproveAbsence/{AbsenceId}");
 						if (response.IsSuccessStatusCode)
 						{
-							var absence = await response.Content.ReadFromJsonAsync<WebApi.Models.DTO.ApproveAbsenceDTO>();
-							model = absence ?? new WebApi.Models.DTO.ApproveAbsenceDTO();
+							var absence = await response.Content.ReadFromJsonAsync<ApproveAbsenceDTO>();
+							model = absence ?? new ApproveAbsenceDTO();
 						}
 						else
 						{

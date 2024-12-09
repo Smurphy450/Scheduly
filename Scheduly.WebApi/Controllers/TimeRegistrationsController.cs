@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
-using Scheduly.WebApp.Models.DTO;
-using Scheduly.WebApp.Models;
+using Scheduly.WebApi.Models.DTO.TimeRegistration;
 
 namespace Scheduly.WebApi.Controllers
 {

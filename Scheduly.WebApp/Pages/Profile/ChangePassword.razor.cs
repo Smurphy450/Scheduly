@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.User;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 using System.Security.Claims;

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Scheduly.WebApi.Models.DTO;
+using Scheduly.WebApi.Models.DTO.Notification;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;

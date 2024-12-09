@@ -1,6 +1,6 @@
-﻿namespace Scheduly.WebApi.Models.DTO
+﻿namespace Scheduly.WebApi.Models.DTO.Absence
 {
-    public class ApproveAbsenceDTO
+    public class AbsenceDTO
     {
         public int AbsenceId { get; set; }
         public int UserId { get; set; }

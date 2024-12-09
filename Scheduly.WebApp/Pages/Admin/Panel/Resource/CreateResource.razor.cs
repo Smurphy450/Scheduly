@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Scheduly.WebApi.Models.DTO;
 using Scheduly.WebApi.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Scheduly.WebApi.Models.DTO.Resource;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
 {

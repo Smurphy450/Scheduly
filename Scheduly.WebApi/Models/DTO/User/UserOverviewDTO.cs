@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Scheduly.WebApi.Models.DTO.Common;
 
-namespace Scheduly.WebApi.Models.DTO
+namespace Scheduly.WebApi.Models.DTO.User
 {
     public class UserOverviewDTO
     {

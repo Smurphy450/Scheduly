@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Scheduly.WebApp.Models.DTO;
+using Scheduly.WebApi.Models.DTO.TimeRegistration;
 using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.TimeRegistration
 {
-	public class TimeRegistrationBase : ComponentBase
+    public class TimeRegistrationBase : ComponentBase
     {
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }

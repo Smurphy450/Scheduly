@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Newtonsoft.Json;
-using Scheduly.WebApi.Models.DTO;
-using Scheduly.WebApi.Models;
-using Scheduly.WebApp.Models.DTO;
+using Scheduly.WebApi.Models.DTO.User;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
 using System.Text;
+using Scheduly.WebApi.Models.DTO.AdminSettings;
 
 namespace Scheduly.WebApp.Pages.Profile
 {

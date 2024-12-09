@@ -1,4 +1,4 @@
-﻿namespace Scheduly.WebApi.Models.DTO
+﻿namespace Scheduly.WebApi.Models.DTO.Absence
 {
     public class AbsenceQueryDTO
     {
