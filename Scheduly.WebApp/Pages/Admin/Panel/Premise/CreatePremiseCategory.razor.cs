@@ -26,11 +26,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var url = "https://localhost:7171/api/PremiseCategories/CreatePremiseCategory";
 
-                        var premiseCategoryDTO = new CreatePremiseCategoryDTO
-                        {
-                            Name = CategoryName,
-                            UserId = userId
-                        };
+                        var premiseCategoryDTO = CreatePremiseCategoryDTO(CategoryName, userId);
 
                         var response = await httpClient.PostAsJsonAsync(url, premiseCategoryDTO);
 
@@ -58,6 +54,15 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                 Snackbar.Add("Error creating new premise category!", Severity.Error);
             }
+        }
+
+        private CreatePremiseCategoryDTO CreatePremiseCategoryDTO(string name, int userId)
+        {
+            return new CreatePremiseCategoryDTO
+            {
+                Name = name,
+                UserId = userId
+            };
         }
     }
 }
