@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Scheduly.WebApi.Models;
 using static System.Net.WebRequestMethods;
 using Scheduly.WebApi.Models.DTO.Absence;
+using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Absence
 {
@@ -36,14 +37,14 @@ namespace Scheduly.WebApp.Pages.Absence
 
         protected override async Task OnInitializedAsync()
         {
-            await GetUserId();
+            UserId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
             await LoadAbsenceTypeNames();
             _selectedAbsenceTypeId = AbsenceTypes.FirstOrDefault()?.AbsenceTypeId ?? 0;
         }
 
         protected async Task ReportAbsenceAsync()
         {
-            await GetUserId();
+            UserId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
 
             if (ValidateInputs())
             {
@@ -93,24 +94,6 @@ namespace Scheduly.WebApp.Pages.Absence
             catch (HttpRequestException e)
             {
                 Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
-            }
-        }
-
-        private async Task GetUserId()
-        {
-            try
-            {
-                var authState = await authStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    UserId = int.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out int a) ? a : 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApi.Models.DTO.User;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Json;
@@ -11,8 +12,8 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
         public List<UserInfoDTO> UserList { get; set; } = new List<UserInfoDTO>();
-
         protected override async Task OnInitializedAsync()
         {
             await GetAllUsers();
@@ -29,18 +30,16 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
                     {
                         var users = await response.Content.ReadFromJsonAsync<List<UserInfoDTO>>();
                         UserList = users ?? new List<UserInfoDTO>();
-
-                        Console.WriteLine("Retrieved all users.");
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to get all users. Status: {response.StatusCode}");
+                        Snackbar.Add("Failed to get all users.", Severity.Error);
                     }
                 }
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
             }
         }
         protected async Task DeleteUser(int userId)
@@ -49,7 +48,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
 
             if (userId == currentUserId)
             {
-                Console.WriteLine("You cannot delete your own user.");
+                Snackbar.Add("You cannot delete your own user.", Severity.Error);
                 return;
             }
 
@@ -57,21 +56,21 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Admin
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.DeleteAsync($"https://localhost:7171/api/Users/{userId}");
+                    var response = await httpClient.DeleteAsync($"https://localhost:7171/api/Users/{userId}?userId={currentUserId}");
                     if (response.IsSuccessStatusCode)
                     {
                         UserList = UserList.Where(u => u.UserId != userId).ToList();
-                        Console.WriteLine("User deleted successfully.");
+                        Snackbar.Add("User deleted successfully.", Severity.Error);
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to delete user. Status: {response.StatusCode}");
+                        Snackbar.Add($"Failed to delete user. Status: {response.StatusCode}", Severity.Error);
                     }
                 }
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
             }
         }
 
