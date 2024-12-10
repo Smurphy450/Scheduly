@@ -114,46 +114,26 @@ namespace Scheduly.WebApi.Controllers
             }
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteUser(int id)
-        //{
-        //    var user = await _context.Users.FindAsync(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == id);
-        //    if (profile != null)
-        //    {
-        //        _context.Profiles.Remove(profile);
-        //    }
-
-        //    _context.Users.Remove(user);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id, [FromQuery] int userId)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == id);
-            if (profile != null)
-            {
-                _context.Profiles.Remove(profile);
-            }
-
-            _context.Users.Remove(user);
-
             try
             {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == id);
+                if (profile != null)
+                {
+                    _context.Profiles.Remove(profile);
+                }
+
+                _context.Users.Remove(user);
+
+            
                 await _context.SaveChangesAsync();
                 await LoggingHelper.LogActionAsync(_context, new LoggingDTO
                 {
