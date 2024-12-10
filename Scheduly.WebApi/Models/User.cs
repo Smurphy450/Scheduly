@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scheduly.WebApi.Models.DTO.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Scheduly.WebApi.Models;

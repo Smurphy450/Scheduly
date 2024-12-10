@@ -10,6 +10,7 @@ using Scheduly.WebApp.Authentication;
 using Scheduly.WebApp.Utilities;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 
 namespace Scheduly.WebApp.Pages.Login
 {
@@ -18,9 +19,9 @@ namespace Scheduly.WebApp.Pages.Login
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; }
 
         protected User model = new User();
-        [Inject] private IJSRuntime JSRuntime { get; set; }
         protected async Task HandleKeyDown(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
@@ -37,53 +38,54 @@ namespace Scheduly.WebApp.Pages.Login
                 var username = model.Username;
                 var passwordHash = PasswordHasher.HashPassword(model.PasswordHash);
 
-                using (var httpClient = new HttpClient())
+                var userAuthResponse = await AuthenticateUserAsync(username, passwordHash);
+
+                if (userAuthResponse != null)
                 {
-                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
-                    var url = "https://localhost:7171/api/Users/authenticate";
-
-                    // Create form data
-                    var formData = new Dictionary<string, string>
+                    var customerAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+                    await customerAuthStateProvider.UpdateAuthenticationState(new UserSession
                     {
-                        { "username", username },
-                        { "passwordHash", passwordHash }
-                    };
+                        Username = userAuthResponse.Username,
+                        UserID = userAuthResponse.UserID,
+                        Role = userAuthResponse.Role
+                    });
 
-                    // Convert form data to string
-                    var content = new FormUrlEncodedContent(formData);
-
-                    // Send POST request
-                    var response = await httpClient.PostAsync(url, content);
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var contentString = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error Details: {contentString}");
-                        Snackbar.Add("Authentication failed. Please check your credentials.", Severity.Error);
-                        Console.WriteLine($"Authentication failed for username: {username}");
-                    }
-                    else
-                    {
-                        var userAuthResponse = await response.Content.ReadFromJsonAsync<UserSession>();
-                        if (userAuthResponse != null)
-                        {
-                            var customerAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-                            await customerAuthStateProvider.UpdateAuthenticationState(new UserSession
-                            {
-                                Username = userAuthResponse.Username,
-                                UserID = userAuthResponse.UserID,
-                                Role = userAuthResponse.Role
-                            });
-
-                            NavigationManager.NavigateTo("/Overview");
-                        }
-                    }
+                    NavigationManager.NavigateTo("/Overview");
+                }
+                else
+                {
+                    Snackbar.Add("Authentication failed. Please check your credentials.", Severity.Error);
                 }
             }
             catch (Exception ex)
             {
                 Snackbar.Add($"An error occurred during authentication: {ex.Message}", Severity.Error);
                 Console.WriteLine($"Error during authentication attempt: {ex.Message}");
+            }
+        }
+
+        private async Task<UserSession> AuthenticateUserAsync(string username, string passwordHash)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var url = "https://localhost:7171/api/Users/authenticate";
+
+                var userAuthRequest = new UserAuthRequest
+                {
+                    Username = username,
+                    PasswordHash = passwordHash
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(userAuthRequest), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<UserSession>();
+                }
+
+                return null;
             }
         }
     }

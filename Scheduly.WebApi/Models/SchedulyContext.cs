@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Scheduly.WebApi.Models.DTO.Common;
 
 namespace Scheduly.WebApi.Models;
 
