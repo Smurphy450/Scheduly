@@ -16,14 +16,10 @@ namespace Scheduly.WebApp.Pages.Overview
         protected double AverageWeeklyWorkTime { get; set; } = 0.0;
         protected List<OverviewPremisesDTO> AllPremises { get; set; } = new();
         protected List<OverviewResourcesDTO> AllResources { get; set; } = new();
-
         protected override async Task OnInitializedAsync()
         {
-            await CheckDayStarted();
-            await GetAverageWeeklyWorkTime();
-            await GetUserOverview();
+            await LoadOverviewData();
         }
-
         private async Task CheckDayStarted()
         {
             var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
@@ -51,37 +47,6 @@ namespace Scheduly.WebApp.Pages.Overview
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error checking if day started: {ex.Message}");
-                }
-            }
-        }
-
-        private async Task GetAverageWeeklyWorkTime()
-        {
-            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
-            if (userId != 0)
-            {
-                try
-                {
-                    using (var httpClient = new HttpClient())
-                    {
-                        var response = await httpClient.GetAsync($"https://localhost:7171/api/TimeRegistrations/AverageWeeklyWorkTime/{userId}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            AverageWeeklyWorkTime = await response.Content.ReadFromJsonAsync<double>();
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Failed to get average weekly work time. Status: {response.StatusCode}");
-                        }
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine($"An error occurred while making the request: {e.Message}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error getting average weekly work time: {ex.Message}");
                 }
             }
         }
@@ -122,6 +87,44 @@ namespace Scheduly.WebApp.Pages.Overview
             }
         }
 
+        private async Task LoadOverviewData()
+        {
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+            if (userId != 0)
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var response = await httpClient.GetAsync($"https://localhost:7171/api/Overview/GetOverviewData/{userId}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var overviewData = await response.Content.ReadFromJsonAsync<OverviewDataDTO>();
+                            if (overviewData != null)
+                            {
+                                DayStarted = overviewData.DayStarted;
+                                AverageWeeklyWorkTime = overviewData.AverageWeeklyWorkTime;
+                                AllPremises = overviewData.UserOverview.OverviewPremises;
+                                AllResources = overviewData.UserOverview.OverviewResources;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to load overview data. Status: {response.StatusCode}");
+                        }
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading overview data: {ex.Message}");
+                }
+            }
+        }
+
         protected async Task StartDay()
         {
             await RegisterTime(true);
@@ -152,16 +155,19 @@ namespace Scheduly.WebApp.Pages.Overview
                         if (!response.IsSuccessStatusCode)
                         {
                             Console.WriteLine($"Failed to register time. Status: {response.StatusCode}");
+                            Snackbar.Add("Failed to register time", Severity.Error);
                         }
                     }
                 }
                 catch (HttpRequestException e)
                 {
                     Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                    Snackbar.Add("An error occurred while making the request", Severity.Error);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error registering time: {ex.Message}");
+                    Snackbar.Add("Error registering time", Severity.Error);
                 }
             }
             await CheckDayStarted();
@@ -177,19 +183,19 @@ namespace Scheduly.WebApp.Pages.Overview
 					if (getAllResponse.IsSuccessStatusCode)
 					{
                         Snackbar.Add("Unbooked item.", Severity.Success);
-						Console.WriteLine("Unbooked booking.");
 
 						await GetUserOverview();
-					}
+                    }
 					else
 					{
-						Console.WriteLine($"Failed to Delete booking. Status: {getAllResponse.StatusCode}");
+                        Snackbar.Add("Failed to Delete booking", Severity.Error);
+                        Console.WriteLine($"Failed to Delete booking. Status: {getAllResponse.StatusCode}");
 					}
 				}
 			}
 			catch (HttpRequestException e)
 			{
-				Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                Snackbar.Add($"An error occurred while making the request: {e.Message}", Severity.Error);
 			}
 		}
 	}

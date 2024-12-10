@@ -10,7 +10,6 @@ namespace Scheduly.WebApp.Pages.TimeRegistration
     {
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
-
         protected List<TimeRegistrationDTO> TimeRegistration { get; set; } = new List<TimeRegistrationDTO>();
         protected DateTime? startDate { get; set; } = DateTime.Now.AddMonths(-3);
         protected DateTime? endDate { get; set; } = DateTime.Now.AddMonths(1);
@@ -55,7 +54,8 @@ namespace Scheduly.WebApp.Pages.TimeRegistration
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://localhost:7171/api/TimeRegistrations/{timeId}");
+                var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                var response = await httpClient.DeleteAsync($"https://localhost:7171/api/TimeRegistrations/{timeId}?userId={userId}");
                 if (response.IsSuccessStatusCode)
                 {
                     TimeRegistration.RemoveAll(a => a.TimeId == timeId);

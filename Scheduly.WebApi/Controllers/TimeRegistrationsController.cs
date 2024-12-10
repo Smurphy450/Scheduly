@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO.Common;
 using Scheduly.WebApi.Models.DTO.TimeRegistration;
+using Scheduly.WebApi.Utilities;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -126,18 +128,33 @@ namespace Scheduly.WebApi.Controllers
 
         // DELETE: api/TimeRegistrations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTimeRegistration(int id)
+        public async Task<IActionResult> DeleteTimeRegistration(int id, [FromQuery] int userId)
         {
-            var timeRegistration = await _context.TimeRegistrations.FindAsync(id);
-            if (timeRegistration == null)
+            try
             {
-                return NotFound();
+                var timeRegistration = await _context.TimeRegistrations.FindAsync(id);
+                if (timeRegistration == null)
+                {
+                    return NotFound();
+                }
+
+                _context.TimeRegistrations.Remove(timeRegistration);
+                await _context.SaveChangesAsync();
+
+                await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                {
+                    UserId = userId,
+                    Action = "DeleteTimeRegistration",
+                    AffectedData = $"Deleted time registration with ID: {id}"
+                });
+
+                return NoContent();
             }
-
-            _context.TimeRegistrations.Remove(timeRegistration);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, userId, "DeleteTimeRegistration", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
