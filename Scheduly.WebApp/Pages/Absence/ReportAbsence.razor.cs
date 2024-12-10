@@ -7,6 +7,7 @@ using Scheduly.WebApi.Models;
 using static System.Net.WebRequestMethods;
 using Scheduly.WebApi.Models.DTO.Absence;
 using Scheduly.WebApp.Utilities;
+using Microsoft.JSInterop;
 
 namespace Scheduly.WebApp.Pages.Absence
 {
@@ -14,8 +15,9 @@ namespace Scheduly.WebApp.Pages.Absence
     {
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+		[Inject] private IJSRuntime JSRuntime { get; set; }
 
-        public int AbsenceTypeId { get; set; }
+		public int AbsenceTypeId { get; set; }
         public int UserId { get; set; }
         public DateTimeOffset Start { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset End { get; set; } = DateTimeOffset.Now;
@@ -84,7 +86,8 @@ namespace Scheduly.WebApp.Pages.Absence
                     if (response.IsSuccessStatusCode)
                     {
                         Snackbar.Add("Absence reported successfully.", Severity.Success);
-                    }
+						await JSRuntime.InvokeVoidAsync("history.back");
+					}
                     else
                     {
                         Snackbar.Add("Failed to report absence.", Severity.Error);

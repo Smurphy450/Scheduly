@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO.User;
@@ -14,7 +15,9 @@ namespace Scheduly.WebApp.Pages.Profile
         [Inject] NavigationManager NavigationManager { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
-        protected string CurrentPassword { get; set; }
+		[Inject] private IJSRuntime JSRuntime { get; set; }
+
+		protected string CurrentPassword { get; set; }
         protected string NewPassword { get; set; }
         protected string NewPasswordReentered { get; set; }
         protected async Task SaveChanges()
@@ -36,8 +39,8 @@ namespace Scheduly.WebApp.Pages.Profile
                     if (response.IsSuccessStatusCode)
                     {
                         Snackbar.Add("Password changed successfully.", Severity.Success);
-                        NavigationManager.NavigateTo("/Profile");
-                    }
+						await JSRuntime.InvokeVoidAsync("history.back");
+					}
                     else
                     {
                         Snackbar.Add($"Failed to change password. Status: {response.StatusCode}", Severity.Error);
