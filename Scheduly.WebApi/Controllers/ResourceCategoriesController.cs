@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scheduly.WebApi.Models;
+using Scheduly.WebApi.Models.DTO.Common;
 using Scheduly.WebApi.Models.DTO.Resource;
+using Scheduly.WebApi.Utilities;
 
 namespace Scheduly.WebApi.Controllers
 {
@@ -32,52 +34,90 @@ namespace Scheduly.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResourceCategory>> GetResourceCategory(int id)
         {
-            var resourceCategory = await _context.ResourceCategories.FindAsync(id);
-
-            if (resourceCategory == null)
+            try
             {
-                return NotFound();
-            }
+                var resourceCategory = await _context.ResourceCategories.FindAsync(id);
 
-            return resourceCategory;
+                if (resourceCategory == null)
+                {
+                    return NotFound();
+                }
+
+                return resourceCategory;
+            }
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, 1, "GetResourceCategory", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // POST: api/ResourceCategories/CreateResourceCategory
         [HttpPost("CreateResourceCategory")]
-        public async Task<ActionResult<ResourceCategory>> CreateResourceCategory([FromForm] CreateResourceCategoryDTO resourceCategoryDTO)
+        public async Task<ActionResult<ResourceCategory>> CreateResourceCategory([FromBody] CreateResourceCategoryDTO resourceCategoryDTO)
         {
-            if (!string.IsNullOrEmpty(resourceCategoryDTO.Name))
+            try
             {
-                var resourceCategory = new ResourceCategory
+                if (!string.IsNullOrEmpty(resourceCategoryDTO.Name))
                 {
-                    Name = resourceCategoryDTO.Name
-                };
+                    var resourceCategory = new ResourceCategory
+                    {
+                        Name = resourceCategoryDTO.Name
+                    };
 
-                _context.ResourceCategories.Add(resourceCategory);
-                await _context.SaveChangesAsync();
+                    _context.ResourceCategories.Add(resourceCategory);
+                    await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetResourceCategory", new { id = resourceCategory.CategoryId }, resourceCategory);
+                    await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                    {
+                        UserId = resourceCategoryDTO.UserId,
+                        Action = "CreateResourceCategory",
+                        AffectedData = $"Created resource category with ID: {resourceCategory.CategoryId}"
+                    });
+
+                    return Ok(new { Success = true });
+                }
+                else
+                {
+                    return BadRequest("Name is required");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Name is required");
+                await ErrorLoggingHelper.LogErrorAsync(_context, resourceCategoryDTO.UserId, "CreateResourceCategory", ex);
+                return StatusCode(500, "Internal server error");
             }
         }
 
         // DELETE: api/ResourceCategories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteResourceCategory(int id)
+        public async Task<IActionResult> DeleteResourceCategory(int id, [FromQuery] int userId)
         {
-            var resourceCategory = await _context.ResourceCategories.FindAsync(id);
-            if (resourceCategory == null)
+            try
             {
-                return NotFound();
+                var resourceCategory = await _context.ResourceCategories.FindAsync(id);
+                if (resourceCategory == null)
+                {
+                    return NotFound();
+                }
+
+                _context.ResourceCategories.Remove(resourceCategory);
+                await _context.SaveChangesAsync();
+
+                await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                {
+                    UserId = userId,
+                    Action = "DeleteResourceCategory",
+                    AffectedData = $"Deleted resource category with ID: {id}"
+                });
+
+                return NoContent();
             }
-
-            _context.ResourceCategories.Remove(resourceCategory);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, userId, "DeleteResourceCategory", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

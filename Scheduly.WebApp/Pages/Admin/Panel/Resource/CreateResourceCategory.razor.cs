@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Scheduly.WebApi.Models.DTO.Resource;
+using Scheduly.WebApp.Utilities;
 using System.Net.Http.Headers;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
@@ -7,6 +10,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
     public class CreateResourceCategoryBase : ComponentBase
     {
         [Inject] private ISnackbar Snackbar { get; set; }
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
 
         public string CategoryName { get; set; }
 
@@ -18,17 +22,13 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
                 {
                     try
                     {
-                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                        int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                        var createResourceCategoryDTO = CreateResourceCategoryDTO(userId);
+
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var url = "https://localhost:7171/api/ResourceCategories/CreateResourceCategory";
 
-                        var formData = new Dictionary<string, string>
-                        {
-                            { "name", CategoryName }
-                        };
-
-                        var content = new FormUrlEncodedContent(formData);
-
-                        var response = await httpClient.PostAsync(url, content);
+                        var response = await httpClient.PostAsJsonAsync(url, createResourceCategoryDTO);
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -60,6 +60,14 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
 
                 Console.WriteLine($"Error creating new resource category: {ex.Message}");
             }
+        }
+        private CreateResourceCategoryDTO CreateResourceCategoryDTO(int userId)
+        {
+            return new CreateResourceCategoryDTO
+            {
+                Name = CategoryName,
+                UserId = userId
+            };
         }
     }
 }
