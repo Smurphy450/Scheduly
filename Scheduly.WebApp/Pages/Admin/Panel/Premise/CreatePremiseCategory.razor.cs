@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using Scheduly.WebApi.Models;
 using Scheduly.WebApi.Models.DTO.Premise;
 using Scheduly.WebApp.Utilities;
+using System;
 using System.Net.Http.Headers;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
@@ -11,7 +14,7 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
     {
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         [Inject] private ISnackbar Snackbar { get; set; }
-
+        [Inject] private SchedulyContext _context { get; set; }
         public string CategoryName { get; set; }
 
         public async Task CreateNewCategory()
@@ -23,36 +26,33 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                     try
                     {
                         var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
-                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var url = "https://localhost:7171/api/PremiseCategories/CreatePremiseCategory";
 
                         var premiseCategoryDTO = CreatePremiseCategoryDTO(CategoryName, userId);
 
-                        var response = await httpClient.PostAsJsonAsync(url, premiseCategoryDTO);
+                        var response = await SendCreateCategoryRequest(premiseCategoryDTO);
 
                         if (response.IsSuccessStatusCode)
                         {
-                            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                            Snackbar.Add("Created new category.", Severity.Success);
+                            ShowSnackbar("Created new category.", Severity.Success);
 
                             CategoryName = string.Empty;
                         }
                         else
                         {
-                            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                            Snackbar.Add("Failed to create new premise category!", Severity.Error);
+                            ShowSnackbar("Failed to create new premise category!", Severity.Error);
                         }
                     }
                     catch (HttpRequestException e)
                     {
-                        Console.WriteLine($"An error occurred while making the request: {e.Message}");
+                        ShowSnackbar("Failed to create new premise category!", Severity.Error);
+                        await ErrorLoggingHelper.LogErrorAsync(_context, "CreateNewCategory", e);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                Snackbar.Add("Error creating new premise category!", Severity.Error);
+                ShowSnackbar("Error creating new premise category!", Severity.Error);
+                await LogErrorAsync(ex, "CreateNewCategory");
             }
         }
 
@@ -63,6 +63,37 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Premise
                 Name = name,
                 UserId = userId
             };
+        }
+
+        private async Task<HttpResponseMessage> SendCreateCategoryRequest(CreatePremiseCategoryDTO premiseCategoryDTO)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var url = "https://localhost:7171/api/PremiseCategories/CreatePremiseCategory";
+                    return await httpClient.PostAsJsonAsync(url, premiseCategoryDTO);
+                }
+                catch (HttpRequestException e)
+                {
+                    await LogErrorAsync(e, "SendCreateCategoryRequest");
+                    throw;
+                }
+            }   
+        }
+
+        private void ShowSnackbar(string message, Severity severity)
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add(message, severity);
+        }
+
+        private async Task LogErrorAsync(Exception ex, string action)
+        {
+            var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+            await ErrorLoggingHelper.LogErrorAsync(_context, action, ex);
         }
     }
 }

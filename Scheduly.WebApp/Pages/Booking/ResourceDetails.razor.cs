@@ -114,7 +114,7 @@ namespace Scheduly.WebApp.Pages.Booking
                                 ResourceId = premiseId,
                                 Start = CombineDateTimeAndTimeSpan(startDate, startTime),
                                 End = CombineDateTimeAndTimeSpan(endDate, endTime),
-                                Approved = false //TODO: Skal hentes fra PremisCatagory.
+                                Approved = false
                             };
 
                             var content = new StringContent(JsonConvert.SerializeObject(createBookingDTO), System.Text.Encoding.UTF8, "application/json");
