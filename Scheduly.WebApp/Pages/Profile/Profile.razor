@@ -4,7 +4,7 @@
 
 <h3>Profile</h3>
 
-<MudPaper Class="pa-4" Width="500px">
+<MudPaper Class="pa-4" MaxWidth="500px">
     <MudForm Model="@model">
         <MudTextField Label="FirstName" InputType="InputType.Text" @bind-Value="model.FirstName" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(5) ? false : true)" />
         <MudTextField Label="LastName" InputType="InputType.Text" @bind-Value="model.LastName" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(6) ? false : true)" />
@@ -14,7 +14,7 @@
         <MudTextField Label="PhoneNumber" InputType="InputType.Telephone" @bind-Value="model.PhoneNumber" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(3) ? false : true)" />
         <MudTextField Label="Username" InputType="InputType.Text" @bind-Value="model.Username" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(7) ? false : true)" />
         <MudTextField Label="Email" InputType="InputType.Email" @bind-Value="model.Email" Variant="Variant.Outlined" Disabled="@(IsFieldEditable(2) ? false : true)" />
-        <MudStack Row="true">
+        <MudStack Class="pt-4" Row="true">
             <MudButton Variant="Variant.Filled" OnClick="SaveChanges">Save Changes</MudButton>
             <MudButton Variant="Variant.Filled" Href="@("/Profile/ChangePassword")">Change password</MudButton>
         </MudStack>
