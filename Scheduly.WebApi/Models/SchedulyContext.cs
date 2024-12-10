@@ -234,7 +234,7 @@ public partial class SchedulyContext : DbContext
             entity.Property(e => e.TimeId).HasColumnName("TimeID");
             entity.Property(e => e.End)
                 .HasPrecision(2)
-                .HasDefaultValueSql("(sysdatetimeoffset())");
+                .HasDefaultValueSql("(sysdatetimeoffset())"); //Remove to make nullable
             entity.Property(e => e.Start)
                 .HasPrecision(2)
                 .HasDefaultValueSql("(sysdatetimeoffset())");

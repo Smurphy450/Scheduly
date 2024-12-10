@@ -35,73 +35,6 @@ namespace Scheduly.WebApi.Controllers
             return exists;
         }
 
-        // POST: api/TimeRegistrations/TimeRegistrationDTOs
-        [HttpPost("TimeRegistrationDTOs")]
-        public async Task<ActionResult<IEnumerable<TimeRegistrationDTO>>> GetTimeRegistrationsByDateRange([FromBody] TimeRegistrationDTO query)
-        {
-            var timeRegistrations = await _context.TimeRegistrations
-                .Where(tr => tr.UserId == query.UserId && tr.Start >= query.Start && tr.Start <= query.End)
-                .Select(tr => new TimeRegistrationDTO
-                {
-                    TimeId = tr.TimeId,
-                    UserId = tr.UserId,
-                    Start = tr.Start,
-                    End = tr.End
-                })
-                .ToListAsync();
-
-            return Ok(timeRegistrations);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<TimeRegistration>> PostTimeRegistration(TimeRegistrationDTO timeRegistrationDto)
-        {
-            var timeRegistration = new TimeRegistration
-            {
-                UserId = timeRegistrationDto.UserId,
-                Start = timeRegistrationDto.Start.Value,
-                End = timeRegistrationDto.End
-            };
-
-            _context.TimeRegistrations.Add(timeRegistration);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTimeRegistration", new { id = timeRegistration.TimeId }, timeRegistration);
-        }
-
-        [HttpPost("RegisterTime")]
-        public async Task<IActionResult> RegisterTime([FromBody] TimeRegistrationDTO timeRegistrationDto)
-        {
-            var userId = timeRegistrationDto.UserId;
-            var today = timeRegistrationDto.Start.Value.Date;
-
-            var existingTimeRegistrations = await _context.TimeRegistrations
-                .Where(tr => tr.UserId == userId && tr.Start.Date == today && (tr.End == null || tr.Start == tr.End))
-                .OrderByDescending(tr => tr.Start)
-                .ToListAsync();
-
-            var existingTimeRegistration = existingTimeRegistrations.FirstOrDefault();
-
-            if (existingTimeRegistration != null)
-            {
-                existingTimeRegistration.End = timeRegistrationDto.End;
-                _context.Entry(existingTimeRegistration).State = EntityState.Modified;
-            }
-            else
-            {
-                var newTimeRegistration = new TimeRegistration
-                {
-                    UserId = userId,
-                    Start = timeRegistrationDto.Start.Value,
-                    End = timeRegistrationDto.Start.Value //vil gerne indsætte null, men det kan jeg ikke.
-                };
-                _context.TimeRegistrations.Add(newTimeRegistration);
-            }
-
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
         [HttpGet("AverageWeeklyWorkTime/{userId}")]
         public async Task<ActionResult<double>> GetAverageWeeklyWorkTime(int userId)
         {
@@ -123,6 +56,97 @@ namespace Scheduly.WebApi.Controllers
             var averageWeeklyWorkTime = totalHours / totalWeeks;
 
             return Ok(averageWeeklyWorkTime);
+        }
+
+        // POST: api/TimeRegistrations/TimeRegistrationDTOs
+        [HttpPost("TimeRegistrationDTOs")]
+        public async Task<ActionResult<IEnumerable<TimeRegistrationDTO>>> GetTimeRegistrationsByDateRange([FromBody] TimeRegistrationDTO query)
+        {
+            try
+            {
+                var timeRegistrations = await _context.TimeRegistrations
+                .Where(tr => tr.UserId == query.UserId && tr.Start >= query.Start && tr.Start <= query.End)
+                .Select(tr => new TimeRegistrationDTO
+                {
+                    TimeId = tr.TimeId,
+                    UserId = tr.UserId,
+                    Start = tr.Start,
+                    End = tr.End
+                })
+                .ToListAsync();
+
+                return Ok(timeRegistrations);
+            }
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, query.UserId, "GetTimeRegistrationsByDateRange", ex);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        //[HttpPost]
+        //public async Task<ActionResult<TimeRegistration>> PostTimeRegistration(TimeRegistrationDTO timeRegistrationDto)
+        //{
+        //    var timeRegistration = new TimeRegistration
+        //    {
+        //        UserId = timeRegistrationDto.UserId,
+        //        Start = timeRegistrationDto.Start.Value,
+        //        End = timeRegistrationDto.End
+        //    };
+
+        //    _context.TimeRegistrations.Add(timeRegistration);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetTimeRegistration", new { id = timeRegistration.TimeId }, timeRegistration);
+        //}
+
+        [HttpPost("RegisterTime")]
+        public async Task<IActionResult> RegisterTime([FromBody] TimeRegistrationDTO timeRegistrationDto)
+        {
+            try
+            {
+                var userId = timeRegistrationDto.UserId;
+                var startDateTime = timeRegistrationDto.Start.Value;
+
+                var existingTimeRegistrations = await _context.TimeRegistrations
+                    .Where(tr => tr.UserId == userId && tr.Start.Date == startDateTime.Date && (tr.End == null || tr.Start == tr.End))
+                    .OrderByDescending(tr => tr.Start)
+                    .ToListAsync();
+
+                var existingTimeRegistration = existingTimeRegistrations.FirstOrDefault();
+
+                if (existingTimeRegistration != null)
+                {
+                    existingTimeRegistration.End = timeRegistrationDto.End;
+                    _context.Entry(existingTimeRegistration).State = EntityState.Modified;
+                }
+                else
+                {
+                    var newTimeRegistration = new TimeRegistration
+                    {
+                        UserId = userId,
+                        Start = timeRegistrationDto.Start.Value,
+                        End = timeRegistrationDto.Start.Value //vil gerne indsætte null, men det kan jeg ikke.
+                    };
+                    _context.TimeRegistrations.Add(newTimeRegistration);
+                }
+
+                await _context.SaveChangesAsync();
+
+                await LoggingHelper.LogActionAsync(_context, new LoggingDTO
+                {
+                    UserId = userId,
+                    Action = "RegisterTime",
+                    AffectedData = $"Registered time for user ID: {userId} on {startDateTime}"
+                });
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                await ErrorLoggingHelper.LogErrorAsync(_context, timeRegistrationDto.UserId, "RegisterTime", ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 
