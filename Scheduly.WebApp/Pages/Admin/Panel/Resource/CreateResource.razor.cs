@@ -5,13 +5,15 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Scheduly.WebApi.Models.DTO.Resource;
+using Microsoft.AspNetCore.Components.Authorization;
+using Scheduly.WebApp.Utilities;
 
 namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
 {
     public class CreateResourceBase : ComponentBase
     {
         [Inject] private ISnackbar Snackbar { get; set; }
-
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
         public string ResourceName { get; set; }
         public int ResourceAmount { get; set; }
         public string ResourceDescription { get; set; }
@@ -65,13 +67,15 @@ namespace Scheduly.WebApp.Pages.Admin.Panel.Resource
         {
             if (ValidateResourceInputs())
             {
+                var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                 var resourceDto = new CreateResourceDTO
                 {
                     CategoryId = _selectedResourceCategoryId,
                     Name = ResourceName,
                     Amount = ResourceAmount,
                     Description = ResourceDescription ?? string.Empty,
-                    MustBeApproved = MustBeApproved
+                    MustBeApproved = MustBeApproved,
+                    UserId = userId
                 };
 
                 await SendResourceCreationRequest(resourceDto);

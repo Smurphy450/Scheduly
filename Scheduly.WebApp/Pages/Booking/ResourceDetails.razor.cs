@@ -155,7 +155,8 @@ namespace Scheduly.WebApp.Pages.Booking
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Resources/{resourceId}");
+                    int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                    var getAllResponse = await httpClient.DeleteAsync($"https://localhost:7171/api/Resources/{resourceId}?userId={userId}");
                     if (getAllResponse.IsSuccessStatusCode)
                     {
                         // Load items again

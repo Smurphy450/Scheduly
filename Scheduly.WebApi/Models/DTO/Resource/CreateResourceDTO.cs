@@ -7,5 +7,6 @@
         public int Amount { get; set; }
         public string Description { get; set; }
         public bool MustBeApproved { get; set; }
+        public int UserId { get; set; }
     }
 }

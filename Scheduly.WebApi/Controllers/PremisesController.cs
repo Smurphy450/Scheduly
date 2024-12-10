@@ -53,7 +53,7 @@ namespace Scheduly.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                await ErrorLoggingHelper.LogErrorAsync(_context, 0, "GetPremisesByCategory", ex);
+                await ErrorLoggingHelper.LogErrorAsync(_context, 1, "GetPremisesByCategory", ex);
                 return StatusCode(500, "Internal server error");
             }
         }

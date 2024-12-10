@@ -44,7 +44,7 @@ namespace Scheduly.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                await ErrorLoggingHelper.LogErrorAsync(_context, 0, "GetPendingApprovalAbsences", ex);
+                await ErrorLoggingHelper.LogErrorAsync(_context, 1, "GetPendingApprovalAbsences", ex);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -152,7 +152,7 @@ namespace Scheduly.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                await ErrorLoggingHelper.LogErrorAsync(_context, 0, "DeleteAbsence", ex);
+                await ErrorLoggingHelper.LogErrorAsync(_context, 1, "DeleteAbsence", ex);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -194,7 +194,7 @@ namespace Scheduly.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                await ErrorLoggingHelper.LogErrorAsync(_context, 0, "ApproveAbsence", ex);
+                await ErrorLoggingHelper.LogErrorAsync(_context, 1, "ApproveAbsence", ex);
                 return StatusCode(500, "Internal server error");
             }
         }
