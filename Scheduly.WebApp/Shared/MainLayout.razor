@@ -20,7 +20,7 @@
 								 Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Title="Switch to Light Mode"
 								 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Warning" ToggledTitle="Switch to Dark Mode" />
 		</MudAppBar>
-		<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+		<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Overlay="true" Breakpoint="@_breakpoint" Elevation="1" Variant="DrawerVariant.Temporary" OpenMiniOnHover="true">
 			<NavMenu />
 		</MudDrawer>
 	}
