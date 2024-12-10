@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using Scheduly.WebApi.Models.DTO.Notification;
 using Scheduly.WebApi.Models.DTO.User;
 using Scheduly.WebApp.Utilities;
@@ -11,6 +13,8 @@ namespace Scheduly.WebApp.Pages.Admin
     public class EditUserBase : ComponentBase
     {
         [Parameter] public int UserId { get; set; }
+        [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
+        [Inject] private ISnackbar Snackbar { get; set; }
         public UserProfileDTO UserProfile { get; set; } = new UserProfileDTO();
         public string NewPassword { get; set; }
 
@@ -54,13 +58,15 @@ namespace Scheduly.WebApp.Pages.Admin
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.PutAsJsonAsync($"https://localhost:7171/api/Profiles/UserProfile/{UserId}", UserProfile);
+                    int userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
+                    var response = await httpClient.PutAsJsonAsync($"https://localhost:7171/api/Profiles/UserProfile/{userId}", UserProfile);
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("User profile updated successfully.");
+                        Snackbar.Add("User profile updated successfully.", Severity.Success);
                     }
                     else
                     {
+                        Snackbar.Add("Failed to update user profile.", Severity.Error);
                         Console.WriteLine($"Failed to update user profile. Status: {response.StatusCode}");
                     }
                 }
@@ -112,10 +118,11 @@ namespace Scheduly.WebApp.Pages.Admin
                     var response = await httpClient.PostAsJsonAsync("https://localhost:7171/api/Users/UpdatePassword", updatePasswordDTO);
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("Password updated successfully.");
+                        Snackbar.Add("Password updated successfully.", Severity.Success);
                     }
                     else
                     {
+                        Snackbar.Add("Failed to update password.", Severity.Error);
                         Console.WriteLine($"Failed to update password. Status: {response.StatusCode}");
                     }
                 }

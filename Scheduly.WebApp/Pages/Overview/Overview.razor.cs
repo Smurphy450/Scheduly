@@ -106,6 +106,15 @@ namespace Scheduly.WebApp.Pages.Overview
                                 AverageWeeklyWorkTime = overviewData.AverageWeeklyWorkTime;
                                 AllPremises = overviewData.UserOverview.OverviewPremises;
                                 AllResources = overviewData.UserOverview.OverviewResources;
+
+                                if (AverageWeeklyWorkTime > 48)
+                                {
+                                    Snackbar.Add("You have exceeded the maximum allowed work time under the new EU laws.", Severity.Error);
+                                }
+                                else if (AverageWeeklyWorkTime > 40)
+                                {
+                                    Snackbar.Add("You are close to exceeding the maximum of 48 hours.", Severity.Warning);
+                                }
                             }
                         }
                         else

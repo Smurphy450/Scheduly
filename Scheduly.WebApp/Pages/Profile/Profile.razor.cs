@@ -14,7 +14,6 @@ namespace Scheduly.WebApp.Pages.Profile
     {
         [Inject] private ISnackbar Snackbar { get; set; }
         [Inject] private AuthenticationStateProvider authStateProvider { get; set; }
-
         protected UserProfileDTO model { get; set; } = new UserProfileDTO();
         protected List<AdminSettingDTO> AdminSettings { get; set; } = new List<AdminSettingDTO>();
 
@@ -75,9 +74,10 @@ namespace Scheduly.WebApp.Pages.Profile
             {
                 using (var httpClient = new HttpClient())
                 {
+                    var userId = await UserInfoHelper.GetUserIdAsync(authStateProvider);
                     var json = JsonConvert.SerializeObject(model);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PutAsync($"https://localhost:7171/api/Profiles/User/{model.UserId}", content);
+                    var response = await httpClient.PutAsync($"https://localhost:7171/api/Profiles/User?userId={userId}", content);
                     if (response.IsSuccessStatusCode)
                     {
                         Snackbar.Add("Profile updated successfully.", Severity.Success);
