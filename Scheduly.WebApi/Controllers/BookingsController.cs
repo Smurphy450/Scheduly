@@ -153,7 +153,7 @@ namespace Scheduly.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<ApproveBookingDTO>>> GetPendingApprovalBookings()
         {
             var pendingBookings = await _context.Bookings
-                .Where(b => b.Start > DateTimeOffset.Now && b.Approved == null)
+                .Where(b => (b.Start > DateTimeOffset.Now && b.Approved == null) || b.Approved == null)
                 .Include(b => b.User)
                 .Include(b => b.Premise)
                 .ThenInclude(p => p.PremiseCategory)
